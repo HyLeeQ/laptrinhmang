@@ -1,6 +1,6 @@
 package org.example.zalu.controller;
 
-import org.example.zalu.dao.UserDAO;
+import org.example.zalu.model.dao.UserDAO;
 import org.example.zalu.model.User;
 
 public class Main {

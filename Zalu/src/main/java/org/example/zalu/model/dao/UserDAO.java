@@ -1,4 +1,4 @@
-package org.example.zalu.dao;
+package org.example.zalu.model.dao;
 
 import org.example.zalu.model.DBConnection;
 import org.example.zalu.model.User;
