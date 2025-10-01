@@ -10,8 +10,10 @@ import javafx.stage.Stage;
 import org.example.zalu.dao.UserDAO;
 import org.example.zalu.model.DBConnection;
 import org.example.zalu.model.User;
+import org.example.zalu.client.ChatClient;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -39,17 +41,20 @@ public class LoginController {
         }
 
         try {
-            Connection connection = DBConnection.getConnection();
-            if (connection == null) {
-                throw new SQLException("Database connection failed");
-            }
-            userDAO = new UserDAO(connection);
-            System.out.println("Attempting login for username: " + username);
-
             User user = userDAO.login(username, password);
             if (user != null) {
                 int userId = user.getId();
                 System.out.println("Login successful for userId: " + userId);
+
+                // Gửi login info đến server qua ChatClient
+                ObjectOutputStream serverOut = ChatClient.getOut();
+                if (serverOut != null) {
+                    serverOut.writeObject("LOGIN:" + userId);
+                    serverOut.flush();
+                    System.out.println("Sent LOGIN:" + userId + " to server");
+                } else {
+                    System.out.println("Server not connected, cannot send login");
+                }
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(
                         "/org/example/zalu/views/main-view.fxml"));
@@ -72,9 +77,6 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error loading main view: " + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Unexpected error: " + e.getMessage());
         }
     }
 
