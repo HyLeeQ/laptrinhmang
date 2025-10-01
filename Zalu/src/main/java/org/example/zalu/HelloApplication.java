@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/login-view.fxml"));
             Parent root = loader.load();
             LoginController loginController = loader.getController();
-            loginController.setStage(primaryStage); // Gán stage
+            loginController.setStage(primaryStage);
 
             primaryStage.setTitle("Chat Application - Login");
             primaryStage.setScene(new Scene(root, 600, 400));
@@ -25,9 +25,5 @@ public class HelloApplication extends Application {
             e.printStackTrace();
             System.out.println("Failed to load FXML: " + e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

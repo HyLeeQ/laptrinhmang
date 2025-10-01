@@ -1,5 +1,6 @@
 package org.example.zalu.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,12 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import org.example.zalu.dao.FriendDAO;
-import org.example.zalu.model.DBConnection;
+import org.example.zalu.client.ChatClient;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
 public class FriendRequestController {
@@ -25,10 +24,9 @@ public class FriendRequestController {
     private Button rejectButton;
 
     private Stage stage;
-    private FriendDAO friendDAO;
     private int currentUserId = -1;
     private int selectedSenderId = -1;
-    private boolean dataLoaded = false; // Flag để tránh load trùng lặp
+    private List<Integer> pendingRequests = null; // Lưu list senderIds từ MainController
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -37,62 +35,38 @@ public class FriendRequestController {
     public void setCurrentUserId(int userId) {
         this.currentUserId = userId;
         System.out.println("FriendRequestController currentUserId set to: " + userId);
-        if (!dataLoaded) {
-            initData(); // Load dữ liệu ngay sau khi set userId, chỉ gọi một lần
-        }
+        // Không load data ở đây nữa - dùng setPendingRequests
+    }
+
+    // THÊM method này để nhận list từ MainController
+    public void setPendingRequests(List<Integer> pendingRequests) {
+        this.pendingRequests = pendingRequests;
+        loadRequestList(); // Load UI ngay
+        System.out.println("Pending requests set: " + pendingRequests.size());
     }
 
     @FXML
     public void initialize() {
         System.out.println("FriendRequestController initialize for userId: " + currentUserId);
-        // Khởi tạo DAO luôn, không phụ thuộc ID
-        try {
-            Connection connection = DBConnection.getConnection();
-            if (connection == null) {
-                throw new Exception("Database connection failed");
-            }
-            friendDAO = new FriendDAO(connection);
-            System.out.println("friendDAO initialized");
-        } catch (Exception e) {
-            System.out.println("Error initializing FriendRequestController: " + e.getMessage());
-        }
+        // Disable buttons ban đầu
+        if (acceptButton != null) acceptButton.setDisable(true);
+        if (rejectButton != null) rejectButton.setDisable(true);
 
-        // Load dữ liệu chỉ nếu userId đã set
-        if (currentUserId != -1) {
-            initData();
+        // Nếu pendingRequests đã set trước, load lại
+        if (pendingRequests != null) {
+            loadRequestList();
         } else {
-            System.out.println("Warning: currentUserId is not set before initialize");
+            requestList.getItems().add("No pending requests (waiting for data...)");
         }
     }
 
-    private void initData() {
-        if (currentUserId == -1) {
-            System.out.println("Warning: currentUserId is not set before initData");
-            return;
-        }
-        if (dataLoaded) return; // Tránh load trùng lặp
-        try {
-            loadPendingRequests();
-            dataLoaded = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error loading pending requests: " + e.getMessage());
-        }
-    }
-
-    private void loadPendingRequests() throws SQLException {
-        if (friendDAO == null) {
-            System.out.println("friendDAO is null in loadPendingRequests, skipping");
-            return;
-        }
-        System.out.println("Loading pending requests for userId: " + currentUserId);
-        List<Integer> senderIds = friendDAO.getPendingRequests(currentUserId);
-        System.out.println("Found " + senderIds.size() + " pending requests: " + senderIds);
+    private void loadRequestList() {
+        if (requestList == null || pendingRequests == null) return;
         requestList.setItems(FXCollections.observableArrayList());
-        for (int senderId : senderIds) {
+        for (int senderId : pendingRequests) {
             requestList.getItems().add("User" + senderId + " wants to be friends");
         }
-        if (requestList.getItems().isEmpty()) {
+        if (pendingRequests.isEmpty()) {
             requestList.getItems().add("No pending requests");
         }
     }
@@ -112,16 +86,22 @@ public class FriendRequestController {
     private void acceptRequest() {
         if (selectedSenderId != -1) {
             try {
-                System.out.println("Attempting to accept request from senderId: " + selectedSenderId + " to currentUserId: " + currentUserId);
-                if (friendDAO.acceptFriendRequest(currentUserId, selectedSenderId)) {
-                    System.out.println("Accepted friend request from User" + selectedSenderId);
-                    loadPendingRequests();
-                } else {
-                    System.out.println("Failed to accept request - no pending row found");
+                ObjectOutputStream out = ChatClient.getOut();
+                if (out == null) {
+                    System.out.println("Server not connected");
+                    return;
                 }
-            } catch (SQLException e) {
+                String req = "ACCEPT_FRIEND|" + currentUserId + "|" + selectedSenderId;
+                out.writeObject(req);
+                out.flush();
+                System.out.println("Sent ACCEPT_FRIEND request for senderId: " + selectedSenderId);
+
+                // Sau khi gửi, reload list (response success sẽ đến listener ở Main, nhưng ở đây reload tạm)
+                // Hoặc quay về main để reload toàn bộ
+                backToMain(); // Quay về main để reload friends/requests
+            } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error accepting request: " + e.getMessage());
+                System.out.println("Error sending accept request: " + e.getMessage());
             }
         }
     }
@@ -130,15 +110,21 @@ public class FriendRequestController {
     private void rejectRequest() {
         if (selectedSenderId != -1) {
             try {
-                if (friendDAO.rejectFriendRequest(currentUserId, selectedSenderId)) {
-                    System.out.println("Rejected friend request from User" + selectedSenderId);
-                    loadPendingRequests();
-                } else {
-                    System.out.println("Failed to reject request");
+                ObjectOutputStream out = ChatClient.getOut();
+                if (out == null) {
+                    System.out.println("Server not connected");
+                    return;
                 }
-            } catch (SQLException e) {
+                String req = "REJECT_FRIEND|" + currentUserId + "|" + selectedSenderId;
+                out.writeObject(req);
+                out.flush();
+                System.out.println("Sent REJECT_FRIEND request for senderId: " + selectedSenderId);
+
+                // Tương tự, quay về main để reload
+                backToMain();
+            } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Error rejecting request: " + e.getMessage());
+                System.out.println("Error sending reject request: " + e.getMessage());
             }
         }
     }

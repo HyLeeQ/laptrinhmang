@@ -1,5 +1,7 @@
 package org.example.zalu.controller;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,21 +10,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.zalu.dao.FriendDAO;
-import org.example.zalu.dao.MessageDAO;
-import org.example.zalu.dao.UserDAO;
-import org.example.zalu.dao.VoiceMessageDAO;
-import org.example.zalu.model.DBConnection;
+import org.example.zalu.client.ChatClient;
 import org.example.zalu.model.Message;
-import org.example.zalu.model.VoiceMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainController {
@@ -32,18 +27,17 @@ public class MainController {
     private TextField messageField;
     @FXML
     private TextArea chatArea;
+    @FXML
+    private TextField friendIdField; // THÊM: TextField để nhập ID bạn bè
 
     private Stage stage;
-    private ObjectOutputStream out;
-    private Thread listenThread;
-    private Socket socket;
-    private UserDAO userDAO;
-    private FriendDAO friendDAO;
-    private MessageDAO messageDAO;
-    private VoiceMessageDAO voiceMessageDAO;
     private int currentUserId = -1;
     private int currentFriendId = -1;
     private volatile boolean isRunning = true;
+    private Thread listenThread;
+    private boolean listenerStarted = false;
+    private List<Integer> pendingRequests = new ArrayList<>();
+    private boolean waitingForRequests = false;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -52,183 +46,203 @@ public class MainController {
     public void setCurrentUserId(int userId) {
         this.currentUserId = userId;
         System.out.println("Current userId set to: " + userId);
-        initData(); // Load dữ liệu ngay sau khi set userId
+        initData(); // Load dữ liệu ngay sau khi set userId (sync cho nhanh)
+        // startListening() được gọi SAU khi load initial xong, tránh concurrent read
     }
 
     @FXML
     public void initialize() {
         System.out.println("MainController initialized for userId: " + currentUserId);
-        // Chỉ khởi tạo cơ bản, không load dữ liệu ở đây
-        try {
-            Connection connection = DBConnection.getConnection();
-            if (connection == null) {
-                throw new SQLException("Failed to establish database connection");
-            }
-            userDAO = new UserDAO(connection);
-            friendDAO = new FriendDAO(connection);
-            messageDAO = new MessageDAO(connection);
-            voiceMessageDAO = new VoiceMessageDAO(connection);
-            chatArea.appendText("Database connection successful\n");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            chatArea.appendText("Database error: " + e.getMessage() + "\n");
-        }
-
-        try {
-            socket = new Socket("localhost", 5000);
-            out = new ObjectOutputStream(socket.getOutputStream());
-            out.writeObject("LOGIN:" + currentUserId);
-            out.flush();
-            startListening();
-            chatArea.appendText("Connected to chat server\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-            chatArea.appendText("Server connection error: " + e.getMessage() + "\n");
-        }
-
-        // Nếu userId chưa set, in cảnh báo
-        if (currentUserId == -1) {
-            chatArea.appendText("Warning: User ID not set. Data will be loaded after login.\n");
-        }
+        chatArea.appendText("Connected! Loading data...\n"); // Update message ngay, không "Waiting for login"
     }
 
+    // SỬA: initData() dùng Task sync read response (nhanh, không freeze UI)
     private void initData() {
-        if (currentUserId == -1) {
-            System.out.println("Warning: currentUserId is not set before initData");
-            chatArea.appendText("Error: User ID not set. Please login again.\n");
-            return;
-        }
+        if (currentUserId == -1) return;
 
-        try {
-            loadFriends();
-            if (!chatList.getItems().isEmpty()) {
-                currentFriendId = Integer.parseInt(chatList.getItems().get(0).replace("User", ""));
-                loadMessagesAndVoices();
+        // Update UI ngay khi bắt đầu load
+        Platform.runLater(() -> chatArea.appendText("Loading friends...\n"));
+
+        Task<Object> loadTask = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+                ObjectOutputStream out = ChatClient.getOut();
+                if (out == null) throw new IOException("Server not connected");
+
+                // BƯỚC 1: Load friends sync
+                String reqFriends = "GET_FRIENDS|" + currentUserId;
+                out.writeObject(reqFriends);
+                out.flush();
+                System.out.println("Sent GET_FRIENDS for user " + currentUserId);
+
+                ObjectInputStream in = ChatClient.getIn();
+                if (in == null) throw new IOException("Cannot read from server");
+                Object objFriends = in.readObject();
+                if (!(objFriends instanceof List && ((List<?>) objFriends).get(0) instanceof Integer)) {
+                    throw new IOException("Invalid friends response: " + objFriends.getClass().getSimpleName());
+                }
+                @SuppressWarnings("unchecked")
+                final List<Integer> friendIds = (List<Integer>) objFriends;
+
+                // BƯỚC 2: Load messages cho friend đầu tiên (nếu có) sync
+                List<Message> messages = new ArrayList<>();
+                if (!friendIds.isEmpty()) {
+                    currentFriendId = friendIds.get(0); // Set ngay trong task
+                    String reqMessages = "GET_MESSAGES|" + currentUserId + "|" + currentFriendId;
+                    out.writeObject(reqMessages);
+                    out.flush();
+                    System.out.println("Sent GET_MESSAGES for friend " + currentFriendId);
+
+                    Object objMessages = in.readObject();
+                    if (!(objMessages instanceof List && ((List<?>) objMessages).get(0) instanceof Message)) {
+                        throw new IOException("Invalid messages response: " + objMessages.getClass().getSimpleName());
+                    }
+                }
+
+                // Trả về pair (friends, messages) để onSucceeded dùng
+                return new Object[]{friendIds, messages};
             }
-            userDAO.updateStatus(currentUserId, "online");
-            chatArea.appendText("Loaded data successfully\n");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            chatArea.appendText("Error loading data: " + e.getMessage() + "\n");
-        }
+        };
+
+        loadTask.setOnSucceeded(event -> {
+            @SuppressWarnings("unchecked")
+            Object[] result = (Object[]) loadTask.getValue();
+            List<Integer> friendIds = (List<Integer>) result[0];
+            List<Message> messages = (List<Message>) result[1];
+
+            // Update UI với friends và messages
+            Platform.runLater(() -> {
+                chatList.getItems().clear();
+                for (int id : friendIds) {
+                    chatList.getItems().add("User" + id);
+                }
+                chatArea.appendText("Loaded " + friendIds.size() + " friends!\n");
+
+                // Update messages ngay
+                chatArea.clear();
+                for (Message msg : messages) {
+                    String display = String.format("[%s] %s -> %s: %s %s",
+                            msg.getCreatedAt(),
+                            msg.getSenderId() == currentUserId ? "You" : "User" + msg.getSenderId(),
+                            msg.getReceiverId() == currentUserId ? "You" : "User" + msg.getReceiverId(),
+                            msg.getContent(),
+                            msg.getIsRead() ? "(Read)" : "(Unread)");
+                    chatArea.appendText(display + "\n");
+                }
+                chatArea.appendText("Messages loaded!\n");
+            });
+            System.out.println("Initial load complete");
+
+            // Start listener SAU khi sync load xong hoàn toàn, tránh concurrent read
+            startListening();
+        });
+
+        loadTask.setOnFailed(event -> {
+            Throwable ex = loadTask.getException();
+            ex.printStackTrace();
+            Platform.runLater(() -> chatArea.appendText("Error loading data: " + ex.getMessage() + "\n"));
+            // Fallback: Start listener dù lỗi
+            startListening();
+        });
+
+        // Chạy task ở background thread
+        new Thread(loadTask).start();
     }
 
-    private void loadFriends() throws SQLException {
-        if (friendDAO == null) throw new SQLException("FriendDAO not initialized");
-        List<Integer> friendIds = friendDAO.getFriendsByUserId(currentUserId);
-        chatList.getItems().clear();
-        for (int friendId : friendIds) {
-            chatList.getItems().add("User" + friendId);
-        }
-    }
-
-    private void loadMessagesAndVoices() throws SQLException {
-        if (currentFriendId == -1) return;
-        if (messageDAO == null || voiceMessageDAO == null) throw new SQLException("DAO not initialized");
-        chatArea.clear();
-        List<Message> messages = messageDAO.getMessagesByUserAndFriend(currentUserId, currentFriendId);
-        for (Message message : messages) {
-            String displayText = String.format("[%s] %s -> %s: %s %s",
-                    message.getCreatedAt(),
-                    message.getSenderId() == currentUserId ? "You" : "User" + message.getSenderId(),
-                    message.getReceiverId() == currentUserId ? "You" : "User" + message.getReceiverId(),
-                    message.getContent(),
-                    message.getIsRead() ? "(Read)" : "(Unread)");
-            chatArea.appendText(displayText + "\n");
-        }
-        List<VoiceMessage> voiceMessages = voiceMessageDAO.getVoiceMessagesByUserAndFriend(currentUserId, currentFriendId);
-        for (VoiceMessage voice : voiceMessages) {
-            String displayText = String.format("[%s] %s sent voice: %s %s",
-                    voice.getCreatedAt(),
-                    voice.getSenderId() == currentUserId ? "You" : "User" + voice.getSenderId(),
-                    voice.getFilePath(),
-                    voice.getIsRead() ? "(Read)" : "(Unread)");
-            chatArea.appendText(displayText + "\n");
-        }
+    private void loadMessagesForFriend() {
+        // Không làm gì - listener sẽ handle response GET_MESSAGES
+        System.out.println("Requesting messages for friend " + currentFriendId + " (async via listener)");
     }
 
     private void startListening() {
+        if (listenerStarted || currentUserId == -1) return;
+        listenerStarted = true;
+
         listenThread = new Thread(() -> {
-            try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+            ObjectInputStream in = ChatClient.getIn();
+            if (in == null) return;
+            try {
                 while (isRunning) {
-                    String message = (String) in.readObject();
-                    if (message != null) {
-                        javafx.application.Platform.runLater(() -> {
-                            chatArea.appendText(message + "\n");
-                            try {
-                                loadMessagesAndVoices();
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                                chatArea.appendText("Error loading messages: " + e.getMessage() + "\n");
-                            }
-                        });
+                    Object obj = in.readObject();
+                    if (obj != null) {
+                        Platform.runLater(() -> handleResponse(obj));
                     }
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                if (isRunning) {
-                    e.printStackTrace();
-                    System.out.println("Error receiving message: " + e.getMessage());
-                }
+            } catch (Exception e) {
+                if (isRunning) System.out.println("Error receiving: " + e.getMessage());
+            } finally {
+                listenerStarted = false;
             }
         });
         listenThread.setDaemon(true);
         listenThread.start();
+        System.out.println("Listener started for user " + currentUserId);
+    }
+
+    private void handleResponse(Object obj) {
+        try {
+            if (obj instanceof List && !((List<?>) obj).isEmpty() && ((List<?>) obj).get(0) instanceof Integer) {
+                @SuppressWarnings("unchecked")
+                List<Integer> ids = (List<Integer>) obj;
+                if (waitingForRequests) {
+                    pendingRequests.clear();
+                    pendingRequests.addAll(ids);
+                    chatArea.appendText("Loaded " + ids.size() + " pending requests\n");
+                    waitingForRequests = false;
+                } else {
+                    chatList.getItems().clear();
+                    for (int id : ids) {
+                        chatList.getItems().add("User" + id);
+                    }
+                    if (!ids.isEmpty()) {
+                        currentFriendId = ids.get(0);
+                        loadMessagesForFriend();
+                    }
+                    chatArea.appendText("Loaded " + ids.size() + " friends\n");
+                }
+            } else if (obj instanceof List && !((List<?>) obj).isEmpty() && ((List<?>) obj).get(0) instanceof Message) {
+                @SuppressWarnings("unchecked")
+                List<Message> messages = (List<Message>) obj;
+                chatArea.clear();
+                for (Message msg : messages) {
+                    String display = String.format("[%s] %s -> %s: %s %s",
+                            msg.getCreatedAt(),
+                            msg.getSenderId() == currentUserId ? "You" : "User" + msg.getSenderId(),
+                            msg.getReceiverId() == currentUserId ? "You" : "User" + msg.getReceiverId(),
+                            msg.getContent(),
+                            msg.getIsRead() ? "(Read)" : "(Unread)");
+                    chatArea.appendText(display + "\n");
+                }
+            } else if (obj instanceof Boolean) {
+                boolean success = (Boolean) obj;
+                chatArea.appendText(success ? "Action successful\n" : "Action failed\n");
+            } else if (obj instanceof String) {
+                chatArea.appendText((String) obj + "\n");
+                loadMessagesForFriend();
+            } else {
+                chatArea.appendText("Unknown response: " + obj.getClass().getSimpleName() + "\n");
+            }
+        } catch (Exception e) {
+            chatArea.appendText("Error handling response: " + e.getMessage() + "\n");
+        }
     }
 
     @FXML
     private void sendMessage() {
-        String message = messageField.getText().trim();
-        if (!message.isEmpty() && currentFriendId != -1) {
+        String content = messageField.getText().trim();
+        if (!content.isEmpty() && currentFriendId != -1) {
             try {
-                Message newMessage = new Message(0, currentUserId, currentFriendId, message, false, LocalDateTime.now());
-                if (messageDAO.saveMessage(newMessage)) {
-                    String fullMessage = currentUserId + ":" + currentFriendId + ":" + message;
-                    out.writeObject(fullMessage);
-                    out.flush();
-                    messageField.clear();
-                    loadMessagesAndVoices();
-                } else {
-                    chatArea.appendText("Failed to send message\n");
-                }
-            } catch (SQLException | IOException e) {
+                ObjectOutputStream out = ChatClient.getOut();
+                if (out == null) return;
+                String req = "SEND_MESSAGE|" + currentUserId + "|" + currentFriendId + "|" + content;
+                out.writeObject(req);
+                out.flush();
+                messageField.clear();
+            } catch (IOException e) {
                 e.printStackTrace();
-                chatArea.appendText("Error sending message: " + e.getMessage() + "\n");
+                chatArea.appendText("Error sending: " + e.getMessage() + "\n");
             }
         }
-    }
-
-    @FXML
-    private void logout() {
-        System.out.println("Đăng xuất");
-        isRunning = false;
-        try {
-            if (socket != null && !socket.isClosed()) {
-                socket.close();
-            }
-            if (userDAO != null) {
-                try {
-                    userDAO.updateStatus(currentUserId, "offline");
-                    chatArea.appendText("Logged out successfully\n");
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    chatArea.appendText("Database error during logout: " + e.getMessage() + "\n");
-                }
-            }
-            switchScene("/org/example/zalu/views/login-view.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error logging out: " + e.getMessage());
-        }
-    }
-
-    private void switchScene(String fxmlPath) throws IOException {
-        if (stage == null) throw new IllegalStateException("Stage is not initialized");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 800, 400);
-        stage.setScene(scene);
-        stage.setTitle("Chat Application - " + fxmlPath.replace("/views/", "").replace(".fxml", ""));
-        stage.show();
     }
 
     @FXML
@@ -237,8 +251,13 @@ public class MainController {
         if (selected != null) {
             currentFriendId = Integer.parseInt(selected.replace("User", ""));
             try {
-                loadMessagesAndVoices();
-            } catch (SQLException e) {
+                ObjectOutputStream out = ChatClient.getOut();
+                if (out == null) return;
+                String req = "GET_MESSAGES|" + currentUserId + "|" + currentFriendId;
+                out.writeObject(req);
+                out.flush();
+                System.out.println("Sent GET_MESSAGES for friend " + currentFriendId);
+            } catch (IOException e) {
                 e.printStackTrace();
                 chatArea.appendText("Error loading messages: " + e.getMessage() + "\n");
             }
@@ -246,60 +265,140 @@ public class MainController {
     }
 
     @FXML
-    private void sendVoiceMessage() {
-        if (currentFriendId != -1) {
-            try {
-                String filePath = "/path/to/sample_voice.mp3"; // Thay bằng logic chọn file
-                VoiceMessage voiceMessage = new VoiceMessage(0, currentUserId, currentFriendId, filePath, LocalDateTime.now(), false);
-                if (voiceMessageDAO.saveVoiceMessage(voiceMessage)) {
-                    String fullMessage = currentUserId + ":" + currentFriendId + ":VOICE:" + filePath;
-                    out.writeObject(fullMessage);
-                    out.flush();
-                    loadMessagesAndVoices();
-                } else {
-                    chatArea.appendText("Failed to send voice message\n");
-                }
-            } catch (SQLException | IOException e) {
-                e.printStackTrace();
-                chatArea.appendText("Error sending voice message: " + e.getMessage() + "\n");
-            }
-        }
-    }
-
-    @FXML
     private void addFriend() {
+        String input = friendIdField.getText().trim(); // LẤY INPUT TỪ TEXTFIELD
+        if (input.isEmpty()) {
+            chatArea.appendText("Please enter friend ID\n");
+            return;
+        }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/add-friend-view.fxml"));
-            Parent root = loader.load();
-            AddFriendController addFriendController = loader.getController();
-            addFriendController.setStage(stage);
-            addFriendController.setCurrentUserId(currentUserId);
-            stage.setScene(new Scene(root, 400, 300));
-            stage.setTitle("Chat Application - Add Friend");
-            stage.show();
+            int targetId = Integer.parseInt(input); // Parse input thành int
+            ObjectOutputStream out = ChatClient.getOut();
+            if (out == null) return;
+            String req = "SEND_FRIEND_REQUEST|" + currentUserId + "|" + targetId;
+            out.writeObject(req);
+            out.flush();
+            chatArea.appendText("Friend request sent to User" + targetId + "\n");
+            friendIdField.clear(); // Clear field sau khi gửi
+        } catch (NumberFormatException e) {
+            chatArea.appendText("Invalid ID format\n");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error loading add friend view: " + e.getMessage());
+            chatArea.appendText("Error sending friend request: " + e.getMessage() + "\n");
         }
     }
 
     @FXML
     private void viewFriendRequests() {
+        if (currentUserId == -1) {
+            chatArea.appendText("Please login first\n");
+            return;
+        }
+
+        waitingForRequests = true;
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/friend-request-view.fxml"));
-            Parent root = loader.load();
-            FriendRequestController requestController = loader.getController();
-            if (requestController == null) {
-                throw new IOException("FriendRequestController not loaded from FXML");
+            ObjectOutputStream out = ChatClient.getOut();
+            if (out == null) {
+                chatArea.appendText("Server not connected\n");
+                return;
             }
-            requestController.setStage(stage);
-            requestController.setCurrentUserId(currentUserId); // Gọi ngay sau load, trước set scene
-            stage.setScene(new Scene(root, 400, 300));
-            stage.setTitle("Chat Application - Friend Requests");
-            stage.show();
+            String req = "GET_PENDING_REQUESTS|" + currentUserId;
+            out.writeObject(req);
+            out.flush();
+            System.out.println("Sent GET_PENDING_REQUESTS for user " + currentUserId);
+
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(200);
+                    try{
+                        switchToFriendRequestsView();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (InterruptedException e) {
+
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Error loading friend request view: " + e.getMessage());
+            chatArea.appendText("Error requesting pending requests: " + e.getMessage() + "\n");
+            waitingForRequests = false;
+        }
+    }
+
+    private void switchToFriendRequestsView() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/friend-request-view.fxml"));
+        Parent root = loader.load();
+        FriendRequestController requestController = loader.getController();
+        if (requestController != null) {
+            requestController.setStage(stage);
+            requestController.setCurrentUserId(currentUserId);
+            requestController.setPendingRequests(pendingRequests);
+        }
+        stage.setScene(new Scene(root, 400, 300));
+        stage.setTitle("Chat Application - Friend Requests");
+        stage.show();
+    }
+
+    @FXML
+    private void logout() {
+        System.out.println("Đăng xuất");
+        isRunning = false;
+        listenerStarted = false;
+        try {
+            ChatClient.disconnect();
+            chatArea.appendText("Logged out successfully\n");
+            switchScene("/org/example/zalu/views/login-view.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+            chatArea.appendText("Error during logout: " + e.getMessage() + "\n");
+            Platform.exit();
+        }
+    }
+
+    private void switchScene(String fxmlPath) throws IOException {
+        if (stage == null) throw new IllegalStateException("Stage is not initialized");
+
+        java.net.URL fxmlUrl = getClass().getResource(fxmlPath);
+        if (fxmlUrl == null) {
+            throw new IOException("FXML file not found: " + fxmlPath);
+        }
+        System.out.println("Found FXML at: " + fxmlUrl);
+
+        FXMLLoader loader = new FXMLLoader(fxmlUrl);
+        Parent root = loader.load();
+
+        Object controller = loader.getController();
+        if (controller instanceof LoginController) {
+            ((LoginController) controller).setStage(stage);
+        }
+
+        Scene scene = new Scene(root, 800, 400);
+        stage.setScene(scene);
+        stage.setTitle("Chat Application - Login");
+        stage.show();
+    }
+
+    @FXML
+    private void sendVoiceMessage() {
+        if (currentFriendId != -1) {
+            try {
+                String filePath = "/path/to/sample_voice.mp3"; // Thay bằng logic chọn file
+                ObjectOutputStream out = ChatClient.getOut();
+                if (out == null) {
+                    chatArea.appendText("Server not connected\n");
+                    return;
+                }
+                String req = "SEND_VOICE_MESSAGE|" + currentUserId + "|" + currentFriendId + "|" + filePath;
+                out.writeObject(req);
+                out.flush();
+                chatArea.appendText("Voice message sent: " + filePath + "\n");
+                loadMessagesForFriend();
+            } catch (IOException e) {
+                e.printStackTrace();
+                chatArea.appendText("Error sending voice message: " + e.getMessage() + "\n");
+            }
         }
     }
 }
