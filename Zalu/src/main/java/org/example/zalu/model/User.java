@@ -17,16 +17,11 @@ public class User {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
-        // Gán giá trị trước
         this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.status = status;
-        // Kiểm tra sau khi gán
-        if (this.status != null && !this.status.equals("online") && !this.status.equals("offline")) {
-            throw new IllegalArgumentException("Status must be 'online' or 'offline'");
-        }
+        this.username = username.trim();
+        this.password = password; // Nên hash trước khi lưu
+        this.email = email.trim();
+        setStatus(status); // Sử dụng setStatus để kiểm tra
     }
 
     public int getId() {
@@ -45,7 +40,7 @@ public class User {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
-        this.username = username;
+        this.username = username.trim();
     }
 
     public String getPassword() {
@@ -56,7 +51,7 @@ public class User {
         if (password == null || password.trim().isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
-        this.password = password; // Nên hash password trước khi set
+        this.password = password; // Nên hash trước khi set
     }
 
     public String getEmail() {
@@ -67,7 +62,7 @@ public class User {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
-        this.email = email;
+        this.email = email.trim();
     }
 
     public String getStatus() {

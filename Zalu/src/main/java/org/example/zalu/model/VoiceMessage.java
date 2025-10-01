@@ -4,24 +4,26 @@ import java.time.LocalDateTime;
 
 public class VoiceMessage {
     private int id;
-    private int sender_id;
-    private int receiver_id;
-    private String file_path;
-    private LocalDateTime created_at;
+    private int senderId;
+    private int receiverId;
+    private String filePath;
+    private LocalDateTime createdAt;
+    private boolean isRead;
 
-    public VoiceMessage(int id, int sender_id, int receiver_id, String file_path, LocalDateTime created_at) {
+    public VoiceMessage(int id, int senderId, int receiverId, String filePath, LocalDateTime createdAt, boolean isRead) {
         this.id = id;
-        this.sender_id = sender_id;
-        this.receiver_id = receiver_id;
-        if (file_path == null || file_path.trim().isEmpty()) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path cannot be null or empty");
         }
-        this.file_path = file_path;
-        if (created_at == null) {
-            this.created_at = LocalDateTime.now(); // Mặc định thời gian hiện tại nếu null
+        this.filePath = filePath.trim();
+        if (createdAt == null) {
+            this.createdAt = LocalDateTime.now();
         } else {
-            this.created_at = created_at;
+            this.createdAt = createdAt;
         }
+        this.isRead = isRead;
     }
 
     public int getId() {
@@ -33,41 +35,49 @@ public class VoiceMessage {
     }
 
     public int getSenderId() {
-        return sender_id;
+        return senderId;
     }
 
-    public void setSenderId(int sender_id) {
-        this.sender_id = sender_id;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
     public int getReceiverId() {
-        return receiver_id;
+        return receiverId;
     }
 
-    public void setReceiverId(int receiver_id) {
-        this.receiver_id = receiver_id;
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getFilePath() {
-        return file_path;
+        return filePath;
     }
 
-    public void setFilePath(String file_path) {
-        if (file_path == null || file_path.trim().isEmpty()) {
+    public void setFilePath(String filePath) {
+        if (filePath == null || filePath.trim().isEmpty()) {
             throw new IllegalArgumentException("File path cannot be null or empty");
         }
-        this.file_path = file_path;
+        this.filePath = filePath.trim();
     }
 
     public LocalDateTime getCreatedAt() {
-        return created_at;
+        return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime created_at) {
-        if (created_at == null) {
-            this.created_at = LocalDateTime.now();
+    public void setCreatedAt(LocalDateTime createdAt) {
+        if (createdAt == null) {
+            this.createdAt = LocalDateTime.now();
         } else {
-            this.created_at = created_at;
+            this.createdAt = createdAt;
         }
+    }
+
+    public boolean getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
     }
 }

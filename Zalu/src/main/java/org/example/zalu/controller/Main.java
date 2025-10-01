@@ -1,14 +1,13 @@
 package org.example.zalu.controller;
 
 import org.example.zalu.model.*;
-import org.example.zalu.model.dao.UserDAO;
-import org.example.zalu.model.dao.FriendDAO;
-import org.example.zalu.model.dao.MessageDAO;
-import org.example.zalu.model.dao.VoiceMessageDAO;
+import org.example.zalu.dao.UserDAO;
+import org.example.zalu.dao.FriendDAO;
+import org.example.zalu.dao.MessageDAO;
+import org.example.zalu.dao.VoiceMessageDAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 public class Main {
     public static void main(String[] args) {

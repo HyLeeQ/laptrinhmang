@@ -1,37 +1,41 @@
 package org.example.zalu.model;
 
 public class Friend {
-    private int user_id;
-    private int friend_id;
+    private int userId;
+    private int friendId;
     private String status;
 
-    public Friend (int user_id, int friend_id, String status){
-        this.user_id = user_id;
-        this.friend_id = friend_id;
-        // Kiểm tra status hợp lệ (tùy chọn)
-        if (!status.equals("pending") && !status.equals("accepted") && !status.equals("blocked")) {
+    public Friend(int userId, int friendId, String status) {
+        this.userId = userId;
+        this.friendId = friendId;
+        if (status == null || (!status.equals("pending") && !status.equals("accepted") && !status.equals("blocked"))) {
             throw new IllegalArgumentException("Status must be 'pending', 'accepted', or 'blocked'");
         }
         this.status = status;
     }
 
     public int getUserId() {
-        return user_id;
+        return userId;
     }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public int getFriendId() {
-        return friend_id;
+        return friendId;
     }
+
+    public void setFriendId(int friendId) {
+        this.friendId = friendId;
+    }
+
     public String getStatus() {
         return status;
     }
-    public void setId(int user_id) {
-        this.user_id = user_id;
-    }
-    public void setUsername(int friend_id) {
-        this.friend_id = friend_id;
-    }
-    public void setPassword(String status) {
-        if (!status.equals("pending") && !status.equals("accepted") && !status.equals("blocked")) {
+
+    public void setStatus(String status) {
+        if (status == null || (!status.equals("pending") && !status.equals("accepted") && !status.equals("blocked"))) {
             throw new IllegalArgumentException("Status must be 'pending', 'accepted', or 'blocked'");
         }
         this.status = status;

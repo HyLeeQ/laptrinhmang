@@ -6,28 +6,30 @@ import java.time.LocalDateTime;
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
-    private int sender_id;
-    private int receiver_id;
+    private int senderId;
+    private int receiverId;
     private String content;
-    private LocalDateTime created_at;
+    private boolean isRead;
+    private LocalDateTime createdAt;
 
-    //constructor default
-    public Message(){
+    // Constructor mặc định
+    public Message() {
     }
 
-    //constructor full
-    public Message(int id, int sender_id, int receiver_id, String content, LocalDateTime created_at) {
+    // Constructor đầy đủ
+    public Message(int id, int senderId, int receiverId, String content, boolean isRead, LocalDateTime createdAt) {
         this.id = id;
-        this.sender_id = sender_id;
-        this.receiver_id = receiver_id;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
         if (content == null || content.trim().isEmpty()) {
             throw new IllegalArgumentException("Content cannot be null or empty");
         }
-        this.content = content;
-        if (created_at == null) {
-            this.created_at = LocalDateTime.now(); // Mặc định thời gian hiện tại nếu null
+        this.content = content.trim();
+        this.isRead = isRead;
+        if (createdAt == null) {
+            this.createdAt = LocalDateTime.now();
         } else {
-            this.created_at = created_at;
+            this.createdAt = createdAt;
         }
     }
 
@@ -40,19 +42,19 @@ public class Message implements Serializable {
     }
 
     public int getSenderId() {
-        return sender_id;
+        return senderId;
     }
 
-    public void setSenderId(int sender_id) {
-        this.sender_id = sender_id;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
     public int getReceiverId() {
-        return receiver_id;
+        return receiverId;
     }
 
-    public void setReceiverId(int receiver_id) {
-        this.receiver_id = receiver_id;
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
     }
 
     public String getContent() {
@@ -63,18 +65,26 @@ public class Message implements Serializable {
         if (content == null || content.trim().isEmpty()) {
             throw new IllegalArgumentException("Content cannot be null or empty");
         }
-        this.content = content;
+        this.content = content.trim();
+    }
+
+    public boolean getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
     }
 
     public LocalDateTime getCreatedAt() {
-        return created_at;
+        return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime created_at) {
-        if (created_at == null) {
-            this.created_at = LocalDateTime.now();
+    public void setCreatedAt(LocalDateTime createdAt) {
+        if (createdAt == null) {
+            this.createdAt = LocalDateTime.now();
         } else {
-            this.created_at = created_at;
+            this.createdAt = createdAt;
         }
     }
 }
