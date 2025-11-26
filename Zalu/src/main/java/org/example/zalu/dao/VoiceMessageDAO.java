@@ -1,39 +1,52 @@
 package org.example.zalu.dao;
 
 import org.example.zalu.model.VoiceMessage;
+import org.example.zalu.util.database.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VoiceMessageDAO {
-    private Connection connection;
-
-    public VoiceMessageDAO(Connection connection) {
-        this.connection = connection;
+    
+    public VoiceMessageDAO() {
+        // Sử dụng HikariCP pool từ DBConnection
+    }
+    
+    private Connection getConnection() throws SQLException {
+        return DBConnection.getConnection();
     }
 
     public boolean saveVoiceMessage(VoiceMessage voiceMessage) throws SQLException {
         String sql = "INSERT INTO voice_messages (sender_id, receiver_id, file_path, created_at, is_read) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, voiceMessage.getSenderId());
             pstmt.setInt(2, voiceMessage.getReceiverId());
             pstmt.setString(3, voiceMessage.getFilePath());
             pstmt.setObject(4, voiceMessage.getCreatedAt());
             pstmt.setBoolean(5, voiceMessage.getIsRead());
             int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        voiceMessage.setId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 
     public List<VoiceMessage> getVoiceMessagesByUserAndFriend(int userId, int friendId) throws SQLException {
         List<VoiceMessage> voiceMessages = new ArrayList<>();
         String sql = "SELECT * FROM voice_messages WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) ORDER BY created_at ASC";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             pstmt.setInt(2, friendId);
             pstmt.setInt(3, friendId);
@@ -58,7 +71,8 @@ public class VoiceMessageDAO {
     // Lấy voice message theo ID
     public VoiceMessage findVoiceMessageById(int id) throws SQLException {
         String sql = "SELECT * FROM voice_messages WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -79,7 +93,8 @@ public class VoiceMessageDAO {
     // Cập nhật trạng thái đã đọc
     public boolean markVoiceAsRead(int messageId) throws SQLException {
         String sql = "UPDATE voice_messages SET is_read = TRUE WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, messageId);
             return pstmt.executeUpdate() > 0;
         }

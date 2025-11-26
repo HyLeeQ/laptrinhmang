@@ -1,0 +1,139 @@
+2025-11-24 15:50:06.637 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 15:50:06.637 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 15:50:06.912 [main] INFO  org.example.zalu.server.ChatServer - ================================
+
+2025-11-24 15:50:07.433 [main] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 15:50:23.592 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã đọc cấu hình từ server.properties: localhost:5000
+2025-11-24 15:50:23.594 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ℹ Sử dụng IP mặc định: localhost (để kết nối từ máy khác, cấu hình trong server.properties hoặc dùng -Dserver.address=IP)
+2025-11-24 15:50:23.602 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 15:50:23.618 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 15:50:24.159 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - ✓ Zalu Client đã khởi động thành công!
+2025-11-24 15:50:24.160 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kích thước cố định: 1200.0 x 777.0
+2025-11-24 15:50:24.160 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kết nối server: OK
+2025-11-24 15:50:30.169 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Xử lý LOGIN_REQUEST: LOGIN_REQUEST|user1|123456
+2025-11-24 15:50:30.462 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Login thành công, gửi LOGIN_RESPONSE cho user 1
+2025-11-24 15:50:30.748 [Thread-4] INFO  o.example.zalu.server.ClientHandler - ✓ user1 (ID: 1) đăng nhập thành công
+2025-11-24 15:50:46.373 [Thread-4] INFO  o.example.zalu.server.ClientHandler - User 1 đăng xuất chủ động
+2025-11-24 15:50:46.574 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 15:50:46.575 [Thread-4] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 15:50:46.587 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - Ứng dụng Zalu đã tắt hoàn toàn – Hẹn gặp lại!
+2025-11-24 15:50:46.604 [Thread-4] INFO  org.example.zalu.ZaluApplication - App đang tắt → disconnect sạch
+2025-11-24 15:50:58.221 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã đọc cấu hình từ server.properties: localhost:5000
+2025-11-24 15:50:58.223 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ℹ Sử dụng IP mặc định: localhost (để kết nối từ máy khác, cấu hình trong server.properties hoặc dùng -Dserver.address=IP)
+2025-11-24 15:50:58.230 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 15:50:58.236 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 15:50:58.707 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - ✓ Zalu Client đã khởi động thành công!
+2025-11-24 15:50:58.708 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kích thước cố định: 1200.0 x 777.0
+2025-11-24 15:50:58.708 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kết nối server: OK
+2025-11-24 15:51:27.999 [Thread-5] INFO  o.example.zalu.server.ClientHandler - Server: Xử lý LOGIN_REQUEST: LOGIN_REQUEST|user1|123456
+2025-11-24 15:51:28.100 [Thread-5] INFO  o.example.zalu.server.ClientHandler - Server: Login thành công, gửi LOGIN_RESPONSE cho user 1
+2025-11-24 15:51:28.218 [Thread-5] INFO  o.example.zalu.server.ClientHandler - ✓ user1 (ID: 1) đăng nhập thành công
+2025-11-24 15:53:20.822 [Thread-5] INFO  o.example.zalu.server.ClientHandler - User 1 đăng xuất chủ động
+2025-11-24 15:53:21.023 [Thread-5] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 15:53:21.025 [Thread-5] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 15:53:21.043 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - Ứng dụng Zalu đã tắt hoàn toàn – Hẹn gặp lại!
+2025-11-24 15:53:21.054 [Thread-4] INFO  org.example.zalu.ZaluApplication - App đang tắt → disconnect sạch
+2025-11-24 15:54:20.518 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 15:54:20.519 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 15:54:20.714 [main] INFO  org.example.zalu.server.ChatServer - ================================
+
+2025-11-24 15:54:21.086 [main] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 15:54:30.747 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã đọc cấu hình từ server.properties: localhost:5000
+2025-11-24 15:54:30.749 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ℹ Sử dụng IP mặc định: localhost (để kết nối từ máy khác, cấu hình trong server.properties hoặc dùng -Dserver.address=IP)
+2025-11-24 15:54:30.755 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 15:54:30.763 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 15:54:31.249 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - ✓ Zalu Client đã khởi động thành công!
+2025-11-24 15:54:31.249 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kích thước cố định: 1200.0 x 777.0
+2025-11-24 15:54:31.249 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kết nối server: OK
+2025-11-24 15:54:43.379 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Xử lý LOGIN_REQUEST: LOGIN_REQUEST|user1|123456
+2025-11-24 15:54:43.512 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Login thành công, gửi LOGIN_RESPONSE cho user 1
+2025-11-24 15:54:43.734 [Thread-4] INFO  o.example.zalu.server.ClientHandler - ✓ user1 (ID: 1) đăng nhập thành công
+2025-11-24 15:56:43.741 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 15:56:43.739 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 15:56:43.748 [Thread-4] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 15:56:43.754 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 15:56:43.767 [Thread-5] INFO  o.example.zalu.server.ClientHandler - Khôi phục session thành công cho userId 1
+2025-11-24 15:57:06.232 [Thread-5] INFO  o.example.zalu.server.ClientHandler - User 1 đăng xuất chủ động
+2025-11-24 15:57:06.433 [Thread-5] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 15:57:06.435 [Thread-5] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 15:58:27.655 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 15:58:27.713 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 15:58:27.817 [Thread-6] INFO  o.example.zalu.server.ClientHandler - Server: Xử lý LOGIN_REQUEST: LOGIN_REQUEST|user1|123456
+2025-11-24 15:58:28.013 [Thread-6] INFO  o.example.zalu.server.ClientHandler - Server: Login thành công, gửi LOGIN_RESPONSE cho user 1
+2025-11-24 15:58:28.198 [Thread-6] INFO  o.example.zalu.server.ClientHandler - ✓ user1 (ID: 1) đăng nhập thành công
+2025-11-24 16:00:28.210 [Thread-6] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 16:00:28.218 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 16:00:28.221 [Thread-6] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 16:00:28.228 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 16:00:28.253 [Thread-7] INFO  o.example.zalu.server.ClientHandler - Khôi phục session thành công cho userId 1
+2025-11-24 16:01:18.360 [Thread-7] INFO  o.example.zalu.server.ClientHandler - User 1 đăng xuất chủ động
+2025-11-24 16:01:18.564 [Thread-7] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 16:01:18.564 [Thread-7] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 16:01:18.641 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - Ứng dụng Zalu đã tắt hoàn toàn – Hẹn gặp lại!
+2025-11-24 16:01:18.660 [Thread-4] INFO  org.example.zalu.ZaluApplication - App đang tắt → disconnect sạch
+2025-11-24 16:11:09.933 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 16:11:09.934 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 16:11:10.206 [main] INFO  org.example.zalu.server.ChatServer - ================================
+
+2025-11-24 16:11:11.286 [main] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 18:09:51.761 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 18:09:51.762 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 18:10:17.973 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 18:10:17.974 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 18:10:18.191 [main] INFO  org.example.zalu.server.ChatServer - ================================
+
+2025-11-24 18:10:21.873 [main] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 18:10:33.307 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã đọc cấu hình từ server.properties: localhost:5000
+2025-11-24 18:10:33.309 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ℹ Sử dụng IP mặc định: localhost (để kết nối từ máy khác, cấu hình trong server.properties hoặc dùng -Dserver.address=IP)
+2025-11-24 18:10:33.316 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 18:10:33.322 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 18:10:33.762 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - ✓ Zalu Client đã khởi động thành công!
+2025-11-24 18:10:33.763 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kích thước cố định: 1200.0 x 777.0
+2025-11-24 18:10:33.763 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kết nối server: OK
+2025-11-24 18:10:40.737 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Xử lý LOGIN_REQUEST: LOGIN_REQUEST|user1|123456
+2025-11-24 18:10:40.970 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Login thành công, gửi LOGIN_RESPONSE cho user 1
+2025-11-24 18:10:41.195 [Thread-4] INFO  o.example.zalu.server.ClientHandler - ✓ user1 (ID: 1) đăng nhập thành công
+2025-11-24 18:10:45.302 [Thread-4] INFO  o.example.zalu.server.ClientHandler - User 1 đăng xuất chủ động
+2025-11-24 18:10:45.502 [Thread-4] INFO  o.example.zalu.server.ClientHandler - Server: Client 1 đã đóng kết nối (EOF)
+2025-11-24 18:10:45.503 [Thread-4] INFO  o.example.zalu.server.ClientHandler - User 1 đã thoát
+2025-11-24 18:10:45.513 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - Ứng dụng Zalu đã tắt hoàn toàn – Hẹn gặp lại!
+2025-11-24 18:10:45.530 [Thread-3] INFO  org.example.zalu.ZaluApplication - App đang tắt → disconnect sạch
+2025-11-24 18:34:13.237 [org.example.zalu.server.ChatServer.main()] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 18:34:13.239 [org.example.zalu.server.ChatServer.main()] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 18:49:59.095 [org.example.zalu.server.ChatServer.main()] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 18:49:59.096 [org.example.zalu.server.ChatServer.main()] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 18:49:59.442 [org.example.zalu.server.ChatServer.main()] INFO  org.example.zalu.server.ChatServer - ================================
+
+2025-11-24 18:50:00.777 [org.example.zalu.server.ChatServer.main()] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 18:59:00.876 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 18:59:00.878 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 18:59:06.086 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2025-11-24 18:59:06.090 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2025-11-24 18:59:06.092 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+
+2025-11-24 18:59:07.277 [main] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 18:59:18.716 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã đọc cấu hình từ server.properties: localhost:5000
+2025-11-24 18:59:18.718 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ℹ Sử dụng IP mặc định: localhost (để kết nối từ máy khác, cấu hình trong server.properties hoặc dùng -Dserver.address=IP)
+2025-11-24 18:59:18.729 [main] INFO  org.example.zalu.server.ChatServer - ✅ Client mới kết nối: /127.0.0.1
+2025-11-24 18:59:18.737 [JavaFX Application Thread] INFO  org.example.zalu.client.ChatClient - ✓ Đã kết nối tới server: localhost:5000
+2025-11-24 18:59:19.183 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - ✓ Zalu Client đã khởi động thành công!
+2025-11-24 18:59:19.183 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kích thước cố định: 1200.0 x 777.0
+2025-11-24 18:59:19.183 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication -    Kết nối server: OK
+2025-11-24 18:59:25.954 [JavaFX Application Thread] INFO  org.example.zalu.ZaluApplication - Ứng dụng Zalu đã tắt hoàn toàn – Hẹn gặp lại!
+2025-11-24 18:59:25.967 [Thread-3] INFO  org.example.zalu.ZaluApplication - App đang tắt → disconnect sạch
+2025-11-24 19:25:41.132 [main] INFO  org.example.zalu.server.ChatServer - ✓ Tất cả DAO đã khởi tạo thành công với HikariCP!
+2025-11-24 19:25:41.135 [main] INFO  org.example.zalu.server.ChatServer - === Kiểm tra cấu hình MySQL ===
+2025-11-24 19:25:46.340 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2025-11-24 19:25:46.344 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2025-11-24 19:25:46.345 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+
+2025-11-24 19:25:49.852 [Thread-4] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 19:25:51.851 [JavaFX Application Thread] INFO  org.example.zalu.server.ChatServer - Server đã dừng
+2025-11-24 19:25:52.744 [Thread-5] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 19:25:53.501 [JavaFX Application Thread] INFO  org.example.zalu.server.ChatServer - Server đã dừng
+2025-11-24 19:26:00.624 [Thread-6] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 19:26:01.589 [JavaFX Application Thread] INFO  org.example.zalu.server.ChatServer - Server đã dừng
+2025-11-24 19:26:02.220 [Thread-7] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 19:26:02.998 [JavaFX Application Thread] INFO  org.example.zalu.server.ChatServer - Server đã dừng
+2025-11-24 19:26:03.758 [Thread-8] INFO  org.example.zalu.server.ChatServer - 🚀 Zalu Server đang chạy trên port 5000
+2025-11-24 19:26:05.143 [JavaFX Application Thread] INFO  org.example.zalu.server.ChatServer - Server đã dừng

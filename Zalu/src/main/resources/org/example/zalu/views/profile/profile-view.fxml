@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.profile.ProfileController"
+            stylesheets="@/styles.css">
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="profile-scroll">
+            <VBox spacing="18" styleClass="profile-dialog" prefWidth="520">
+
+                <StackPane styleClass="profile-cover">
+                    <VBox alignment="BOTTOM_LEFT" spacing="16" styleClass="profile-cover-content">
+                        <HBox spacing="18" alignment="CENTER_LEFT">
+                            <StackPane styleClass="profile-avatar-frame">
+                                <ImageView fx:id="avatarImageView" fitWidth="110" fitHeight="110" preserveRatio="true"/>
+                                <Button text="📷" onAction="#chooseAvatar" styleClass="profile-avatar-btn"
+                                        StackPane.alignment="BOTTOM_RIGHT"/>
+                            </StackPane>
+                            <VBox spacing="6">
+                                <Label fx:id="usernameLabel" text="Tên hiển thị" styleClass="profile-name"/>
+                                <Label fx:id="emailLabel" text="email@example.com" styleClass="profile-email"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+
+                <VBox spacing="18" styleClass="profile-section">
+                    <Label text="Thông tin cá nhân" styleClass="section-heading"/>
+                    <GridPane hgap="18" vgap="14">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" prefWidth="140"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Họ và tên" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <TextField fx:id="fullNameField" promptText="Nhập họ và tên"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-field"/>
+
+                        <Label text="Giới tính" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <HBox spacing="12" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                            <RadioButton fx:id="maleRadio" text="Nam"/>
+                            <RadioButton fx:id="femaleRadio" text="Nữ"/>
+                            <RadioButton fx:id="otherRadio" text="Khác"/>
+                        </HBox>
+
+                        <Label text="Ngày sinh" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <DatePicker fx:id="birthdatePicker" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-field"/>
+
+                        <Label text="Điện thoại" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
+                        <TextField fx:id="phoneField" promptText="Nhập số điện thoại"
+                                   GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-field"/>
+
+                        <Label text="Mô tả" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.valignment="TOP" styleClass="field-label"/>
+                        <TextArea fx:id="bioField" prefRowCount="3" wrapText="true"
+                                  GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-field"/>
+                    </GridPane>
+                </VBox>
+
+                <VBox spacing="12" styleClass="profile-section">
+                    <Label text="Bảo mật" styleClass="section-heading"/>
+                    <HBox spacing="10">
+                        <Button fx:id="changePasswordButton" text="Đổi mật khẩu" onAction="#changePassword"/>
+                        <PasswordField fx:id="newPasswordField" promptText="Mật khẩu mới" visible="false" managed="false"/>
+                    </HBox>
+                </VBox>
+
+                <Label fx:id="statusLabel" text="" styleClass="profile-status"/>
+
+                <HBox alignment="CENTER_RIGHT" spacing="12">
+                    <Button text="👁 Xem hồ sơ" onAction="#viewBio" styleClass="ghost-btn"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Lưu thay đổi" onAction="#saveProfile" styleClass="primary-btn"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fx:controller="org.example.zalu.controller.friend.AddFriendController"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            stylesheets="@/styles.css"
+            styleClass="add-friend-scroll">
+    <content>
+        <VBox alignment="TOP_LEFT" spacing="28" styleClass="add-friend-container">
+            <padding>
+                <Insets top="32" right="32" bottom="32" left="32"/>
+            </padding>
+
+            <VBox spacing="8" styleClass="add-friend-header">
+                <Label text="Tìm kiếm bạn bè" styleClass="add-friend-eyebrow"/>
+                <Label text="Kết nối với bạn bè mới" styleClass="add-friend-title"/>
+                <Label text="Tìm kiếm người dùng bằng username hoặc email và gửi lời mời kết bạn."
+                       wrapText="true" styleClass="add-friend-subtitle"/>
+            </VBox>
+
+            <VBox spacing="16" styleClass="add-friend-card">
+                <Label text="🔍 Tìm kiếm" styleClass="section-title"/>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="add-friend-search-row">
+                    <TextField fx:id="searchField"
+                               promptText="Nhập username hoặc email để tìm kiếm..."
+                               HBox.hgrow="ALWAYS"
+                               styleClass="form-field"/>
+                    <Button fx:id="searchButton" text="🔍 Tìm kiếm" onAction="#searchFriend"
+                            styleClass="primary-btn" prefWidth="160" prefHeight="46"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="16" styleClass="add-friend-card" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="📋 Kết quả tìm kiếm" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="resultCountLabel" text="" styleClass="section-count"/>
+                </HBox>
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                            hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                            styleClass="add-friend-list-scroll">
+                    <content>
+                        <VBox fx:id="friendListContainer" spacing="12" styleClass="add-friend-list">
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="8"/>
+                            </padding>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

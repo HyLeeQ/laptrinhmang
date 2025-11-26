@@ -1,6 +1,12 @@
 package org.example.zalu.dao;
 
 import org.example.zalu.model.Friend;
+import org.example.zalu.model.User;
+import org.example.zalu.util.database.DBConnection;
+import org.example.zalu.exception.database.DatabaseException;
+import org.example.zalu.exception.database.DatabaseConnectionException;
+import org.example.zalu.exception.auth.UserNotFoundException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,184 +15,200 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FriendDAO {
-    private Connection connection;
 
-    public FriendDAO(Connection connection) {
-        this.connection = connection;
+    // Không cần gì nữa, chỉ dùng DBConnection.getConnection()
+
+    private Connection getConnection() throws SQLException {
+        return DBConnection.getConnection();   // ← Dùng pool xịn của bạn
+    }
+
+    // ===================== TOÀN BỘ METHOD GIỮ NGUYÊN =====================
+
+    public boolean isExistingFriendOrRequest(int userId, int friendId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM friends " +
+                "WHERE ((user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)) " +
+                "AND status IN ('accepted', 'pending')";
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);
+            p.setInt(2, friendId);
+            p.setInt(3, friendId);
+            p.setInt(4, userId);
+
+            try(ResultSet rs = p.executeQuery()) {
+                if(rs.next()){
+                    int count = rs.getInt(1);
+                    System.out.println("Kiểm tra quan hệ: count = " + count + " giữa " + userId + " và " + friendId);
+                    return count > 0;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean saveFriend(Friend friend) throws SQLException {
         String sql = "INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, friend.getUserId());
-            pstmt.setInt(2, friend.getFriendId());
-            pstmt.setString(3, friend.getStatus());
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0;
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, friend.getUserId());
+            p.setInt(2, friend.getFriendId());
+            p.setString(3, friend.getStatus());
+            return p.executeUpdate() > 0;
         }
     }
 
     public Friend findFriendById(int userId, int friendId) throws SQLException {
         String sql = "SELECT * FROM friends WHERE user_id = ? AND friend_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            pstmt.setInt(2, friendId);
-            try (ResultSet rs = pstmt.executeQuery()) {
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);
+            p.setInt(2, friendId);
+            try (ResultSet rs = p.executeQuery()) {
                 if (rs.next()) {
-                    return new Friend(
-                            rs.getInt("user_id"),
-                            rs.getInt("friend_id"),
-                            rs.getString("status")
-                    );
+                    return new Friend(rs.getInt("user_id"), rs.getInt("friend_id"), rs.getString("status"));
                 }
             }
         }
         return null;
     }
 
-    // Lấy danh sách bạn bè của người dùng (accepted)
     public List<Integer> getFriendsByUserId(int userId) throws SQLException {
-        List<Integer> friendIds = new ArrayList<>();
-        String sql = "SELECT friend_id FROM friends WHERE user_id = ? AND status = 'accepted'";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            try (ResultSet rs = pstmt.executeQuery()) {
+        List<Integer> list = new ArrayList<>();
+        String sql = """
+        SELECT friend_id FROM friends WHERE user_id = ? AND status = 'accepted'
+        UNION
+        SELECT user_id FROM friends WHERE friend_id = ? AND status = 'accepted'
+        """;
+        try (Connection conn = getConnection();
+             PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);
+            p.setInt(2, userId);
+            try (ResultSet rs = p.executeQuery()) {
                 while (rs.next()) {
-                    friendIds.add(rs.getInt("friend_id"));
+                    int friendId = rs.getInt(1);
+                    if (friendId != userId) {
+                        list.add(friendId);
+                    }
                 }
             }
         }
-        return friendIds;
+        return list;
     }
 
-    // Lấy danh sách lời mời kết bạn (pending requests)
     public List<Integer> getPendingRequests(int userId) throws SQLException {
-        List<Integer> senderIds = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         String sql = "SELECT user_id FROM friends WHERE friend_id = ? AND status = 'pending'";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    senderIds.add(rs.getInt("user_id"));
-                }
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);
+            try (ResultSet rs = p.executeQuery()) {
+                while (rs.next()) list.add(rs.getInt(1));
             }
         }
-        return senderIds;
+        return list;
     }
 
-    // Gửi lời mời kết bạn (status = 'pending') - Lưu hai chiều với transaction
+    public List<Integer> getOutgoingRequest(int userId) throws SQLException {
+        List<Integer> list = new ArrayList<>();
+        String sql = "SELECT friend_id FROM friends WHERE user_id = ? AND status = 'pending'";
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);
+            try (ResultSet rs = p.executeQuery()) {
+                while (rs.next()) list.add(rs.getInt(1));
+            }
+        }
+        return list;
+    }
+
+    public List<User> getPendingRequestsWithUserInfo(int userId, UserDAO userDAO) throws SQLException, DatabaseException, DatabaseConnectionException {
+        List<User> list = new ArrayList<>();
+        for (int senderId : getPendingRequests(userId)) {
+            try {
+                User u = userDAO.getUserById(senderId);
+                if (u != null) list.add(u);
+            } catch (UserNotFoundException e) {
+                // User might have been deleted, skip silently
+                System.out.println("User with ID " + senderId + " not found, skipping...");
+            }
+        }
+        return list;
+    }
+
+    public List<User> getOutgoingRequestsWithUserInfo(int userId, UserDAO userDAO) throws SQLException, DatabaseException, DatabaseConnectionException {
+        List<User> list = new ArrayList<>();
+        for (int receiverId : getOutgoingRequest(userId)) {
+            try {
+                User u = userDAO.getUserById(receiverId);
+                if (u != null) list.add(u);
+            } catch (UserNotFoundException e) {
+                // User might have been deleted, skip silently
+                System.out.println("User with ID " + receiverId + " not found, skipping...");
+            }
+        }
+        return list;
+    }
+
     public boolean sendFriendRequest(int userId, int friendId) throws SQLException {
-        if (userId == friendId) return false; // Không tự kết bạn
+        if (userId == friendId) return false;
+        if (!userExists(userId) || !userExists(friendId)) return false;
+        if (isExistingFriendOrRequest(userId, friendId)) return false;
 
-        // Kiểm tra đã tồn tại chưa (hai chiều)
-        String checkSql = "SELECT COUNT(*) FROM friends WHERE (user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)";
-        try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
-            checkStmt.setInt(1, userId);
-            checkStmt.setInt(2, friendId);
-            checkStmt.setInt(3, friendId);
-            checkStmt.setInt(4, userId);
-            ResultSet rs = checkStmt.executeQuery();
-            if (rs.next() && rs.getInt(1) > 0) {
-                System.out.println("Friend request already exists for " + userId + " - " + friendId);
-                return false;
-            }
-        }
-
-        // Sử dụng transaction để đảm bảo cả hai chiều thành công
-        connection.setAutoCommit(false); // Bắt đầu transaction
-        try {
-            // Lưu chiều 1: sender -> receiver
-            String sql = "INSERT INTO friends (user_id, friend_id, status, created_at) VALUES (?, ?, 'pending', CURRENT_TIMESTAMP)";
-            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-                pstmt.setInt(1, userId);
-                pstmt.setInt(2, friendId);
-                int rowsAffected1 = pstmt.executeUpdate();
-                if (rowsAffected1 == 0) {
-                    connection.rollback();
-                    return false;
-                }
-                System.out.println("Inserted first direction: " + userId + " -> " + friendId);
-            }
-
-            // Lưu chiều 2: receiver -> sender
-            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-                pstmt.setInt(1, friendId);
-                pstmt.setInt(2, userId);
-                int rowsAffected2 = pstmt.executeUpdate();
-                if (rowsAffected2 == 0) {
-                    connection.rollback();
-                    return false;
-                }
-                System.out.println("Inserted second direction: " + friendId + " -> " + userId);
-            }
-
-            connection.commit(); // Commit nếu cả hai thành công
-            System.out.println("Friend request sent successfully (both directions)");
-            return true;
-        } catch (SQLException e) {
-            connection.rollback(); // Rollback nếu lỗi
-            e.printStackTrace();
-            System.out.println("Error sending friend request: " + e.getMessage());
-            throw e;
-        } finally {
-            connection.setAutoCommit(true); // Kết thúc transaction
+        String sql = "INSERT INTO friends (user_id, friend_id, status, created_at) VALUES (?, ?, 'pending', NOW())";
+        try (Connection conn = getConnection();
+             PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);     // người gửi
+            p.setInt(2, friendId);   // người nhận
+            boolean success = p.executeUpdate() > 0;
+            System.out.println(success ?
+                    "Gửi lời mời thành công từ " + userId + " đến " + friendId :
+                    "Gửi thất bại");
+            return success;
         }
     }
-
-    // Chấp nhận lời mời kết bạn (cập nhật hai chiều)
-    public boolean acceptFriendRequest(int userId, int friendId) throws SQLException {
+    public boolean acceptFriendRequest(int userId, int senderId) throws SQLException {
         String sql = "UPDATE friends SET status = 'accepted' WHERE user_id = ? AND friend_id = ? AND status = 'pending'";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            // Cập nhật chiều 1: sender -> receiver
-            pstmt.setInt(1, friendId); // Người gửi lời mời
-            pstmt.setInt(2, userId); // Người nhận lời mời
-            int rowsAffected1 = pstmt.executeUpdate();
-            System.out.println("Rows affected in first direction: " + rowsAffected1);
-            if (rowsAffected1 > 0) {
-                // Cập nhật chiều 2: receiver -> sender
-                pstmt.setInt(1, userId);
-                pstmt.setInt(2, friendId);
-                int rowsAffected2 = pstmt.executeUpdate();
-                System.out.println("Rows affected in second direction: " + rowsAffected2);
-                if (rowsAffected2 > 0) {
-                    return true;
-                }
-            }
-            return false;
+        try (Connection conn = getConnection();
+             PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, senderId);
+            p.setInt(2, userId);
+            int rows = p.executeUpdate();
+            System.out.println("Accept friend: updated " + rows + " rows");
+            return rows > 0;
         }
     }
 
-    // Từ chối lời mời kết bạn (xóa hai chiều)
-    public boolean rejectFriendRequest(int userId, int friendId) throws SQLException {
+    public boolean rejectFriendRequest(int userId, int senderId) throws SQLException {
         String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ? AND status = 'pending'";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            // Xóa chiều 1: sender -> receiver
-            pstmt.setInt(1, friendId); // Người gửi lời mời
-            pstmt.setInt(2, userId); // Người nhận lời mời
-            int rowsAffected1 = pstmt.executeUpdate();
-            System.out.println("Rows deleted in first direction: " + rowsAffected1);
-            if (rowsAffected1 > 0) {
-                // Xóa chiều 2: receiver -> sender
-                pstmt.setInt(1, userId);
-                pstmt.setInt(2, friendId);
-                int rowsAffected2 = pstmt.executeUpdate();
-                System.out.println("Rows deleted in second direction: " + rowsAffected2);
-                if (rowsAffected2 > 0) {
-                    return true;
-                }
-            }
-            return false;
+        try (Connection conn = getConnection();
+             PreparedStatement p = conn.prepareStatement(sql)) {
+
+            p.setInt(1, senderId);
+            p.setInt(2, userId);
+
+            int rows = p.executeUpdate();
+            System.out.println("Reject friend: deleted " + rows + " rows (sender=" + senderId + ", receiver=" + userId + ")");
+            return rows > 0;
         }
     }
 
-    // Cập nhật trạng thái bạn bè
     public boolean updateFriendStatus(int userId, int friendId, String status) throws SQLException {
         String sql = "UPDATE friends SET status = ? WHERE user_id = ? AND friend_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, status);
-            pstmt.setInt(2, userId);
-            pstmt.setInt(3, friendId);
-            return pstmt.executeUpdate() > 0;
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setString(1, status);
+            p.setInt(2, userId);
+            p.setInt(3, friendId);
+            return p.executeUpdate() > 0;
         }
+    }
+
+    private boolean userExists(int userId) throws SQLException {
+        String sql = "SELECT 1 FROM users WHERE id = ? LIMIT 1";
+        try (Connection conn = getConnection(); PreparedStatement p = conn.prepareStatement(sql)) {
+            p.setInt(1, userId);
+            try (ResultSet rs = p.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    public List<Integer> getPendingFriendRequests(int userId) throws SQLException {
+        // Chính là hàm cũ của bạn, chỉ đổi tên cho đúng chuẩn
+        return getPendingRequests(userId);
     }
 }

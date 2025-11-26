@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.zalu.controller.chat.WelcomeController"
+           stylesheets="@/styles.css" styleClass="welcome-root">
+    <children>
+        <VBox alignment="CENTER" spacing="32" styleClass="welcome-container">
+            <children>
+                <!-- Icon/Logo Section -->
+                <VBox alignment="CENTER" spacing="8">
+                    <StackPane styleClass="welcome-icon-wrapper">
+                        <Region styleClass="welcome-icon-circle"/>
+                        <Label text="💬" styleClass="welcome-icon-emoji"/>
+                    </StackPane>
+                    <Label text="Zalu" styleClass="welcome-logo"/>
+                </VBox>
+                
+                <!-- Welcome Text Section -->
+                <VBox alignment="CENTER" spacing="12" maxWidth="500">
+                    <Label text="Chào mừng bạn đến với Zalu!" styleClass="welcome-title"/>
+                    <Label fx:id="welcomeLabel" text="Bạn đã đăng nhập thành công" 
+                           styleClass="welcome-subtitle" wrapText="true"/>
+                    <Label fx:id="userInfoLabel" text="Tài khoản: [username]" 
+                           styleClass="welcome-user-info"/>
+                </VBox>
+                
+                <!-- Features Section -->
+                <VBox alignment="CENTER" spacing="16" maxWidth="600">
+                    <HBox alignment="CENTER" spacing="32">
+                        <VBox alignment="CENTER" spacing="8" styleClass="welcome-feature">
+                            <Label text="🔒" styleClass="welcome-feature-icon"/>
+                            <Label text="Bảo mật cao" styleClass="welcome-feature-text"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="8" styleClass="welcome-feature">
+                            <Label text="⚡" styleClass="welcome-feature-icon"/>
+                            <Label text="Tin nhắn nhanh" styleClass="welcome-feature-text"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="8" styleClass="welcome-feature">
+                            <Label text="👥" styleClass="welcome-feature-icon"/>
+                            <Label text="Nhóm chat" styleClass="welcome-feature-text"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+                
+                <!-- CTA Button (sẽ bị ẩn khi embedded) -->
+                <Button fx:id="goToMainButton" text="Bắt đầu trò chuyện" onAction="#switchToMain" 
+                        prefHeight="52" prefWidth="280" styleClass="welcome-primary-btn"/>
+                        
+                <Region VBox.vgrow="ALWAYS"/>
+                
+                <!-- Footer -->
+                <Label text="Chọn một người bạn hoặc nhóm để bắt đầu nhắn tin" 
+                       styleClass="welcome-footer"/>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

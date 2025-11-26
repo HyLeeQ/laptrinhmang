@@ -1,0 +1,8 @@
+2025-11-24 18:59:06.086 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2025-11-24 18:59:06.090 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2025-11-24 18:59:06.092 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+
+2025-11-24 19:25:46.340 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2025-11-24 19:25:46.344 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2025-11-24 19:25:46.345 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+

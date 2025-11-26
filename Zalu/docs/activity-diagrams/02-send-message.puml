@@ -1,0 +1,33 @@
+@startuml Send Message Flow
+title Activity Diagram: Luồng Gửi tin nhắn 1-1
+
+start
+
+:User nhập tin nhắn và nhấn gửi;
+:ChatController.sendContentToActiveChat();
+
+if (Chat với friend?) then (yes)
+  :Gửi SEND_MESSAGE|receiverId|senderId|content;
+  :Tạo Message local;
+  :Hiển thị ngay trên UI;
+else (no - group)
+  :Gửi SEND_GROUP_MESSAGE|groupId|content;
+  :Tạo Message local;
+endif
+
+:Server nhận\n(ClientHandler.handleMessage());
+:Server tạo Message object;
+:Server lưu vào database\n(MessageDAO.saveMessage());
+
+if (Lưu thành công?) then (yes)
+  :Broadcast đến receiver\n(ClientBroadcaster.broadcastMessage());
+  :Gửi MESSAGE_SENT|OK|messageId;
+  :Receiver nhận và cập nhật UI;
+  stop
+else (no)
+  :Gửi MESSAGE_SENT|FAIL;
+  stop
+endif
+
+@enduml
+

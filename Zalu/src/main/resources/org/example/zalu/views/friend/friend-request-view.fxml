@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.zalu.controller.friend.FriendRequestController"
+           stylesheets="@/styles.css"
+           styleClass="friend-requests-root">
+    <children>
+        <VBox alignment="TOP_CENTER" spacing="24" prefWidth="780" styleClass="friend-shell" maxWidth="900">
+            <padding>
+                <Insets top="32" right="36" bottom="32" left="36"/>
+            </padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="friend-header">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Kết nối bạn bè" styleClass="friend-eyebrow"/>
+                        <Label text="Quản lý lời mời kết bạn" styleClass="friend-title"/>
+                        <Label text="Theo dõi yêu cầu đến, yêu cầu đã gửi và thêm bạn mới ngay trong một nơi."
+                               wrapText="true" styleClass="friend-subtitle"/>
+                    </VBox>
+                    <Button text="✕" onAction="#backToMain" styleClass="close-header-btn" prefWidth="40" prefHeight="40"/>
+                </HBox>
+
+                <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" styleClass="friend-tabpane">
+                    <tabs>
+                        <Tab text="Lời mời đến">
+                            <content>
+                                <VBox spacing="20" styleClass="request-section">
+                                    <Label text="Danh sách lời mời kết bạn từ người khác" styleClass="section-title"/>
+                                    <ListView fx:id="incomingList" prefHeight="320" VBox.vgrow="ALWAYS" styleClass="request-list"/>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab text="Yêu cầu đã gửi">
+                            <content>
+                                <VBox spacing="20" styleClass="request-section">
+                                    <Label text="Các lời mời bạn đã gửi đang chờ phản hồi" styleClass="section-title"/>
+                                    <ListView fx:id="outgoingList" prefHeight="320" VBox.vgrow="ALWAYS" styleClass="request-list"/>
+                                </VBox>
+                            </content>
+                        </Tab>
+                        <Tab text="Thêm bạn mới">
+                            <content>
+                                <StackPane styleClass="embedded-card">
+                                    <fx:include source="add-friend-tab.fxml" fx:id="addFriendTab"/>
+                                </StackPane>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </children>
+</StackPane>
+

@@ -1,0 +1,32 @@
+@startuml Login Flow
+title Activity Diagram: Luồng Đăng nhập
+
+start
+
+:User mở ứng dụng;
+:Client kết nối server\n(ChatClient.connectToServer());
+
+:User nhập username/password;
+:Client gửi LOGIN_REQUEST;
+
+:Server nhận request\n(ClientHandler.handleLogin());
+:Server kiểm tra database\n(UserDAO.login());
+
+if (Login thành công?) then (yes)
+  :Server gửi LOGIN_RESPONSE|SUCCESS|userId;
+  :Server gửi danh sách bạn bè;
+  :Server gửi tin nhắn cũ;
+  :Server gửi danh sách nhóm;
+  :Server broadcast USER_ONLINE;
+  
+  :Client nhận response\n(ChatEventManager.processEvent());
+  :Chuyển sang màn hình chính\n(MainController);
+  stop
+else (no)
+  :Server gửi LOGIN_RESPONSE|FAIL;
+  :Đóng kết nối;
+  :Hiển thị lỗi;
+  stop
+endif
+
+@enduml

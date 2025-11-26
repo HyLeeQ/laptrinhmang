@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.group.ManageGroupController"
+            styleClass="friend-requests-root" stylesheets="@/styles.css" prefWidth="600" prefHeight="700">
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="add-friend-scroll">
+            <VBox styleClass="friend-shell" spacing="20" prefWidth="580">
+                <padding><Insets top="28" right="36" bottom="32" left="36"/></padding>
+                
+                <VBox spacing="6" styleClass="friend-header">
+                    <Label text="Quản lý nhóm" styleClass="friend-eyebrow"/>
+                    <Label text="Quản lý nhóm" styleClass="friend-title"/>
+                    <Label fx:id="groupNameLabel" text="Tên nhóm" styleClass="friend-subtitle"/>
+                </VBox>
+                
+                <VBox spacing="12" styleClass="request-section">
+                    <Label text="Ảnh đại diện nhóm" styleClass="field-label"/>
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <ImageView fx:id="groupAvatarView" fitWidth="100" fitHeight="100" preserveRatio="true" styleClass="group-avatar"/>
+                        <VBox spacing="8">
+                            <Button fx:id="changeAvatarButton" text="Đổi avatar" onAction="#handleChangeAvatar" styleClass="primary-btn" prefWidth="150"/>
+                            <Label text="Kích thước tối đa: 2MB" styleClass="auth-subtext"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+                
+                <VBox spacing="12" styleClass="request-section">
+                    <Label text="Đổi tên nhóm" styleClass="field-label"/>
+                    <TextField fx:id="groupNameField" styleClass="form-field" promptText="Nhập tên nhóm mới"/>
+                    <Button fx:id="updateNameButton" text="Lưu tên nhóm" onAction="#handleUpdateGroupName" styleClass="primary-btn" prefWidth="180"/>
+                </VBox>
+                
+                <VBox spacing="12" styleClass="request-section">
+                    <Label text="Thành viên nhóm" styleClass="field-label"/>
+                    <ListView fx:id="membersListView" prefHeight="150" styleClass="request-list"/>
+                    <VBox spacing="8">
+                        <HBox spacing="8">
+                            <Button fx:id="promoteAdminButton" text="Thăng quyền Admin" onAction="#handlePromoteAdmin" styleClass="primary-btn" prefWidth="180"/>
+                            <Button fx:id="demoteAdminButton" text="Hạ quyền Admin" onAction="#handleDemoteAdmin" styleClass="ghost-btn" prefWidth="180"/>
+                        </HBox>
+                        <HBox spacing="8">
+                            <Button fx:id="removeMemberButton" text="Xóa thành viên đã chọn" onAction="#handleRemoveMember" styleClass="danger-btn" prefWidth="200"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="Rời nhóm" onAction="#handleLeaveGroup" styleClass="danger-btn" prefWidth="150"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <VBox spacing="8" styleClass="request-section">
+                    <Button fx:id="deleteGroupButton" text="Xóa nhóm" onAction="#handleDeleteGroup" styleClass="danger-btn"/>
+                </VBox>
+                
+                <Region VBox.vgrow="ALWAYS"/>
+                
+                <HBox spacing="12" styleClass="footer-actions" alignment="CENTER_RIGHT">
+                    <Button text="Đóng" onAction="#handleClose" styleClass="back-btn"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
+

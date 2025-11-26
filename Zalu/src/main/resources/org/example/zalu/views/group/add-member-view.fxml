@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.group.AddMemberController"
+            styleClass="friend-requests-root" stylesheets="@/styles.css" prefWidth="500" prefHeight="600">
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="add-friend-scroll">
+            <VBox styleClass="friend-shell" spacing="20" prefWidth="480">
+                <padding><Insets top="28" right="36" bottom="32" left="36"/></padding>
+                
+                <VBox spacing="6" styleClass="friend-header">
+                    <Label text="Thêm thành viên" styleClass="friend-eyebrow"/>
+                    <Label fx:id="groupNameLabel" text="Tên nhóm" styleClass="friend-title"/>
+                    <Label text="Chọn bạn bè để thêm vào nhóm" styleClass="friend-subtitle"/>
+                </VBox>
+                
+                <VBox spacing="12" styleClass="request-section">
+                    <Label text="Tìm kiếm bạn bè" styleClass="field-label"/>
+                    <HBox spacing="8">
+                        <TextField fx:id="searchFriendField" styleClass="form-field" promptText="Tìm bạn bè..." HBox.hgrow="ALWAYS"/>
+                        <Button text="Tìm" onAction="#handleSearchFriend" styleClass="primary-btn" prefWidth="100"/>
+                    </HBox>
+                </VBox>
+                
+                <VBox spacing="12" styleClass="request-section">
+                    <Label text="Danh sách bạn bè" styleClass="field-label"/>
+                    <ListView fx:id="friendsListView" prefHeight="300" styleClass="request-list"/>
+                </VBox>
+                
+                <VBox spacing="12" styleClass="request-section">
+                    <Button fx:id="addMemberButton" text="Thêm thành viên đã chọn" onAction="#handleAddMember" styleClass="primary-btn"/>
+                </VBox>
+                
+                <Region VBox.vgrow="ALWAYS"/>
+                
+                <HBox spacing="12" styleClass="footer-actions" alignment="CENTER_RIGHT">
+                    <Button text="Đóng" onAction="#handleClose" styleClass="back-btn"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
+

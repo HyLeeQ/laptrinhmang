@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.profile.BioViewController"
+            stylesheets="@/styles.css">
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="profile-scroll">
+            <VBox spacing="20" styleClass="profile-dialog" prefWidth="600">
+                
+                <!-- Cover với avatar và tên -->
+                <StackPane styleClass="profile-cover">
+                    <VBox alignment="BOTTOM_LEFT" spacing="16" styleClass="profile-cover-content">
+                        <HBox spacing="20" alignment="CENTER_LEFT">
+                            <StackPane styleClass="profile-avatar-frame">
+                                <ImageView fx:id="avatarImageView" fitWidth="120" fitHeight="120" preserveRatio="true"/>
+                            </StackPane>
+                            <VBox spacing="8">
+                                <Label fx:id="fullNameLabel" text="Họ và tên" styleClass="profile-name"/>
+                                <Label fx:id="usernameLabel" text="@username" styleClass="profile-email"/>
+                                <Label fx:id="emailLabel" text="email@example.com" styleClass="profile-email"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </StackPane>
+
+                <!-- Bio Section -->
+                <VBox spacing="12" styleClass="profile-section">
+                    <Label text="Giới thiệu" styleClass="section-heading"/>
+                    <TextArea fx:id="bioTextArea" prefRowCount="4" wrapText="true" 
+                              editable="false" styleClass="bio-display-area"/>
+                </VBox>
+
+                <!-- Thông tin cá nhân -->
+                <VBox spacing="12" styleClass="profile-section">
+                    <Label text="Thông tin cá nhân" styleClass="section-heading"/>
+                    <GridPane hgap="20" vgap="16">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" prefWidth="120"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Giới tính:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="bio-info-label"/>
+                        <Label fx:id="genderLabel" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="bio-info-value"/>
+
+                        <Label text="Ngày sinh:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="bio-info-label"/>
+                        <Label fx:id="birthdateLabel" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="bio-info-value"/>
+
+                        <Label text="Điện thoại:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="bio-info-label"/>
+                        <Label fx:id="phoneLabel" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="bio-info-value"/>
+                    </GridPane>
+                </VBox>
+
+                <!-- Nút đóng và chỉnh sửa -->
+                <HBox alignment="CENTER_RIGHT" spacing="12">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="editButton" text="✏️ Chỉnh sửa" onAction="#openEditProfile" styleClass="ghost-btn" visible="false" managed="false"/>
+                    <Button text="Đóng" onAction="#closeBioView" styleClass="primary-btn"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
+

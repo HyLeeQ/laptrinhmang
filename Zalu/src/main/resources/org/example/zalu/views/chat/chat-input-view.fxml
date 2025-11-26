@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.zalu.controller.chat.ChatController"
+      spacing="0" styleClass="chat-input-container">
+    
+    <!-- File preview panel (hiển thị khi có file đang gửi) -->
+    <HBox fx:id="filePreviewPanel" styleClass="file-preview-panel" visible="false" managed="false"
+          alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Label fx:id="filePreviewIcon" text="📎" styleClass="file-preview-icon"/>
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="filePreviewLabel" text="File" styleClass="file-preview-label"/>
+            <Label fx:id="filePreviewSize" text="0 KB" styleClass="file-preview-size"/>
+            <ProgressBar fx:id="fileProgressBar" visible="false" managed="false" prefWidth="200" prefHeight="4" styleClass="file-progress-bar"/>
+        </VBox>
+        <Button fx:id="filePreviewCancelBtn" text="✕" styleClass="file-preview-cancel-btn" onAction="#cancelFilePreview"/>
+    </HBox>
+    
+    <!-- Voice preview panel (hiển thị khi có voice đã ghi) -->
+    <HBox fx:id="voicePreviewPanel" styleClass="voice-preview-panel" visible="false" managed="false"
+          alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Label text="🎤" styleClass="voice-preview-icon"/>
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="voicePreviewLabel" text="Tin nhắn thoại" styleClass="voice-preview-label"/>
+            <Label fx:id="voicePreviewSize" text="0 KB" styleClass="voice-preview-size"/>
+        </VBox>
+        <Button fx:id="voicePreviewCancelBtn" text="✕" styleClass="voice-preview-cancel-btn" onAction="#cancelVoicePreview"/>
+    </HBox>
+    
+    <!-- Recording panel (hiển thị khi đang ghi âm) -->
+    <HBox fx:id="recordingPanel" styleClass="recording-panel" visible="false" managed="false"
+          alignment="CENTER" spacing="12">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Label text="🔴" styleClass="recording-icon"/>
+        <Label fx:id="recordingTimeLabel" text="00:00" styleClass="recording-time-label"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="stopRecordingButton" text="Dừng" styleClass="stop-recording-btn" onAction="#stopVoiceRecording"/>
+    </HBox>
+    
+    <!-- Reply preview panel (hiển thị khi đang reply một tin nhắn) -->
+    <HBox fx:id="replyPreviewPanel" styleClass="reply-preview-panel" visible="false" managed="false"
+          alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Label text="↩" styleClass="reply-preview-icon"/>
+        <VBox spacing="2" HBox.hgrow="ALWAYS">
+            <Label text="Trả lời:" styleClass="reply-preview-label" style="-fx-font-size: 11px; -fx-text-fill: #8e8e93;"/>
+            <Label fx:id="replyPreviewContent" text="" styleClass="reply-preview-content" style="-fx-font-size: 13px; -fx-text-fill: #1c1e21;"/>
+        </VBox>
+        <Button fx:id="replyPreviewCancelBtn" text="✕" styleClass="reply-preview-cancel-btn" onAction="#cancelReply"/>
+    </HBox>
+
+    <!-- Input bar -->
+    <HBox alignment="CENTER" spacing="8" styleClass="input-bar">
+        <padding><Insets top="16" right="20" bottom="16" left="20"/></padding>
+
+        <Button text="📎" styleClass="input-icon" onAction="#handleSendFile"/>
+        <Button fx:id="voiceButton" text="🎤" styleClass="input-icon" onAction="#handleVoiceMessage"/>
+
+        <TextField fx:id="messageField" promptText="Nhập tin nhắn..."
+                   styleClass="message-input" HBox.hgrow="ALWAYS"/>
+
+        <Button fx:id="emojiButton" text="😊" styleClass="input-icon" onAction="#handleEmojiPicker"/>
+        <Button text="👍" styleClass="input-icon" onAction="#handleSendLike"/>
+
+        <Button fx:id="sendButton" text="Gửi" styleClass="send-button" onAction="#sendMessage"/>
+    </HBox>
+</VBox>
