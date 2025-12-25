@@ -10,8 +10,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import org.example.zalu.dao.UserDAO;
 import org.example.zalu.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -19,18 +20,28 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class BioViewController {
-    @FXML private ImageView avatarImageView;
-    @FXML private Label fullNameLabel;
-    @FXML private Label usernameLabel;
-    @FXML private Label emailLabel;
-    @FXML private TextArea bioTextArea;
-    @FXML private Label genderLabel;
-    @FXML private Label birthdateLabel;
-    @FXML private Label phoneLabel;
-    @FXML private Button editButton;
+    private static final Logger logger = LoggerFactory.getLogger(BioViewController.class);
+    @FXML
+    private ImageView avatarImageView;
+    @FXML
+    private Label fullNameLabel;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private TextArea bioTextArea;
+    @FXML
+    private Label genderLabel;
+    @FXML
+    private Label birthdateLabel;
+    @FXML
+    private Label phoneLabel;
+    @FXML
+    private Button editButton;
 
     private Stage stage;
-    private UserDAO userDAO;
+
     private int currentUserId = -1;
     private int displayedUserId = -1;
     private static final String DEFAULT_AVATAR = "/images/default-avatar.jpg";
@@ -47,22 +58,22 @@ public class BioViewController {
 
     public void setUserId(int userId) {
         this.displayedUserId = userId;
-        try {
-            if (userDAO == null) {
-                userDAO = new UserDAO();
+
+        // Register callback to update UI when data arrives
+        org.example.zalu.client.ChatEventManager.getInstance().registerGetUserByIdCallback(users -> {
+            if (users != null) {
+                for (User u : users) {
+                    if (u.getId() == this.displayedUserId) {
+                        javafx.application.Platform.runLater(() -> loadUserBio(u));
+                        break;
+                    }
+                }
             }
-            User user = userDAO.getUserById(userId);
-            if (user != null) {
-                loadUserBio(user);
-            }
-            updateEditButtonVisibility();
-        } catch (org.example.zalu.exception.auth.UserNotFoundException e) {
-            System.err.println("User not found: " + e.getMessage());
-            e.printStackTrace();
-        } catch (org.example.zalu.exception.database.DatabaseException | org.example.zalu.exception.database.DatabaseConnectionException e) {
-            System.err.println("Error loading user bio: " + e.getMessage());
-            e.printStackTrace();
-        }
+        });
+
+        // Request data
+        org.example.zalu.client.ChatClient.sendRequest("GET_USER_BY_ID|" + userId);
+        updateEditButtonVisibility();
     }
 
     public void setUser(User user) {
@@ -178,9 +189,15 @@ public class BioViewController {
                 return image;
             }
         } catch (Exception e) {
-            System.err.println("Không thể load avatar từ path " + path + ": " + e.getMessage());
+            logger.error("Không thể load avatar từ path {}: {}", path, e.getMessage(), e);
         }
         return null;
+    }
+
+    private Runnable onProfileUpdateCallback;
+
+    public void setOnProfileUpdateCallback(Runnable callback) {
+        this.onProfileUpdateCallback = callback;
     }
 
     @FXML
@@ -189,24 +206,31 @@ public class BioViewController {
             return;
         }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/profile/profile-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/example/zalu/views/profile/profile-view.fxml"));
             Parent root = loader.load();
             ProfileController profileCtrl = loader.getController();
             profileCtrl.setCurrentUserId(displayedUserId);
-            
+
+            profileCtrl.setOnProfileUpdated(updatedUser -> {
+                // Refresh profile data locally
+                if (updatedUser != null) {
+                    javafx.application.Platform.runLater(() -> loadUserBio(updatedUser));
+                }
+
+                if (onProfileUpdateCallback != null) {
+                    onProfileUpdateCallback.run();
+                }
+            });
+
             Stage profileStage = new Stage();
             profileCtrl.setStage(profileStage);
             profileStage.setScene(new Scene(root, 800, 600));
             profileStage.setTitle("Chỉnh sửa hồ sơ");
             profileStage.show();
-            
-            // Đóng bio view sau khi mở profile view
-            if (stage != null) {
-                stage.close();
-            }
+
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Không thể mở profile view: " + e.getMessage());
+            logger.error("Không thể mở profile view: {}", e.getMessage(), e);
         }
     }
 
@@ -217,4 +241,3 @@ public class BioViewController {
         }
     }
 }
-

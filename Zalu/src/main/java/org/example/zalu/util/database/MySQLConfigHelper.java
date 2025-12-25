@@ -1,5 +1,8 @@
 package org.example.zalu.util.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,75 +13,76 @@ import java.sql.Statement;
  * Tự động set GLOBAL nếu có quyền, hoặc hiển thị hướng dẫn
  */
 public class MySQLConfigHelper {
-    
+    private static final Logger logger = LoggerFactory.getLogger(MySQLConfigHelper.class);
+
     /**
      * Kiểm tra và cố gắng set max_allowed_packet
+     * 
      * @return true nếu thành công, false nếu không có quyền
      */
     public static boolean checkAndSetMaxAllowedPacket() {
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement()) {
-            
+                Statement stmt = conn.createStatement()) {
+
             // Kiểm tra giá trị hiện tại
             try (ResultSet rs = stmt.executeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'")) {
                 if (rs.next()) {
                     long currentValue = rs.getLong("Value");
-                    System.out.println("MySQL max_allowed_packet hiện tại: " + currentValue + " bytes (" + (currentValue / 1024 / 1024) + " MB)");
-                    
+                    logger.info("MySQL max_allowed_packet hiện tại: {} bytes ({} MB)", currentValue,
+                            currentValue / 1024 / 1024);
+
                     if (currentValue < 16777216) { // < 16MB
-                        System.out.println("⚠ max_allowed_packet quá nhỏ, đang thử set GLOBAL...");
-                        
+                        logger.warn("max_allowed_packet quá nhỏ, đang thử set GLOBAL...");
+
                         try {
                             stmt.execute("SET GLOBAL max_allowed_packet=16777216");
-                            System.out.println("✓ Đã set GLOBAL max_allowed_packet=16MB thành công!");
-                            System.out.println("  Lưu ý: Giá trị này sẽ mất khi restart MySQL.");
-                            System.out.println("  Để cấu hình vĩnh viễn, xem file SETUP_MYSQL.md");
+                            logger.info("✓ Đã set GLOBAL max_allowed_packet=16MB thành công!");
+                            logger.info("  Lưu ý: Giá trị này sẽ mất khi restart MySQL.");
+                            logger.info("  Để cấu hình vĩnh viễn, xem file SETUP_MYSQL.md");
                             return true;
                         } catch (SQLException e) {
                             if (e.getMessage().contains("Access denied") || e.getMessage().contains("super")) {
-                                System.err.println("✗ Không có quyền set GLOBAL max_allowed_packet");
-                                System.err.println("  Vui lòng chạy lệnh SQL sau với quyền admin:");
-                                System.err.println("  SET GLOBAL max_allowed_packet=16777216;");
-                                System.err.println("  Hoặc xem hướng dẫn trong file SETUP_MYSQL.md");
+                                logger.error("✗ Không có quyền set GLOBAL max_allowed_packet");
+                                logger.error("  Vui lòng chạy lệnh SQL sau với quyền admin:");
+                                logger.error("  SET GLOBAL max_allowed_packet=16777216;");
+                                logger.error("  Hoặc xem hướng dẫn trong file SETUP_MYSQL.md");
                                 return false;
                             } else {
                                 throw e;
                             }
                         }
                     } else {
-                        System.out.println("✓ max_allowed_packet đã đủ lớn (" + (currentValue / 1024 / 1024) + " MB)");
+                        logger.info("✓ max_allowed_packet đã đủ lớn ({} MB)", currentValue / 1024 / 1024);
                         return true;
                     }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra max_allowed_packet: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Lỗi khi kiểm tra max_allowed_packet: {}", e.getMessage(), e);
             return false;
         }
         return false;
     }
-    
+
     /**
      * Chỉ kiểm tra giá trị hiện tại, không thay đổi
      */
     public static void checkMaxAllowedPacket() {
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'")) {
-            
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SHOW VARIABLES LIKE 'max_allowed_packet'")) {
+
             if (rs.next()) {
                 long currentValue = rs.getLong("Value");
-                System.out.println("MySQL max_allowed_packet: " + currentValue + " bytes (" + (currentValue / 1024 / 1024) + " MB)");
-                
+                logger.info("MySQL max_allowed_packet: {} bytes ({} MB)", currentValue, currentValue / 1024 / 1024);
+
                 if (currentValue < 16777216) {
-                    System.out.println("⚠ Cảnh báo: max_allowed_packet quá nhỏ, có thể không lưu được file lớn!");
-                    System.out.println("  Xem hướng dẫn trong file SETUP_MYSQL.md");
+                    logger.warn("⚠ Cảnh báo: max_allowed_packet quá nhỏ, có thể không lưu được file lớn!");
+                    logger.warn("  Xem hướng dẫn trong file SETUP_MYSQL.md");
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra max_allowed_packet: " + e.getMessage());
+            logger.error("Lỗi khi kiểm tra max_allowed_packet: {}", e.getMessage(), e);
         }
     }
 }
-

@@ -1,16 +1,18 @@
 package org.example.zalu.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String username;
-    private String fullName;  // Tên thật để hiển thị
+    private String fullName; // Tên thật để hiển thị
     private String password;
     private String email;
     private String phone;
-    private String avatarUrl;  // Giữ nhưng không dùng binary
+    private String avatarUrl; // Giữ nhưng không dùng binary
     private byte[] avatarData;
     private String bio;
     private LocalDate birthdate;
@@ -24,7 +26,7 @@ public class User {
 
     // Constructor đầy đủ (cho login/register - không avatarData)
     public User(int id, String username, String fullName, String password, String email, String phone,
-                String avatarUrl, String bio, LocalDate birthdate, String status, String gender) {
+            String avatarUrl, String bio, LocalDate birthdate, String status, String gender) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -32,13 +34,13 @@ public class User {
         if (id != -1 && (password == null || password.trim().isEmpty())) {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
-        if (id != -1 && (email == null || email.trim().isEmpty())) {  // Tương tự cho email nếu cần
+        if (id != -1 && (email == null || email.trim().isEmpty())) { // Tương tự cho email nếu cần
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
         this.id = id;
         this.username = username.trim();
         this.fullName = (fullName != null) ? fullName.trim() : "";
-        this.password = password != null ? password.trim() : null;  // Cho phép null cho dummy
+        this.password = password != null ? password.trim() : null; // Cho phép null cho dummy
         this.email = email != null ? email.trim() : null;
         this.phone = (phone != null) ? phone.trim() : null;
         this.avatarUrl = (avatarUrl != null) ? avatarUrl.trim() : "/default-avatar.jpg";
@@ -51,7 +53,7 @@ public class User {
 
     // Constructor cho display friends (không avatarData)
     public User(int id, String username, String fullName, String email, String phone,
-                String avatarUrl, String bio, LocalDate birthdate, String status, String gender) {
+            String avatarUrl, String bio, LocalDate birthdate, String status, String gender) {
         this.id = id;
         this.username = (username != null && !username.trim().isEmpty()) ? username.trim() : "";
         this.fullName = (fullName != null && !fullName.trim().isEmpty()) ? fullName.trim() : username;
@@ -202,6 +204,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{id=" + id + ", fullName='" + fullName + "' (username='" + username + "'), email='" + email + "', status='" + status + "'}";
+        return "User{id=" + id + ", fullName='" + fullName + "' (username='" + username + "'), email='" + email
+                + "', status='" + status + "'}";
     }
 }

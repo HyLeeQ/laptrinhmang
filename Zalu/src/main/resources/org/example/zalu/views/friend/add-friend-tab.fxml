@@ -29,7 +29,7 @@
                 <Label text="🔍 Tìm kiếm" styleClass="section-title"/>
                 <HBox alignment="CENTER_LEFT" spacing="12" styleClass="add-friend-search-row">
                     <TextField fx:id="searchField"
-                               promptText="Nhập username hoặc email để tìm kiếm..."
+                               promptText="Nhập tên, email hoặc số điện thoại để tìm kiếm..."
                                HBox.hgrow="ALWAYS"
                                styleClass="form-field"/>
                     <Button fx:id="searchButton" text="🔍 Tìm kiếm" onAction="#searchFriend"

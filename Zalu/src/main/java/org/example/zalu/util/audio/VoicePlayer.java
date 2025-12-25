@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
@@ -18,13 +20,14 @@ import java.nio.file.Paths;
  * Utility class để phát audio trong ứng dụng
  */
 public class VoicePlayer {
+    private static final Logger logger = LoggerFactory.getLogger(VoicePlayer.class);
     private MediaPlayer mediaPlayer;
     private File tempAudioFile;
     private Runnable onPlayStateChanged;
     private Runnable onFinished;
     private double totalDuration = 0; // Lưu tổng thời lượng
     private Runnable onReady;
-    
+
     /**
      * Phát audio từ byte array
      * audioData có thể là raw PCM data hoặc WAV file data
@@ -40,23 +43,23 @@ public class VoicePlayer {
             }
             return;
         }
-        
+
         stop(); // Dừng audio đang phát nếu có
-        
+
         try {
             // Tạo file tạm
             Path voiceDir = Paths.get("voice_messages");
             if (!Files.exists(voiceDir)) {
                 Files.createDirectories(voiceDir);
             }
-            
+
             tempAudioFile = voiceDir.resolve("play_" + System.currentTimeMillis() + "_" + fileName).toFile();
-            
+
             // Kiểm tra xem audioData có phải là WAV file không (có header "RIFF")
-            boolean isWavFile = audioData.length >= 4 && 
-                               audioData[0] == 'R' && audioData[1] == 'I' && 
-                               audioData[2] == 'F' && audioData[3] == 'F';
-            
+            boolean isWavFile = audioData.length >= 4 &&
+                    audioData[0] == 'R' && audioData[1] == 'I' &&
+                    audioData[2] == 'F' && audioData[3] == 'F';
+
             if (isWavFile) {
                 // Nếu đã là WAV file, ghi trực tiếp
                 try (FileOutputStream fos = new FileOutputStream(tempAudioFile)) {
@@ -64,24 +67,24 @@ public class VoicePlayer {
                 }
             } else {
                 // Nếu là raw PCM data, cần convert sang WAV format
-                // Sử dụng format tương tự AudioRecorder: 16kHz, 16bit, mono, PCM, signed, little-endian
+                // Sử dụng format tương tự AudioRecorder: 16kHz, 16bit, mono, PCM, signed,
+                // little-endian
                 AudioFormat audioFormat = new AudioFormat(16000.0f, 16, 1, true, false);
-                
+
                 AudioInputStream audioInputStream = new AudioInputStream(
                         new ByteArrayInputStream(audioData),
                         audioFormat,
-                        audioData.length / audioFormat.getFrameSize()
-                );
-                
+                        audioData.length / audioFormat.getFrameSize());
+
                 AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, tempAudioFile);
                 audioInputStream.close();
             }
-            
+
             // Tạo Media và MediaPlayer
             String fileUrl = tempAudioFile.toURI().toString();
             Media media = new Media(fileUrl);
             mediaPlayer = new MediaPlayer(media);
-            
+
             // Lưu tổng thời lượng khi media ready
             mediaPlayer.setOnReady(() -> {
                 if (mediaPlayer.getMedia() != null) {
@@ -94,7 +97,7 @@ public class VoicePlayer {
                     onReady.run();
                 }
             });
-            
+
             // Xử lý khi phát xong - reset về đầu thay vì dispose
             mediaPlayer.setOnEndOfMedia(() -> {
                 Platform.runLater(() -> {
@@ -110,35 +113,33 @@ public class VoicePlayer {
                     }
                 });
             });
-            
+
             // Xử lý lỗi
             mediaPlayer.setOnError(() -> {
-                System.err.println("Lỗi phát audio: " + mediaPlayer.getError());
+                logger.error("Lỗi phát audio: {}", mediaPlayer.getError());
                 Platform.runLater(() -> {
                     if (onPlayStateChanged != null) {
                         onPlayStateChanged.run();
                     }
                 });
             });
-            
+
             // Bắt đầu phát
             mediaPlayer.play();
-            
+
             if (onPlayStateChanged != null) {
                 onPlayStateChanged.run();
             }
-            
+
         } catch (IOException | IllegalArgumentException e) {
-            System.err.println("Lỗi khi tạo file tạm để phát audio: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Lỗi khi tạo file tạm để phát audio: {}", e.getMessage(), e);
             Platform.runLater(() -> {
                 if (onPlayStateChanged != null) {
                     onPlayStateChanged.run();
                 }
             });
         } catch (Exception e) {
-            System.err.println("Lỗi không xác định khi phát audio: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Lỗi không xác định khi phát audio: {}", e.getMessage(), e);
             Platform.runLater(() -> {
                 if (onPlayStateChanged != null) {
                     onPlayStateChanged.run();
@@ -146,7 +147,7 @@ public class VoicePlayer {
             });
         }
     }
-    
+
     /**
      * Dừng phát audio (không dispose để có thể phát lại)
      */
@@ -156,7 +157,7 @@ public class VoicePlayer {
             mediaPlayer.seek(javafx.util.Duration.ZERO);
         }
     }
-    
+
     /**
      * Dispose và giải phóng tài nguyên (chỉ gọi khi không cần phát lại)
      */
@@ -166,16 +167,16 @@ public class VoicePlayer {
             mediaPlayer.dispose();
             mediaPlayer = null;
         }
-        
+
         // Xóa file tạm sau 1 giây (để đảm bảo MediaPlayer đã giải phóng)
         if (tempAudioFile != null && tempAudioFile.exists()) {
             tempAudioFile.deleteOnExit();
         }
-        
+
         totalDuration = 0;
         onReady = null;
     }
-    
+
     /**
      * Lấy tổng thời lượng (không cần MediaPlayer đang active)
      */
@@ -185,7 +186,7 @@ public class VoicePlayer {
         }
         return getDuration();
     }
-    
+
     /**
      * Set callback khi media ready (để lấy duration)
      */
@@ -204,7 +205,7 @@ public class VoicePlayer {
             }
         }
     }
-    
+
     /**
      * Tạm dừng phát audio
      */
@@ -216,7 +217,7 @@ public class VoicePlayer {
             }
         }
     }
-    
+
     /**
      * Tiếp tục phát audio
      */
@@ -228,21 +229,21 @@ public class VoicePlayer {
             }
         }
     }
-    
+
     /**
      * Kiểm tra xem có đang phát không
      */
     public boolean isPlaying() {
         return mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING;
     }
-    
+
     /**
      * Kiểm tra xem có đang tạm dừng không
      */
     public boolean isPaused() {
         return mediaPlayer != null && mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED;
     }
-    
+
     /**
      * Lấy thời lượng audio (giây)
      */
@@ -253,7 +254,7 @@ public class VoicePlayer {
         }
         return 0;
     }
-    
+
     /**
      * Lấy thời gian hiện tại (giây)
      */
@@ -264,20 +265,19 @@ public class VoicePlayer {
         }
         return 0;
     }
-    
+
     /**
      * Set callback khi trạng thái phát thay đổi
      */
     public void setOnPlayStateChanged(Runnable callback) {
         this.onPlayStateChanged = callback;
     }
-    
+
     /**
      * Set callback khi phát xong
      */
     public void setOnFinished(Runnable callback) {
         this.onFinished = callback;
     }
-    
-}
 
+}

@@ -11,6 +11,8 @@ import org.example.zalu.client.ChatEventManager;
 import org.example.zalu.controller.MainController;
 import org.example.zalu.controller.chat.MessageListController;
 import org.example.zalu.controller.auth.LoginController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +21,7 @@ public class LogoutHandler {
     private final Stage stage;
     private final MainController mainController;
     private final MessageListController messageListController;
+    private static final Logger logger = LoggerFactory.getLogger(LogoutHandler.class);
 
     public LogoutHandler(Stage stage, MainController mainController, MessageListController messageListController) {
         this.stage = stage;
@@ -26,10 +29,11 @@ public class LogoutHandler {
         this.messageListController = messageListController;
     }
 
-    // SỬA: @FXML để FXML có thể gọi trực tiếp nếu cần (backup nếu MainController miss)
+    // SỬA: @FXML để FXML có thể gọi trực tiếp nếu cần (backup nếu MainController
+    // miss)
     @FXML
     public void performLogout() {
-        System.out.println("Logout initiated - cleaning resources...");
+        logger.info("Logout initiated - cleaning resources...");
         try {
             // Clean data
             if (mainController != null) {
@@ -43,16 +47,15 @@ public class LogoutHandler {
             if (messageListController != null) {
                 messageListController.addSystemMessage("Đăng xuất thành công. Tạm biệt!");
             } else {
-                System.out.println("MessageListController null - skipping system message");
+                logger.warn("MessageListController null - skipping system message");
             }
 
             // Switch to login scene
             switchScene("/org/example/zalu/views/auth/login-view.fxml");
-            System.out.println("Logout completed - switched to login view");
+            logger.info("Logout completed - switched to login view");
 
         } catch (Exception e) {
-            System.err.println("Error during logout: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error during logout", e);
             // Fallback: Force exit nếu fail
             if (messageListController != null) {
                 messageListController.addSystemMessage("Lỗi đăng xuất: " + e.getMessage() + ". App sẽ đóng.");
@@ -69,9 +72,11 @@ public class LogoutHandler {
 
         URL fxmlUrl = getClass().getResource(fxmlPath);
         if (fxmlUrl == null) {
-            throw new IOException("FXML file not found: " + fxmlPath + ". Check path in resources/org/example/zalu/views/. Current classpath root: " + getClass().getResource("/"));
+            throw new IOException("FXML file not found: " + fxmlPath
+                    + ". Check path in resources/org/example/zalu/views/. Current classpath root: "
+                    + getClass().getResource("/"));
         }
-        System.out.println("Switching to FXML: " + fxmlPath + " at URL: " + fxmlUrl);
+        logger.debug("Switching to FXML: {} at URL: {}", fxmlPath, fxmlUrl);
 
         FXMLLoader loader = new FXMLLoader(fxmlUrl);
         Parent root = loader.load();
@@ -79,9 +84,9 @@ public class LogoutHandler {
         Object controller = loader.getController();
         if (controller instanceof LoginController) {
             ((LoginController) controller).setStage(stage);
-            System.out.println("LoginController initialized for new scene");
+            logger.debug("LoginController initialized for new scene");
         } else {
-            System.out.println("Controller is " + (controller != null ? controller.getClass().getName() : "null"));
+            logger.debug("Controller is {}", (controller != null ? controller.getClass().getName() : "null"));
         }
 
         Scene scene = new Scene(root, 800, 400);

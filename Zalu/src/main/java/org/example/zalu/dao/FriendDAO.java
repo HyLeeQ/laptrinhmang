@@ -5,7 +5,6 @@ import org.example.zalu.model.User;
 import org.example.zalu.util.database.DBConnection;
 import org.example.zalu.exception.database.DatabaseException;
 import org.example.zalu.exception.database.DatabaseConnectionException;
-import org.example.zalu.exception.auth.UserNotFoundException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -116,32 +115,64 @@ public class FriendDAO {
         return list;
     }
 
-    public List<User> getPendingRequestsWithUserInfo(int userId, UserDAO userDAO) throws SQLException, DatabaseException, DatabaseConnectionException {
+    public List<User> getPendingRequestsWithUserInfo(int userId, UserDAO unused) throws SQLException, DatabaseException, DatabaseConnectionException {
         List<User> list = new ArrayList<>();
-        for (int senderId : getPendingRequests(userId)) {
-            try {
-                User u = userDAO.getUserById(senderId);
-                if (u != null) list.add(u);
-            } catch (UserNotFoundException e) {
-                // User might have been deleted, skip silently
-                System.out.println("User with ID " + senderId + " not found, skipping...");
+        String sql = """
+            SELECT u.id, u.username, u.full_name, u.email, u.phone, u.avatar_url, u.avatar_data,
+                   u.bio, u.birthdate, u.gender, u.status, u.created_at
+            FROM friends f
+            JOIN users u ON u.id = f.user_id
+            WHERE f.friend_id = ? AND f.status = 'pending'
+            ORDER BY f.created_at DESC
+            """;
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapUser(rs));
+                }
             }
         }
         return list;
     }
 
-    public List<User> getOutgoingRequestsWithUserInfo(int userId, UserDAO userDAO) throws SQLException, DatabaseException, DatabaseConnectionException {
+    public List<User> getOutgoingRequestsWithUserInfo(int userId, UserDAO unused) throws SQLException, DatabaseException, DatabaseConnectionException {
         List<User> list = new ArrayList<>();
-        for (int receiverId : getOutgoingRequest(userId)) {
-            try {
-                User u = userDAO.getUserById(receiverId);
-                if (u != null) list.add(u);
-            } catch (UserNotFoundException e) {
-                // User might have been deleted, skip silently
-                System.out.println("User with ID " + receiverId + " not found, skipping...");
+        String sql = """
+            SELECT u.id, u.username, u.full_name, u.email, u.phone, u.avatar_url, u.avatar_data,
+                   u.bio, u.birthdate, u.gender, u.status, u.created_at
+            FROM friends f
+            JOIN users u ON u.id = f.friend_id
+            WHERE f.user_id = ? AND f.status = 'pending'
+            ORDER BY f.created_at DESC
+            """;
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapUser(rs));
+                }
             }
         }
         return list;
+    }
+
+    private User mapUser(ResultSet rs) throws SQLException {
+        User user = new User(
+                rs.getInt("id"),
+                rs.getString("username"),
+                rs.getString("full_name"),
+                rs.getString("email"),
+                rs.getString("phone"),
+                rs.getString("avatar_url"),
+                rs.getString("bio"),
+                rs.getDate("birthdate") != null ? rs.getDate("birthdate").toLocalDate() : null,
+                rs.getString("status"),
+                rs.getString("gender")
+        );
+        user.setAvatarData(rs.getBytes("avatar_data"));
+        user.setCreatedAt(rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null);
+        return user;
     }
 
     public boolean sendFriendRequest(int userId, int friendId) throws SQLException {

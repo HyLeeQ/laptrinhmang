@@ -21,18 +21,23 @@ public class LicenseValidator {
     private static final String LICENSE_SERVER_URL_PROPERTY = "license.server.url";
     private static final String LICENSE_SERVER_PORT_PROPERTY = "license.server.port";
     private static final String LICENSE_KEY_PROPERTY = "license.key";
+    private static final String LICENSE_CHECK_ENABLED_PROPERTY = "license.check.enabled";
+    private static final String SKIP_LICENSE_ENV = "ZALU_SKIP_LICENSE";
     
     private static final String DEFAULT_LICENSE_SERVER = "localhost";
     private static final int DEFAULT_LICENSE_PORT = 8888;
     private static final String DEFAULT_LICENSE_KEY = "ZALU-2024-VALID";
     
     private static boolean isValidated = false;
+    private static boolean isLicenseCheckEnabled = false; // Mặc định TẮT license check
     private static String licenseServerUrl;
     private static int licenseServerPort;
     private static String licenseKey;
     
     static {
         loadLicenseConfig();
+        // Tự động validate nếu license check được bật (nhưng mặc định là tắt)
+        // Không tự động gọi validateLicense() để tránh block startup
     }
     
     /**
@@ -51,20 +56,37 @@ public class LicenseValidator {
                     props.getProperty(LICENSE_SERVER_PORT_PROPERTY, String.valueOf(DEFAULT_LICENSE_PORT))
                 );
                 licenseKey = props.getProperty(LICENSE_KEY_PROPERTY, DEFAULT_LICENSE_KEY);
+                licenseCheckEnabledFrom(props);
                 logger.info("Đã tải cấu hình license từ license.properties");
             } else {
                 // Sử dụng giá trị mặc định nếu không có file
                 licenseServerUrl = DEFAULT_LICENSE_SERVER;
                 licenseServerPort = DEFAULT_LICENSE_PORT;
                 licenseKey = DEFAULT_LICENSE_KEY;
-                logger.warn("Không tìm thấy license.properties, sử dụng cấu hình mặc định");
+                isLicenseCheckEnabled = false; // Mặc định tắt license check
+                logger.warn("Không tìm thấy license.properties, license check mặc định: TẮT");
             }
         } catch (Exception e) {
             logger.error("Lỗi khi tải cấu hình license: {}", e.getMessage());
             licenseServerUrl = DEFAULT_LICENSE_SERVER;
             licenseServerPort = DEFAULT_LICENSE_PORT;
             licenseKey = DEFAULT_LICENSE_KEY;
+            isLicenseCheckEnabled = false; // Mặc định tắt license check khi có lỗi
         }
+    }
+
+    private static void licenseCheckEnabledFrom(Properties props) {
+        String enabledValue = props.getProperty(LICENSE_CHECK_ENABLED_PROPERTY, "false");
+        isLicenseCheckEnabled = Boolean.parseBoolean(enabledValue);
+        // Đảm bảo mặc định là false (vô hiệu hóa) nếu không có cấu hình
+        if (enabledValue == null || enabledValue.trim().isEmpty()) {
+            isLicenseCheckEnabled = false;
+        }
+    }
+
+    private static boolean shouldSkipCheckByEnv() {
+        String envValue = System.getenv(SKIP_LICENSE_ENV);
+        return envValue != null && envValue.equalsIgnoreCase("true");
     }
     
     /**
@@ -73,6 +95,13 @@ public class LicenseValidator {
      */
     public static boolean validateLicense() {
         if (isValidated) {
+            return true;
+        }
+
+        // Luôn bỏ qua license check nếu bị tắt hoặc có env variable
+        if (!isLicenseCheckEnabled || shouldSkipCheckByEnv()) {
+            logger.info("✓ License check đã bị vô hiệu hóa - ứng dụng có thể chạy trên mọi máy");
+            isValidated = true;
             return true;
         }
         

@@ -30,11 +30,28 @@ public class ChatItem {
     }
 
     public String getDisplayName() {
-        return isGroup ? group.getName() : user.getUsername();
+        if (isGroup) {
+            return group.getName();
+        }
+        if (user.getFullName() != null && !user.getFullName().isBlank()) {
+            return user.getFullName();
+        }
+        return user.getUsername();
     }
 
     public int getId() {
         return isGroup ? group.getId() : user.getId();
     }
-}
 
+    public boolean matches(ChatItem other) {
+        if (other == null)
+            return false;
+        if (this.isGroup != other.isGroup)
+            return false;
+        if (this.isGroup) {
+            return this.group.getId() == other.group.getId();
+        } else {
+            return this.user.getId() == other.user.getId();
+        }
+    }
+}

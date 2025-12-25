@@ -28,7 +28,8 @@ public class UserDAO {
         return DBConnection.getConnection();
     }
 
-    public boolean register(User user) throws RegistrationFailedException, DatabaseException, DatabaseConnectionException {
+    public boolean register(User user)
+            throws RegistrationFailedException, DatabaseException, DatabaseConnectionException {
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         String sql = "INSERT INTO users (username, full_name, password, email, phone, avatar_url, avatar_data, bio, birthdate, gender, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -53,17 +54,19 @@ public class UserDAO {
             throw new RegistrationFailedException("Tên đăng nhập, email hoặc số điện thoại đã tồn tại", e);
         } catch (SQLException e) {
             // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi đăng ký tài khoản", e);
         }
     }
 
-    public User login(String username, String password) throws InvalidCredentialsException, UserNotFoundException, DatabaseException, DatabaseConnectionException {
-        String sql = "SELECT id, username, full_name, password, email, phone, avatar_url, avatar_data, bio, birthdate, gender, status, created_at " +
+    public User login(String username, String password)
+            throws InvalidCredentialsException, UserNotFoundException, DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT id, username, full_name, password, email, phone, avatar_url, avatar_data, bio, birthdate, gender, status, created_at "
+                +
                 "FROM users WHERE username = ?";
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
@@ -83,9 +86,10 @@ public class UserDAO {
                             rs.getString("bio"),
                             (rs.getDate("birthdate") != null) ? rs.getDate("birthdate").toLocalDate() : null,
                             rs.getString("status"),
-                            rs.getString("gender")
-                    );
-                    user.setCreatedAt(rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null);
+                            rs.getString("gender"));
+                    user.setCreatedAt(
+                            rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime()
+                                    : null);
                     user.setAvatarData(rs.getBytes("avatar_data"));
                     return user;
                 } else {
@@ -96,9 +100,9 @@ public class UserDAO {
             throw e;
         } catch (SQLException e) {
             // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi đăng nhập", e);
@@ -121,9 +125,10 @@ public class UserDAO {
                             rs.getString("bio"),
                             (rs.getDate("birthdate") != null) ? rs.getDate("birthdate").toLocalDate() : null,
                             rs.getString("status"),
-                            rs.getString("gender")
-                    );
-                    user.setCreatedAt(rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null);
+                            rs.getString("gender"));
+                    user.setCreatedAt(
+                            rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime()
+                                    : null);
                     user.setAvatarData(rs.getBytes("avatar_data"));
                     return user;
                 } else {
@@ -134,9 +139,9 @@ public class UserDAO {
             throw e;
         } catch (SQLException e) {
             // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi lấy thông tin người dùng", e);
@@ -170,9 +175,9 @@ public class UserDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi cập nhật thông tin người dùng", e);
@@ -187,9 +192,9 @@ public class UserDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi cập nhật trạng thái người dùng", e);
@@ -198,7 +203,10 @@ public class UserDAO {
 
     public List<User> searchUsers(String query) throws DatabaseException, DatabaseConnectionException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, full_name, email, phone, avatar_url, avatar_data, bio, birthdate, gender, status FROM users WHERE (username LIKE ? OR email LIKE ? OR full_name LIKE ?) AND id != ?";
+        // Removed avatar_data
+        String sql = "SELECT id, username, full_name, email, phone, avatar_url, bio, birthdate, gender, status "
+                +
+                "FROM users WHERE (full_name LIKE ? OR phone LIKE ? OR email LIKE ?) AND id != ?";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             String pattern = "%" + query + "%";
             stmt.setString(1, pattern);
@@ -217,17 +225,15 @@ public class UserDAO {
                             rs.getString("bio"),
                             (rs.getDate("birthdate") != null) ? rs.getDate("birthdate").toLocalDate() : null,
                             rs.getString("status"),
-                            rs.getString("gender")
-                    );
-                    user.setAvatarData(rs.getBytes("avatar_data"));
+                            rs.getString("gender"));
+                    // No avatar_data set
                     users.add(user);
                 }
             }
         } catch (SQLException e) {
-            // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi tìm kiếm người dùng", e);
@@ -243,13 +249,99 @@ public class UserDAO {
                 return rs.next() && "online".equals(rs.getString("status"));
             }
         } catch (SQLException e) {
-            // Wrap SQLException thành DatabaseConnectionException nếu là lỗi kết nối
-            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") || 
-                e.getMessage().toLowerCase().contains("timeout") || 
-                e.getMessage().toLowerCase().contains("cannot establish"))) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
                 throw new DatabaseConnectionException("Không thể kết nối đến database", e);
             }
             throw new DatabaseException("Lỗi khi kiểm tra trạng thái người dùng", e);
+        }
+    }
+
+    public List<User> getUsersByIds(List<Integer> ids) throws DatabaseException, DatabaseConnectionException {
+        List<User> users = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) {
+            return users;
+        }
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT id, username, full_name, email, phone, avatar_url, bio, birthdate, gender, status FROM users WHERE id IN (");
+        for (int i = 0; i < ids.size(); i++) {
+            sql.append(i == 0 ? "?" : ", ?");
+        }
+        sql.append(")");
+
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < ids.size(); i++) {
+                stmt.setInt(i + 1, ids.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("full_name"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("avatar_url"),
+                            rs.getString("bio"),
+                            (rs.getDate("birthdate") != null) ? rs.getDate("birthdate").toLocalDate() : null,
+                            rs.getString("status"),
+                            rs.getString("gender"));
+                    // No avatar_data set
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            }
+            throw new DatabaseException("Lỗi khi lấy thông tin danh sách người dùng", e);
+        }
+        return users;
+    }
+
+    public byte[] getAvatarData(int userId) throws DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT avatar_data FROM users WHERE id = ?";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBytes("avatar_data");
+                }
+            }
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            }
+            throw new DatabaseException("Lỗi khi tải avatar", e);
+        }
+        return null;
+    }
+
+    /**
+     * Đếm tổng số user đã đăng ký trong hệ thống
+     */
+    public int getTotalUserCount() throws DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT COUNT(*) as total FROM users";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+            return 0;
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            }
+            throw new DatabaseException("Lỗi khi đếm số lượng user", e);
         }
     }
 }

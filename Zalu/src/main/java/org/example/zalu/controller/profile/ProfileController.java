@@ -20,8 +20,9 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.zalu.dao.UserDAO;
 import org.example.zalu.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -29,27 +30,41 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class ProfileController {
-    @FXML private TextField fullNameField;
-    @FXML private TextField phoneField;
-    @FXML private TextArea bioField;
-    @FXML private ImageView avatarImageView;
-    @FXML private Label statusLabel;
-    @FXML private Label usernameLabel;
-    @FXML private Label emailLabel;
-    @FXML private DatePicker birthdatePicker;
-    @FXML private PasswordField newPasswordField;
-    @FXML private RadioButton maleRadio;
-    @FXML private RadioButton femaleRadio;
-    @FXML private RadioButton otherRadio;
-    @FXML private Button changePasswordButton;
+    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private TextArea bioField;
+    @FXML
+    private ImageView avatarImageView;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private DatePicker birthdatePicker;
+    @FXML
+    private PasswordField newPasswordField;
+    @FXML
+    private RadioButton maleRadio;
+    @FXML
+    private RadioButton femaleRadio;
+    @FXML
+    private RadioButton otherRadio;
+    @FXML
+    private Button changePasswordButton;
     private ToggleGroup genderGroup;
 
     private Stage stage;
     private int currentUserId = -1;
-    private UserDAO userDAO;
+
     private User currentUser;
     private static final String DEFAULT_AVATAR = "/images/default-avatar.jpg";
-    private static final long MAX_FILE_SIZE = 2 * 1024 * 1024;  // 2MB
+    private static final long MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -62,14 +77,69 @@ public class ProfileController {
 
     @FXML
     public void initialize() {
-        try {
-            userDAO = new UserDAO();
-        } catch (Exception e) {
-            System.err.println("Error init UserDAO: " + e.getMessage());
-        }
+        // Register callbacks
+        org.example.zalu.client.ChatEventManager.getInstance().registerGetUserByIdCallback(users -> {
+            if (users != null && !users.isEmpty()) {
+                // Ensure we get the correct user
+                for (User u : users) {
+                    if (u.getId() == currentUserId) {
+                        this.currentUser = u;
+                        javafx.application.Platform.runLater(() -> updateUIWithUser(u));
+                        break;
+                    }
+                }
+            }
+        });
+
+        org.example.zalu.client.ChatEventManager.getInstance().registerUpdateProfileCallback(response -> {
+            javafx.application.Platform.runLater(() -> {
+                if (response.startsWith("UPDATE_PROFILE|SUCCESS")) {
+                    statusLabel.setText("✓ Lưu thành công!");
+                    statusLabel.setStyle("-fx-text-fill: green;");
+
+                    // Refresh UI với thông tin mới
+                    updateUIWithUser(currentUser);
+
+                    // Load lại avatar nếu có thay đổi
+                    if (currentUser.getAvatarData() != null && avatarImageView != null) {
+                        try {
+                            Image newImage = new Image(new java.io.ByteArrayInputStream(currentUser.getAvatarData()));
+                            avatarImageView.setImage(resizeImage(newImage, 100, 100));
+                        } catch (Exception e) {
+                            logger.error("Error loading avatar after update: {}", e.getMessage(), e);
+                        }
+                    }
+
+                    // Gọi callback nếu có
+                    if (onProfileUpdated != null) {
+                        onProfileUpdated.accept(currentUser);
+                    }
+
+                    // Ẩn status sau 2 giây
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(2000);
+                            javafx.application.Platform.runLater(() -> {
+                                statusLabel.setText("");
+                                statusLabel.setStyle("");
+                            });
+                        } catch (InterruptedException ignored) {
+                        }
+                    }).start();
+                } else {
+                    String error = response.replace("UPDATE_PROFILE|FAIL|", "");
+                    statusLabel.setText("✗ Lỗi: " + error);
+                    statusLabel.setStyle("-fx-text-fill: red;");
+                    showAlert("Lỗi cập nhật profile: " + error);
+                }
+            });
+        });
+
         genderGroup = new ToggleGroup();
-        if (maleRadio != null) maleRadio.setToggleGroup(genderGroup);
-        if (femaleRadio != null) femaleRadio.setToggleGroup(genderGroup);
+        if (maleRadio != null)
+            maleRadio.setToggleGroup(genderGroup);
+        if (femaleRadio != null)
+            femaleRadio.setToggleGroup(genderGroup);
         if (otherRadio != null) {
             otherRadio.setToggleGroup(genderGroup);
             otherRadio.setSelected(true);
@@ -79,42 +149,40 @@ public class ProfileController {
     }
 
     private void loadUserProfile() {
-        if (currentUserId <= 0 || userDAO == null) return;
-        try {
-            currentUser = userDAO.getUserById(currentUserId);
-            if (currentUser != null) {
-                if (usernameLabel != null) {
-                    usernameLabel.setText(currentUser.getFullName() != null ? currentUser.getFullName() : currentUser.getUsername());
-                }
-                if (emailLabel != null) {
-                    emailLabel.setText("Email: " + (currentUser.getEmail() != null ? currentUser.getEmail() : ""));
-                }
-                fullNameField.setText(currentUser.getFullName());
-                phoneField.setText(currentUser.getPhone() != null ? currentUser.getPhone() : "");
-                bioField.setText(currentUser.getBio() != null ? currentUser.getBio() : "");
-                if (birthdatePicker != null) {
-                    birthdatePicker.setValue(currentUser.getBirthdate());
-                }
+        if (currentUserId <= 0)
+            return;
+        org.example.zalu.client.ChatClient.sendRequest("GET_USER_BY_ID|" + currentUserId);
+    }
 
-                if (genderGroup != null) {
-                    String gender = currentUser.getGender();
-                    if ("male".equalsIgnoreCase(gender) && maleRadio != null) {
-                        maleRadio.setSelected(true);
-                    } else if ("female".equalsIgnoreCase(gender) && femaleRadio != null) {
-                        femaleRadio.setSelected(true);
-                    } else if (otherRadio != null) {
-                        otherRadio.setSelected(true);
-                    }
-                }
-                loadAvatar(avatarImageView, currentUser.getAvatarData(), currentUser.getAvatarUrl(), 100, 100);
-                if (statusLabel != null) {
-                    statusLabel.setText("");
+    private void updateUIWithUser(User user) {
+        if (user != null) {
+            if (usernameLabel != null) {
+                usernameLabel.setText(user.getFullName() != null ? user.getFullName() : user.getUsername());
+            }
+            if (emailLabel != null) {
+                emailLabel.setText("Email: " + (user.getEmail() != null ? user.getEmail() : ""));
+            }
+            fullNameField.setText(user.getFullName());
+            phoneField.setText(user.getPhone() != null ? user.getPhone() : "");
+            bioField.setText(user.getBio() != null ? user.getBio() : "");
+            if (birthdatePicker != null) {
+                birthdatePicker.setValue(user.getBirthdate());
+            }
+
+            if (genderGroup != null) {
+                String gender = user.getGender();
+                if ("male".equalsIgnoreCase(gender) && maleRadio != null) {
+                    maleRadio.setSelected(true);
+                } else if ("female".equalsIgnoreCase(gender) && femaleRadio != null) {
+                    femaleRadio.setSelected(true);
+                } else if (otherRadio != null) {
+                    otherRadio.setSelected(true);
                 }
             }
-        } catch (org.example.zalu.exception.auth.UserNotFoundException e) {
-            showAlert("Không tìm thấy người dùng: " + e.getMessage());
-        } catch (org.example.zalu.exception.database.DatabaseException | org.example.zalu.exception.database.DatabaseConnectionException e) {
-            showAlert("Lỗi tải profile: " + e.getMessage());
+            loadAvatar(avatarImageView, user.getAvatarData(), user.getAvatarUrl(), 100, 100);
+            if (statusLabel != null) {
+                statusLabel.setText("");
+            }
         }
     }
 
@@ -152,7 +220,7 @@ public class ProfileController {
                 return image;
             }
         } catch (Exception e) {
-            System.err.println("Không thể load avatar từ path " + path + ": " + e.getMessage());
+            logger.error("Không thể load avatar từ path {}: {}", path, e.getMessage(), e);
         }
         return null;
     }
@@ -167,8 +235,7 @@ public class ProfileController {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Chọn ảnh đại diện");
         chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.png", "*.gif")
-        );
+                new FileChooser.ExtensionFilter("Images", "*.jpg", "*.jpeg", "*.png", "*.gif"));
         File selected = chooser.showOpenDialog(stage);
         if (selected != null && selected.exists()) {
             try {
@@ -222,6 +289,12 @@ public class ProfileController {
         }
     }
 
+    private java.util.function.Consumer<User> onProfileUpdated;
+
+    public void setOnProfileUpdated(java.util.function.Consumer<User> onProfileUpdated) {
+        this.onProfileUpdated = onProfileUpdated;
+    }
+
     @FXML
     private void saveProfile() {
         if (currentUser == null) {
@@ -250,18 +323,13 @@ public class ProfileController {
                 currentUser.setPassword(newPasswordField.getText().trim());
             }
 
-            if (userDAO.updateUser(currentUser)) {
-                showAlert("Cập nhật profile thành công!");
-                statusLabel.setText("Profile đã lưu.");
-                if (stage != null) {
-                    stage.close();
-                }
-            } else {
-                showAlert("Lỗi cập nhật profile! (Kiểm tra kết nối DB)");
-            }
+            // Send full object to server for update
+            org.example.zalu.client.ChatClient.sendObject(currentUser);
+            statusLabel.setText("Đang lưu...");
+
         } catch (Exception e) {
+            logger.error("Lỗi save profile: {}", e.getMessage(), e);
             showAlert("Lỗi save: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -277,16 +345,17 @@ public class ProfileController {
             BioViewController bioController = loader.getController();
             bioController.setUser(currentUser);
             bioController.setCurrentUserId(currentUserId);
-            
+
             Stage bioStage = new Stage();
             bioController.setStage(bioStage);
             bioStage.setScene(new Scene(root, 650, 700));
             String displayName = (currentUser.getFullName() != null && !currentUser.getFullName().trim().isEmpty())
-                    ? currentUser.getFullName() : currentUser.getUsername();
+                    ? currentUser.getFullName()
+                    : currentUser.getUsername();
             bioStage.setTitle("Hồ sơ của tôi - " + displayName);
             bioStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Không thể mở hồ sơ: {}", e.getMessage(), e);
             showAlert("Không thể mở hồ sơ: " + e.getMessage());
         }
     }

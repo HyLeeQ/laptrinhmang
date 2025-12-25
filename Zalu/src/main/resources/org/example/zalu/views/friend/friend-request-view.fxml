@@ -43,7 +43,7 @@
                                 </VBox>
                             </content>
                         </Tab>
-                        <Tab text="Thêm bạn mới">
+                        <Tab text="➕ Thêm bạn mới">
                             <content>
                                 <StackPane styleClass="embedded-card">
                                     <fx:include source="add-friend-tab.fxml" fx:id="addFriendTab"/>

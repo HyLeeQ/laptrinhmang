@@ -12,11 +12,11 @@ import java.util.Map;
  */
 public class ClientBroadcaster {
     private final Map<Integer, ObjectOutputStream> clients;
-    
+
     public ClientBroadcaster(Map<Integer, ObjectOutputStream> clients) {
         this.clients = clients;
     }
-    
+
     /**
      * Broadcast message đến một user cụ thể
      */
@@ -25,12 +25,16 @@ public class ClientBroadcaster {
         if (target != null) {
             try {
                 if (msg.getFileData() != null) {
-                    target.writeObject("NEW_FILE|" + msg.getSenderId() + "|" + receiverId + "|" + msg.getFileName() + "|" + msg.getFileData().length);
+                    target.writeObject("NEW_FILE|" + msg.getSenderId() + "|" + receiverId + "|" + msg.getFileName()
+                            + "|" + msg.getFileData().length);
                     target.writeObject(msg.getFileData());
                 } else {
                     String msgContent = "NEW_MESSAGE|" + msg.getSenderId() + "|" + receiverId + "|" + msg.getContent();
                     if (msg.getRepliedToMessageId() > 0 && msg.getRepliedToContent() != null) {
                         msgContent += "|REPLY_TO|" + msg.getRepliedToMessageId() + "|" + msg.getRepliedToContent();
+                    }
+                    if (msg.getTempId() != null) {
+                        msgContent += "|TEMP_ID|" + msg.getTempId();
                     }
                     target.writeObject(msgContent);
                 }
@@ -40,7 +44,7 @@ public class ClientBroadcaster {
             }
         }
     }
-    
+
     /**
      * Broadcast group message đến tất cả thành viên
      */
@@ -52,12 +56,18 @@ public class ClientBroadcaster {
                 if (target != null) {
                     try {
                         if (msg.getFileData() != null) {
-                            target.writeObject("NEW_GROUP_FILE|" + groupId + "|" + msg.getSenderId() + "|" + msg.getFileName());
+                            target.writeObject(
+                                    "NEW_GROUP_FILE|" + groupId + "|" + msg.getSenderId() + "|" + msg.getFileName());
                             target.writeObject(msg.getFileData());
                         } else {
-                            String msgContent = "NEW_GROUP_MESSAGE|" + groupId + "|" + msg.getSenderId() + "|" + msg.getContent();
+                            String msgContent = "NEW_GROUP_MESSAGE|" + groupId + "|" + msg.getSenderId() + "|"
+                                    + msg.getContent();
                             if (msg.getRepliedToMessageId() > 0 && msg.getRepliedToContent() != null) {
-                                msgContent += "|REPLY_TO|" + msg.getRepliedToMessageId() + "|" + msg.getRepliedToContent();
+                                msgContent += "|REPLY_TO|" + msg.getRepliedToMessageId() + "|"
+                                        + msg.getRepliedToContent();
+                            }
+                            if (msg.getTempId() != null) {
+                                msgContent += "|TEMP_ID|" + msg.getTempId();
                             }
                             target.writeObject(msgContent);
                         }
@@ -71,7 +81,7 @@ public class ClientBroadcaster {
             System.out.println("Lỗi khi lấy danh sách thành viên nhóm: " + e.getMessage());
         }
     }
-    
+
     /**
      * Broadcast message đến một user cụ thể
      */
@@ -86,7 +96,7 @@ public class ClientBroadcaster {
             }
         }
     }
-    
+
     /**
      * Broadcast message đến tất cả thành viên trong nhóm
      */
@@ -101,4 +111,3 @@ public class ClientBroadcaster {
         }
     }
 }
-

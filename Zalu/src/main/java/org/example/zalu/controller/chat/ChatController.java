@@ -36,32 +36,54 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class ChatController {
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ChatController.class);
 
-    @FXML private TextField messageField;
-    @FXML private Button emojiButton;
-    @FXML private Button voiceButton;
-    @FXML private Button sendButton;
-    @FXML private HBox recordingPanel;
-    @FXML private Label recordingTimeLabel;
-    @FXML private Button stopRecordingButton;
-    @FXML private HBox filePreviewPanel;
-    @FXML private Label filePreviewIcon;
-    @FXML private Label filePreviewLabel;
-    @FXML private Label filePreviewSize;
-    @FXML private ProgressBar fileProgressBar;
-    @FXML private Button filePreviewCancelBtn;
-    
-    @FXML private HBox voicePreviewPanel;
-    @FXML private Label voicePreviewLabel;
-    @FXML private Label voicePreviewSize;
-    @FXML private Button voicePreviewCancelBtn;
-    
-    @FXML private HBox replyPreviewPanel;
-    @FXML private Label replyPreviewContent;
-    @FXML private Button replyPreviewCancelBtn;
-    
+    @FXML
+    private TextField messageField;
+    @FXML
+    private Button emojiButton;
+    @FXML
+    private Button voiceButton;
+    @FXML
+    private Button sendButton;
+    @FXML
+    private HBox recordingPanel;
+    @FXML
+    private Label recordingTimeLabel;
+    @FXML
+    private Button stopRecordingButton;
+    @FXML
+    private HBox filePreviewPanel;
+    @FXML
+    private Label filePreviewIcon;
+    @FXML
+    private Label filePreviewLabel;
+    @FXML
+    private Label filePreviewSize;
+    @FXML
+    private ProgressBar fileProgressBar;
+    @FXML
+    private Button filePreviewCancelBtn;
+
+    @FXML
+    private HBox voicePreviewPanel;
+    @FXML
+    private Label voicePreviewLabel;
+    @FXML
+    private Label voicePreviewSize;
+    @FXML
+    private Button voicePreviewCancelBtn;
+
+    @FXML
+    private HBox replyPreviewPanel;
+    @FXML
+    private Label replyPreviewContent;
+    @FXML
+    private Button replyPreviewCancelBtn;
+
     private Popup emojiPopup;
     private AudioRecorder audioRecorder;
     private boolean isRecordingVoice = false;
@@ -69,7 +91,7 @@ public class ChatController {
     private int recordingSeconds = 0;
     private byte[] pendingVoiceData = null;
     private String pendingVoiceFileName = null;
-    
+
     private byte[] pendingFileData = null;
     private String pendingFileName = null;
     private boolean pendingFileIsImage = false;
@@ -77,9 +99,9 @@ public class ChatController {
     private Stage stage;
     private int currentUserId = -1;
     private int currentFriendId = -1;
-    private int currentGroupId = -1;  // -1 = chat 1-1, >0 = group chat
+    private int currentGroupId = -1; // -1 = chat 1-1, >0 = group chat
     private MessageListController messageListController;
-    
+
     // Typing indicator debouncing
     private Timeline typingDebounceTimer = null;
     private long lastTypingSignalTime = 0;
@@ -94,7 +116,7 @@ public class ChatController {
                 sendMessage();
             }
         });
-        
+
         // Gửi typing signal khi user nhập text
         messageField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.trim().isEmpty()) {
@@ -104,23 +126,26 @@ public class ChatController {
                 stopTypingSignal();
             }
         });
-        
+
         // Drag & Drop support cho messageField
         setupDragAndDrop();
     }
-    
+
     /**
      * Gửi typing signal với debouncing để tránh gửi quá nhiều
      */
     private void sendTypingSignal() {
-        if (currentUserId == -1) return;
-        
+        if (currentUserId == -1)
+            return;
+
         // Chỉ gửi cho chat 1-1, không gửi cho group
-        if (currentGroupId > 0) return;
-        if (currentFriendId <= 0) return;
-        
+        if (currentGroupId > 0)
+            return;
+        if (currentFriendId <= 0)
+            return;
+
         long currentTime = System.currentTimeMillis();
-        
+
         // Nếu đã gửi signal gần đây (< 2 giây), không gửi lại
         if (currentTime - lastTypingSignalTime < TYPING_SIGNAL_INTERVAL) {
             // Reset timer để gửi lại sau 2 giây nếu vẫn đang gõ
@@ -134,11 +159,11 @@ public class ChatController {
             typingDebounceTimer.play();
             return;
         }
-        
+
         // Gửi typing signal
         ChatClient.sendRequest("TYPING|" + currentUserId + "|" + currentFriendId);
         lastTypingSignalTime = currentTime;
-        
+
         // Reset timer để gửi lại sau 2 giây nếu vẫn đang gõ
         if (typingDebounceTimer != null) {
             typingDebounceTimer.stop();
@@ -149,7 +174,7 @@ public class ChatController {
         typingDebounceTimer.setCycleCount(1);
         typingDebounceTimer.play();
     }
-    
+
     /**
      * Dừng typing signal (khi xóa hết text hoặc gửi tin nhắn)
      */
@@ -158,28 +183,30 @@ public class ChatController {
             typingDebounceTimer.stop();
             typingDebounceTimer = null;
         }
-        
-        if (currentUserId == -1 || currentFriendId <= 0) return;
-        
+
+        if (currentUserId == -1 || currentFriendId <= 0)
+            return;
+
         // Gửi signal dừng typing
         ChatClient.sendRequest("TYPING_STOP|" + currentUserId + "|" + currentFriendId);
         lastTypingSignalTime = 0;
     }
-    
+
     private void setupDragAndDrop() {
-        if (messageField == null) return;
-        
+        if (messageField == null)
+            return;
+
         messageField.setOnDragOver(event -> {
             if (event.getDragboard().hasFiles()) {
                 event.acceptTransferModes(javafx.scene.input.TransferMode.COPY);
             }
             event.consume();
         });
-        
+
         messageField.setOnDragDropped(event -> {
             javafx.scene.input.Dragboard db = event.getDragboard();
             boolean success = false;
-            
+
             if (db.hasFiles()) {
                 File file = db.getFiles().get(0); // Lấy file đầu tiên
                 if (file != null && file.exists() && file.isFile()) {
@@ -187,23 +214,23 @@ public class ChatController {
                     success = true;
                 }
             }
-            
+
             event.setDropCompleted(success);
             event.consume();
         });
     }
-    
+
     private void handleDroppedFile(File file) {
         if (currentUserId == -1) {
             showAlert("Vui lòng đăng nhập để gửi file!");
             return;
         }
-        
+
         if (currentFriendId == -1 && currentGroupId == -1) {
             showAlert("Vui lòng chọn một người bạn hoặc nhóm để gửi file!");
             return;
         }
-        
+
         try {
             byte[] data = Files.readAllBytes(file.toPath());
             if (data.length > 25 * 1024 * 1024) { // Giới hạn 25MB
@@ -218,7 +245,7 @@ public class ChatController {
             pendingFileData = data;
             pendingFileName = fileName;
             pendingFileIsImage = isImage;
-            
+
             // Nếu là ảnh, hiển thị preview dialog trước
             if (isImage) {
                 showImagePreviewDialog(data, fileName);
@@ -227,10 +254,10 @@ public class ChatController {
                 showFilePreview(data, fileName);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error reading file", e);
             showAlert("Lỗi đọc file: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error processing file", e);
             showAlert("Lỗi xử lý file: " + e.getMessage());
         }
     }
@@ -246,13 +273,13 @@ public class ChatController {
     public void setCurrentFriend(User friend) {
         if (friend != null) {
             this.currentFriendId = friend.getId();
-            this.currentGroupId = -1;  // Reset group khi chọn bạn
+            this.currentGroupId = -1; // Reset group khi chọn bạn
         }
     }
 
     public void setCurrentGroup(int groupId) {
         this.currentGroupId = groupId;
-        this.currentFriendId = -1;  // Reset friend khi chọn nhóm
+        this.currentFriendId = -1; // Reset friend khi chọn nhóm
     }
 
     public void setMessageListController(MessageListController controller) {
@@ -263,35 +290,34 @@ public class ChatController {
     private void sendMessage() {
         // Dừng typing signal khi gửi tin nhắn
         stopTypingSignal();
-        
+
         // Kiểm tra nếu có file pending, gửi file trước
         if (pendingFileData != null && pendingFileName != null) {
             sendFilePreview();
             return;
         }
-        
+
         // Kiểm tra nếu có voice pending, gửi voice trước
         if (pendingVoiceData != null && pendingVoiceFileName != null) {
             sendVoicePreview();
             return;
         }
-        
+
         // Nếu không có file/voice pending, gửi tin nhắn text
         String content = messageField.getText().trim();
-        if (content.isEmpty()) return;
+        if (content.isEmpty())
+            return;
 
         if (sendContentToActiveChat(content)) {
             messageField.clear();
             messageField.requestFocus();
         }
     }
-    
 
     @FXML
     private void handleSendLike() {
         sendContentToActiveChat("👍");
     }
-
 
     @FXML
     private void handleSendFile() {
@@ -299,7 +325,7 @@ public class ChatController {
             showAlert("Vui lòng đăng nhập để gửi file!");
             return;
         }
-        
+
         if (currentFriendId == -1 && currentGroupId == -1) {
             showAlert("Vui lòng chọn một người bạn hoặc nhóm để gửi file!");
             return;
@@ -315,11 +341,11 @@ public class ChatController {
                 new FileChooser.ExtensionFilter("Tất cả file", "*.*"),
                 new FileChooser.ExtensionFilter("Hình ảnh", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp", "*.webp"),
                 new FileChooser.ExtensionFilter("Video", "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv"),
-                new FileChooser.ExtensionFilter("Tài liệu", "*.pdf", "*.docx", "*.doc", "*.txt", "*.zip", "*.rar")
-        );
+                new FileChooser.ExtensionFilter("Tài liệu", "*.pdf", "*.docx", "*.doc", "*.txt", "*.zip", "*.rar"));
 
         File file = fileChooser.showOpenDialog(stage);
-        if (file == null || !file.exists()) return;
+        if (file == null || !file.exists())
+            return;
 
         try {
             byte[] data = Files.readAllBytes(file.toPath());
@@ -335,7 +361,7 @@ public class ChatController {
             pendingFileData = data;
             pendingFileName = fileName;
             pendingFileIsImage = isImage;
-            
+
             // Nếu là ảnh, hiển thị preview dialog trước
             if (isImage) {
                 showImagePreviewDialog(data, fileName);
@@ -345,20 +371,21 @@ public class ChatController {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error reading file for send", e);
             showAlert("Lỗi đọc file: " + e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error sending file", e);
             showAlert("Lỗi gửi file: " + e.getMessage());
         }
     }
-    
+
     private void showImagePreviewDialog(byte[] imageData, String fileName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/media/image-preview-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/example/zalu/views/media/image-preview-view.fxml"));
             VBox root = loader.load();
             ImagePreviewController controller = loader.getController();
-            
+
             controller.setImageData(imageData, fileName);
             controller.setOnSendCallback(() -> {
                 // Gửi ảnh khi người dùng xác nhận
@@ -368,7 +395,7 @@ public class ChatController {
                 pendingFileName = null;
                 pendingFileIsImage = false;
             });
-            
+
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initOwner(stage);
@@ -376,18 +403,18 @@ public class ChatController {
             dialogStage.setTitle("Xem trước ảnh");
             dialogStage.setScene(new Scene(root));
             dialogStage.setResizable(false);
-            
+
             controller.setDialogStage(dialogStage);
             dialogStage.showAndWait();
-            
+
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error showing image preview", e);
             showAlert("Lỗi hiển thị preview: " + e.getMessage());
             // Nếu lỗi preview, vẫn gửi ảnh trực tiếp
             sendFileData(imageData, fileName, true);
         }
     }
-    
+
     private void sendFileData(byte[] data, String fileName, boolean isImage) {
         try {
             // Hiển thị progress bar cho file lớn (>1MB)
@@ -397,13 +424,14 @@ public class ChatController {
                 fileProgressBar.setManaged(true);
                 fileProgressBar.setProgress(0.5); // Indeterminate progress
             }
-            
+
             // Gửi file cho nhóm hoặc bạn bè
             if (currentGroupId > 0) {
                 // Gửi file cho nhóm
-                ChatClient.sendRequest("SEND_GROUP_FILE|" + currentGroupId + "|" + currentUserId + "|" + fileName + "|" + data.length);
+                ChatClient.sendRequest(
+                        "SEND_GROUP_FILE|" + currentGroupId + "|" + currentUserId + "|" + fileName + "|" + data.length);
                 ChatClient.sendObject(data);
-                
+
                 // Hiển thị ngay trong chat (ảnh, voice hoặc file)
                 if (messageListController != null) {
                     if (isImage) {
@@ -414,10 +442,12 @@ public class ChatController {
                         messageListController.addFileMessage(fileName, data.length, true);
                     }
                 }
-                System.out.println("Đã gửi " + (isImage ? "ảnh" : "file") + " cho nhóm: " + fileName + " (" + formatSize(data.length) + ")");
+                logger.info("Sent {} to group: {} ({})", (isImage ? "image" : "file"), fileName,
+                        formatSize(data.length));
             } else if (currentFriendId > 0) {
                 // Gửi file cho bạn bè
-                ChatClient.sendRequest("SEND_FILE|" + currentUserId + "|" + currentFriendId + "|" + fileName + "|" + data.length);
+                ChatClient.sendRequest(
+                        "SEND_FILE|" + currentUserId + "|" + currentFriendId + "|" + fileName + "|" + data.length);
                 ChatClient.sendObject(data);
 
                 // Hiển thị ngay trong chat (ảnh hoặc file)
@@ -430,9 +460,9 @@ public class ChatController {
                         messageListController.addFileMessage(fileName, data.length, true);
                     }
                 }
-                System.out.println("Đã gửi " + (isImage ? "ảnh" : "file") + ": " + fileName + " (" + formatSize(data.length) + ")");
+                logger.info("Sent {}: {} ({})", (isImage ? "image" : "file"), fileName, formatSize(data.length));
             }
-            
+
             // Ẩn progress bar và preview panel sau khi gửi
             Platform.runLater(() -> {
                 if (fileProgressBar != null) {
@@ -443,7 +473,7 @@ public class ChatController {
                 hideFilePreview();
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error sending file", e);
             showAlert("Lỗi gửi file: " + e.getMessage());
             Platform.runLater(() -> {
                 if (fileProgressBar != null) {
@@ -453,27 +483,28 @@ public class ChatController {
             });
         }
     }
-    
+
     private void showFilePreview(byte[] data, String fileName) {
         Platform.runLater(() -> {
             if (filePreviewPanel != null) {
                 filePreviewPanel.setVisible(true);
                 filePreviewPanel.setManaged(true);
-                
+
                 // Set icon dựa trên loại file
                 if (filePreviewIcon != null) {
-                    filePreviewIcon.setGraphic(IconUtil.getFileIcon(fileName, 24, javafx.scene.paint.Color.web("#65676b")).getGraphic());
+                    filePreviewIcon.setGraphic(
+                            IconUtil.getFileIcon(fileName, 24, javafx.scene.paint.Color.web("#65676b")).getGraphic());
                     filePreviewIcon.setText(null);
                 }
-                
+
                 if (filePreviewLabel != null) {
                     filePreviewLabel.setText(fileName);
                 }
-                
+
                 if (filePreviewSize != null) {
                     filePreviewSize.setText(formatSize(data.length));
                 }
-                
+
                 // Cập nhật text nút Gửi
                 if (sendButton != null) {
                     sendButton.setText("Gửi file");
@@ -481,7 +512,7 @@ public class ChatController {
             }
         });
     }
-    
+
     private void hideFilePreview() {
         Platform.runLater(() -> {
             if (filePreviewPanel != null) {
@@ -491,29 +522,30 @@ public class ChatController {
             pendingFileData = null;
             pendingFileName = null;
             pendingFileIsImage = false;
-            
+
             // Reset text nút Gửi
             if (sendButton != null && pendingVoiceData == null) {
                 sendButton.setText("Gửi");
             }
         });
     }
-    
+
     @FXML
     private void cancelFilePreview() {
         hideFilePreview();
     }
-    
+
     private void sendFilePreview() {
         if (pendingFileData != null && pendingFileName != null) {
             sendFileData(pendingFileData, pendingFileName, pendingFileIsImage);
         }
     }
-    
 
     private String formatSize(long bytes) {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
+        if (bytes < 1024)
+            return bytes + " B";
+        if (bytes < 1024 * 1024)
+            return String.format("%.1f KB", bytes / 1024.0);
         return String.format("%.1f MB", bytes / (1024.0 * 1024));
     }
 
@@ -528,7 +560,7 @@ public class ChatController {
     public void focusInput() {
         messageField.requestFocus();
     }
-    
+
     @FXML
     private void handleVoiceMessage() {
         if (currentFriendId <= 0 && currentGroupId <= 0) {
@@ -539,44 +571,44 @@ public class ChatController {
         // Chỉ ghi âm trực tiếp, không có dialog chọn file
         startVoiceRecording();
     }
-    
+
     private void startVoiceRecording() {
         if (audioRecorder == null) {
             audioRecorder = new AudioRecorder();
         }
-        
+
         // Bắt đầu ghi âm
         if (audioRecorder.startRecording()) {
             isRecordingVoice = true;
             recordingSeconds = 0;
-            
+
             // Ẩn preview nếu có
             hideVoicePreview();
-            
+
             // Hiển thị recording panel
             if (recordingPanel != null) {
                 recordingPanel.setVisible(true);
                 recordingPanel.setManaged(true);
             }
-            
+
             // Cập nhật nút voice
             if (voiceButton != null) {
                 voiceButton.setText("⏹️");
                 voiceButton.setStyle("-fx-background-color: #ff4444;");
             }
-            
+
             // Bắt đầu timer
             startRecordingTimer();
         } else {
             showAlert("Không thể bắt đầu ghi âm. Kiểm tra microphone và quyền truy cập.");
         }
     }
-    
+
     private void startRecordingTimer() {
         if (recordingTimer != null) {
             recordingTimer.stop();
         }
-        
+
         recordingTimer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             recordingSeconds++;
             updateRecordingTime();
@@ -584,7 +616,7 @@ public class ChatController {
         recordingTimer.setCycleCount(Timeline.INDEFINITE);
         recordingTimer.play();
     }
-    
+
     private void updateRecordingTime() {
         Platform.runLater(() -> {
             int minutes = recordingSeconds / 60;
@@ -595,7 +627,7 @@ public class ChatController {
             }
         });
     }
-    
+
     @FXML
     private void stopVoiceRecording() {
         if (audioRecorder != null && isRecordingVoice) {
@@ -604,23 +636,23 @@ public class ChatController {
                 recordingTimer.stop();
                 recordingTimer = null;
             }
-            
+
             // Dừng ghi âm
             byte[] audioData = audioRecorder.stopRecording();
             isRecordingVoice = false;
-            
+
             // Ẩn recording panel
             if (recordingPanel != null) {
                 recordingPanel.setVisible(false);
                 recordingPanel.setManaged(false);
             }
-            
+
             // Cập nhật nút voice
             if (voiceButton != null) {
                 voiceButton.setText("🎤");
                 voiceButton.setStyle("");
             }
-            
+
             if (audioData != null && audioData.length > 0) {
                 // Lưu file tạm
                 try {
@@ -628,10 +660,10 @@ public class ChatController {
                     if (!Files.exists(voiceDir)) {
                         Files.createDirectories(voiceDir);
                     }
-                    
+
                     String fileName = "voice_" + System.currentTimeMillis() + ".wav";
                     File voiceFile = voiceDir.resolve(fileName).toFile();
-                    
+
                     if (audioRecorder.saveToFile(audioData, voiceFile)) {
                         // Lưu vào pending và hiển thị preview
                         pendingVoiceData = audioData;
@@ -648,21 +680,21 @@ public class ChatController {
             }
         }
     }
-    
+
     private void showVoicePreview(byte[] audioData, String fileName) {
         Platform.runLater(() -> {
             if (voicePreviewPanel != null) {
                 voicePreviewPanel.setVisible(true);
                 voicePreviewPanel.setManaged(true);
-                
+
                 if (voicePreviewLabel != null) {
                     voicePreviewLabel.setText("Tin nhắn thoại (" + formatTime(recordingSeconds) + ")");
                 }
-                
+
                 if (voicePreviewSize != null) {
                     voicePreviewSize.setText(formatSize(audioData.length));
                 }
-                
+
                 // Cập nhật text nút Gửi
                 if (sendButton != null) {
                     sendButton.setText("Gửi voice");
@@ -670,7 +702,7 @@ public class ChatController {
             }
         });
     }
-    
+
     private void hideVoicePreview() {
         Platform.runLater(() -> {
             if (voicePreviewPanel != null) {
@@ -679,93 +711,96 @@ public class ChatController {
             }
             pendingVoiceData = null;
             pendingVoiceFileName = null;
-            
+
             // Reset text nút Gửi
             if (sendButton != null && pendingFileData == null) {
                 sendButton.setText("Gửi");
             }
         });
     }
-    
+
     @FXML
     private void cancelVoicePreview() {
         hideVoicePreview();
     }
-    
+
     private void sendVoicePreview() {
         if (pendingVoiceData != null && pendingVoiceFileName != null) {
             sendVoiceMessage(pendingVoiceData, pendingVoiceFileName);
             hideVoicePreview();
         }
     }
-    
+
     private String formatTime(int seconds) {
         int minutes = seconds / 60;
         int secs = seconds % 60;
         return String.format("%d:%02d", minutes, secs);
     }
-    
+
     private void sendVoiceMessage(byte[] audioData, String fileName) {
         if (audioData == null || audioData.length == 0) {
             showAlert("File audio rỗng");
             return;
         }
-        
+
         if (audioData.length > 10 * 1024 * 1024) { // 10MB limit
             showAlert("File audio quá lớn! Chỉ hỗ trợ file dưới 10MB.");
             return;
         }
-        
+
         try {
             // Gửi như file thông thường, nhưng đánh dấu là voice message
             if (currentGroupId > 0) {
-                ChatClient.sendRequest("SEND_GROUP_FILE|" + currentGroupId + "|" + currentUserId + "|" + fileName + "|" + audioData.length);
+                ChatClient.sendRequest("SEND_GROUP_FILE|" + currentGroupId + "|" + currentUserId + "|" + fileName + "|"
+                        + audioData.length);
                 ChatClient.sendObject(audioData);
             } else if (currentFriendId > 0) {
-                ChatClient.sendRequest("SEND_FILE|" + currentUserId + "|" + currentFriendId + "|" + fileName + "|" + audioData.length);
+                ChatClient.sendRequest(
+                        "SEND_FILE|" + currentUserId + "|" + currentFriendId + "|" + fileName + "|" + audioData.length);
                 ChatClient.sendObject(audioData);
             }
-            
+
             // Hiển thị ngay trong chat
             if (messageListController != null) {
                 messageListController.addVoiceMessage(audioData, fileName, true);
             }
-            
-            System.out.println("Đã gửi tin nhắn thoại: " + fileName + " (" + formatSize(audioData.length) + ")");
+
+            logger.info("Sent voice message: {} ({})", fileName, formatSize(audioData.length));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error sending voice message", e);
             showAlert("Lỗi gửi tin nhắn thoại: " + e.getMessage());
         }
     }
-    
+
     @FXML
     private void handleEmojiPicker() {
         try {
             if (emojiPopup == null) {
                 emojiPopup = new Popup();
                 emojiPopup.setAutoHide(true);
-                
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/common/emoji-picker-view.fxml"));
+
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/org/example/zalu/views/common/emoji-picker-view.fxml"));
                 VBox emojiPicker = loader.load();
                 EmojiPickerController controller = loader.getController();
                 controller.setChatController(this);
-                
+
                 emojiPopup.getContent().add(emojiPicker);
             }
-            
+
             // Hiển thị popup gần nút emoji
             if (emojiButton != null && emojiButton.getScene() != null) {
                 Bounds bounds = emojiButton.localToScreen(emojiButton.getBoundsInLocal());
-                emojiPopup.show(emojiButton.getScene().getWindow(), 
-                    bounds.getMinX() - 280, 
-                    bounds.getMaxY() - 300);
+                emojiPopup.show(emojiButton.getScene().getWindow(),
+                        bounds.getMinX() - 280,
+                        bounds.getMaxY() - 300);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error loading emoji picker", e);
             showAlert("Lỗi tải emoji picker: " + e.getMessage());
         }
     }
-    
+
     public void insertEmoji(String emoji) {
         if (messageField != null) {
             int caretPosition = messageField.getCaretPosition();
@@ -775,13 +810,13 @@ public class ChatController {
             messageField.positionCaret(caretPosition + emoji.length());
             messageField.requestFocus();
         }
-        
+
         // Đóng popup sau khi chọn
         if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.hide();
         }
     }
-    
+
     /**
      * Xóa tin nhắn (chỉ xóa cho mình)
      */
@@ -792,7 +827,7 @@ public class ChatController {
         }
         ChatClient.sendRequest("DELETE_MESSAGE|" + messageId + "|" + currentUserId);
     }
-    
+
     /**
      * Thu hồi tin nhắn (xóa cho cả hai)
      */
@@ -803,7 +838,7 @@ public class ChatController {
         }
         ChatClient.sendRequest("RECALL_MESSAGE|" + messageId + "|" + currentUserId);
     }
-    
+
     /**
      * Chỉnh sửa tin nhắn
      */
@@ -818,58 +853,65 @@ public class ChatController {
         }
         ChatClient.sendRequest("EDIT_MESSAGE|" + messageId + "|" + currentUserId + "|" + newContent);
     }
-    
+
     /**
      * Trả lời tin nhắn (reply)
      */
     private Integer replyingToMessageId = null;
     private String replyingToContent = null;
-    
+
     public void startReply(int messageId, String messageContent) {
         replyingToMessageId = messageId;
-        replyingToContent = messageContent != null && !messageContent.trim().isEmpty() 
-            ? messageContent.trim() : "Tin nhắn";
-        
+        replyingToContent = messageContent != null && !messageContent.trim().isEmpty()
+                ? messageContent.trim()
+                : "Tin nhắn";
+
         // Hiển thị reply preview panel
         if (replyPreviewPanel != null && replyPreviewContent != null) {
-            String previewText = replyingToContent.length() > 50 
-                ? replyingToContent.substring(0, 47) + "..." 
-                : replyingToContent;
+            String previewText = replyingToContent.length() > 50
+                    ? replyingToContent.substring(0, 47) + "..."
+                    : replyingToContent;
             replyPreviewContent.setText(previewText);
             replyPreviewPanel.setVisible(true);
             replyPreviewPanel.setManaged(true);
         }
-        
+
         messageField.setPromptText("Nhập tin nhắn...");
         messageField.requestFocus();
     }
-    
+
     public void cancelReply() {
         replyingToMessageId = null;
         replyingToContent = null;
         messageField.setPromptText("Nhập tin nhắn...");
-        
+
         // Ẩn reply preview panel
         if (replyPreviewPanel != null) {
             replyPreviewPanel.setVisible(false);
             replyPreviewPanel.setManaged(false);
         }
     }
-    
-    private boolean sendContentToActiveChat(String rawContent) {
-        if (rawContent == null) return false;
-        String content = rawContent.trim();
-        if (content.isEmpty()) return false;
 
+    private boolean sendContentToActiveChat(String rawContent) {
+        if (rawContent == null)
+            return false;
+        String content = rawContent.trim();
+        if (content.isEmpty())
+            return false;
+
+        String tempId = UUID.randomUUID().toString();
         String requestStr;
         if (currentGroupId > 0) {
+            String baseRequest = "SEND_GROUP_MESSAGE|" + currentGroupId + "|" + content;
             if (replyingToMessageId != null && replyingToMessageId > 0) {
-                requestStr = "SEND_GROUP_MESSAGE|" + currentGroupId + "|" + content + "|REPLY_TO|" + replyingToMessageId + "|" + replyingToContent;
+                requestStr = baseRequest + "|REPLY_TO|" + replyingToMessageId + "|" + replyingToContent + "|TEMP_ID|"
+                        + tempId;
             } else {
-                requestStr = "SEND_GROUP_MESSAGE|" + currentGroupId + "|" + content;
+                requestStr = baseRequest + "|TEMP_ID|" + tempId;
             }
             ChatClient.sendRequest(requestStr);
-            System.out.println("Gửi tin nhắn nhóm: groupId=" + currentGroupId + ", senderId=" + currentUserId + ", content=" + content);
+            logger.debug("Sending group message: groupId={}, senderId={}, content={}, tempId={}", currentGroupId,
+                    currentUserId, content, tempId);
 
             Message localMsg = new Message();
             localMsg.setSenderId(currentUserId);
@@ -877,6 +919,8 @@ public class ChatController {
             localMsg.setContent(content);
             localMsg.setCreatedAt(LocalDateTime.now());
             localMsg.setFile(false);
+            localMsg.setStatus(Message.MessageStatus.SENDING);
+            localMsg.setTempId(tempId);
             if (replyingToMessageId != null && replyingToMessageId > 0) {
                 localMsg.setRepliedToMessageId(replyingToMessageId);
                 localMsg.setRepliedToContent(replyingToContent);
@@ -888,13 +932,16 @@ public class ChatController {
             cancelReply(); // Clear reply after sending
             return true;
         } else if (currentFriendId > 0) {
+            String baseRequest = "SEND_MESSAGE|" + currentFriendId + "|" + currentUserId + "|" + content;
             if (replyingToMessageId != null && replyingToMessageId > 0) {
-                requestStr = "SEND_MESSAGE|" + currentFriendId + "|" + currentUserId + "|" + content + "|REPLY_TO|" + replyingToMessageId + "|" + replyingToContent;
+                requestStr = baseRequest + "|REPLY_TO|" + replyingToMessageId + "|" + replyingToContent + "|TEMP_ID|"
+                        + tempId;
             } else {
-                requestStr = "SEND_MESSAGE|" + currentFriendId + "|" + currentUserId + "|" + content;
+                requestStr = baseRequest + "|TEMP_ID|" + tempId;
             }
             ChatClient.sendRequest(requestStr);
-            System.out.println("Gửi tin nhắn: receiverId=" + currentFriendId + ", senderId=" + currentUserId + ", content=" + content);
+            logger.debug("Sending message: receiverId={}, senderId={}, content={}, tempId={}", currentFriendId,
+                    currentUserId, content, tempId);
 
             Message localMsg = new Message();
             localMsg.setSenderId(currentUserId);
@@ -902,6 +949,8 @@ public class ChatController {
             localMsg.setContent(content);
             localMsg.setCreatedAt(LocalDateTime.now());
             localMsg.setFile(false);
+            localMsg.setStatus(Message.MessageStatus.SENDING);
+            localMsg.setTempId(tempId);
             if (replyingToMessageId != null && replyingToMessageId > 0) {
                 localMsg.setRepliedToMessageId(replyingToMessageId);
                 localMsg.setRepliedToContent(replyingToContent);

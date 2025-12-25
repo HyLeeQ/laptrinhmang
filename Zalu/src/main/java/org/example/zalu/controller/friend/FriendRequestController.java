@@ -15,20 +15,28 @@ import javafx.stage.Stage;
 import org.example.zalu.client.ChatClient;
 import org.example.zalu.controller.MainController;
 import org.example.zalu.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class FriendRequestController implements Initializable {
+    private static final Logger logger = LoggerFactory.getLogger(FriendRequestController.class);
 
-    @FXML private TabPane tabPane;
-    @FXML private ListView<User> incomingList;
-    @FXML private ListView<User> outgoingList;
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private ListView<User> incomingList;
+    @FXML
+    private ListView<User> outgoingList;
     // Buttons đã được di chuyển vào trong ListCell, không còn trong FXML
 
     // QUAN TRỌNG: Thêm dòng này để lấy controller của tab "Thêm Bạn"
-    @FXML private AddFriendController addFriendTabController;  // fx:id trong FXML là addFriendTab → JavaFX tự map thành addFriendTabController
+    @FXML
+    private AddFriendController addFriendTabController; // fx:id trong FXML là addFriendTab → JavaFX tự map thành
+                                                        // addFriendTabController
 
     private Stage stage;
     private int currentUserId = -1;
@@ -82,6 +90,42 @@ public class FriendRequestController implements Initializable {
         }
     }
 
+    public void refreshRequests() {
+        loadData();
+    }
+
+    public void loadData() {
+        if (currentUserId > 0) {
+            System.out.println("FriendRequestController: Loading data via Server for userId: " + currentUserId);
+
+            // Register callback
+            org.example.zalu.client.ChatEventManager.getInstance().registerPendingRequestsMapCallback(map -> {
+                System.out.println("FriendRequestController: Received data map keys: " + map.keySet());
+                List<User> incoming = map.get("incoming");
+                List<User> outgoing = map.get("outgoing");
+
+                javafx.application.Platform.runLater(() -> {
+                    setIncomingRequests(incoming != null ? incoming : java.util.Collections.emptyList());
+                    setOutgoingRequests(outgoing != null ? outgoing : java.util.Collections.emptyList());
+                });
+            });
+
+            // Send request
+            ChatClient.sendRequest("GET_FRIEND_REQUESTS_INFO|" + currentUserId);
+        }
+    }
+
+    // DAOs no longer needed
+    // private org.example.zalu.dao.FriendDAO friendDAO;
+    // private org.example.zalu.dao.UserDAO userDAO;
+
+    public void setDaos(Object unused1, Object unused2) {
+        // Deprecated to keep compatibility if MainController calls it,
+        // but basically do nothing or log warning
+        System.out.println(
+                "FriendRequestController: setDaos called but DAOs are DEPRECATED in partial Client-Server refactor.");
+    }
+
     private ListCell<User> createIncomingCell() {
         return new ListCell<>() {
             private HBox card;
@@ -119,7 +163,7 @@ public class FriendRequestController implements Initializable {
                 acceptBtn.getStyleClass().add("success-btn");
                 acceptBtn.setPrefWidth(130);
                 acceptBtn.setPrefHeight(38);
-                
+
                 rejectBtn = new Button("✗ Từ chối");
                 rejectBtn.getStyleClass().add("danger-btn");
                 rejectBtn.setPrefWidth(130);
@@ -138,17 +182,66 @@ public class FriendRequestController implements Initializable {
                 if (empty || item == null || item.getId() == -1) {
                     setGraphic(null);
                 } else {
-                    nameLabel.setText(item.getUsername());
-                    
+                    nameLabel.setText(resolveDisplayName(item));
+
+                    // Set Avatar
+                    javafx.scene.image.Image img = org.example.zalu.service.AvatarService.resolveAvatar(item);
+                    if (img != null) {
+                        avatar.setFill(new javafx.scene.paint.ImagePattern(img));
+                    } else {
+                        avatar.setFill(Color.web("#0d8bff"));
+                    }
+
                     // Reset button actions
                     acceptBtn.setOnAction(e -> {
                         ChatClient.sendRequest("ACCEPT_FRIEND|" + currentUserId + "|" + item.getId());
-                        backToMainAndRefresh();
+
+                        // Show success notification
+                        javafx.application.Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Thành công!");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Đã chấp nhận lời mời kết bạn từ " + resolveDisplayName(item));
+                            alert.showAndWait();
+
+                            // Refresh UI - Load lại danh sách bạn bè mới nhất
+                            refreshRequests();
+                            backToMainAndRefresh();
+
+                            // Đợi một chút để server xử lý xong, sau đó load lại friend list
+                            new Thread(() -> {
+                                try {
+                                    Thread.sleep(500); // Đợi 500ms để server cập nhật
+                                    javafx.application.Platform.runLater(() -> {
+                                        if (mainController != null) {
+                                            mainController.refreshFriendList();
+                                            System.out.println(
+                                                    "✓ Đã load lại danh sách bạn bè sau khi chấp nhận kết bạn");
+                                        }
+                                    });
+                                } catch (InterruptedException ex) {
+                                    logger.error("Thread interrupted: {}", ex.getMessage(), ex);
+                                    Thread.currentThread().interrupt();
+                                }
+                            }).start();
+                        });
                     });
-                    
+
                     rejectBtn.setOnAction(e -> {
                         ChatClient.sendRequest("REJECT_FRIEND|" + currentUserId + "|" + item.getId());
-                        backToMainAndRefresh();
+
+                        // Show success notification
+                        javafx.application.Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Đã từ chối");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Đã từ chối lời mời kết bạn từ " + resolveDisplayName(item));
+                            alert.showAndWait();
+
+                            // Refresh UI
+                            refreshRequests();
+                            backToMainAndRefresh();
+                        });
                     });
 
                     setGraphic(card);
@@ -184,7 +277,7 @@ public class FriendRequestController implements Initializable {
                 card.getStyleClass().add("request-item-card");
 
                 avatar = new Circle(32);
-                avatar.setFill(Color.web("#ffa500"));
+                avatar.setFill(Color.web("#0d8bff"));
                 avatar.setStroke(Color.WHITE);
                 avatar.setStrokeWidth(2);
 
@@ -200,7 +293,7 @@ public class FriendRequestController implements Initializable {
                 HBox.setHgrow(spacer, Priority.ALWAYS);
 
                 cancelBtn = new Button("✕ Hủy yêu cầu");
-                cancelBtn.getStyleClass().add("warning-btn");
+                cancelBtn.getStyleClass().add("danger-btn");
                 cancelBtn.setPrefWidth(150);
                 cancelBtn.setPrefHeight(38);
 
@@ -214,8 +307,16 @@ public class FriendRequestController implements Initializable {
                 if (empty || item == null || item.getId() == -1) {
                     setGraphic(null);
                 } else {
-                    nameLabel.setText(item.getUsername());
-                    
+                    nameLabel.setText(resolveDisplayName(item));
+
+                    // Set Avatar
+                    javafx.scene.image.Image img = org.example.zalu.service.AvatarService.resolveAvatar(item);
+                    if (img != null) {
+                        avatar.setFill(new javafx.scene.paint.ImagePattern(img));
+                    } else {
+                        avatar.setFill(Color.web("#0d8bff"));
+                    }
+
                     // Reset button action
                     cancelBtn.setOnAction(e -> {
                         ChatClient.sendRequest("CANCEL_FRIEND|" + currentUserId + "|" + item.getId());
@@ -250,20 +351,38 @@ public class FriendRequestController implements Initializable {
         }
     }
 
+    private String resolveDisplayName(User user) {
+        if (user == null)
+            return "";
+        if (user.getFullName() != null && !user.getFullName().isBlank()) {
+            return user.getFullName();
+        }
+        return user.getUsername();
+    }
+
     // ==================== Action ====================
     // Các actions giờ được xử lý trực tiếp trong ListCell buttons
     // Không cần các methods này nữa vì buttons đã được di chuyển vào card
 
     private void backToMainAndRefresh() {
-        backToMain();
-        if (mainController != null) mainController.refreshFriendList();
+        // backToMain(); // Gây loop nếu gọi liên tục
+        if (mainController != null) {
+            mainController.refreshFriendList();
+            // Ẩn item hiện tại khỏi list thay vì chuyển trang
+            if (tabPane.getSelectionModel().getSelectedIndex() == 0) {
+                // Đang ở tab Lời mời kết bạn
+                // Xóa item đã xử lý (logic này nên được cải thiện bằng cách reload list từ
+                // server)
+                // Nhưng tạm thời refreshFriendList sẽ trigger update từ server
+            }
+        }
     }
 
     @FXML
     public void backToMain() {
         System.out.println("=== backToMain() called ===");
         System.out.println("mainController: " + (mainController != null));
-        
+
         if (mainController != null) {
             try {
                 // Quay lại main view bằng cách hiển thị welcome view
@@ -272,8 +391,7 @@ public class FriendRequestController implements Initializable {
                 mainController.refreshFriendList();
                 System.out.println("✓ Đã quay lại welcome view thành công");
             } catch (Exception e) {
-                System.err.println("✗ Lỗi khi quay lại welcome view: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Lỗi khi quay lại welcome view: {}", e.getMessage(), e);
             }
         } else {
             System.err.println("⚠ mainController is null! Không thể quay lại welcome view");

@@ -58,6 +58,24 @@
     <logger name="com.zaxxer.hikari" level="WARN"/>
     <logger name="com.mysql.cj.jdbc" level="WARN"/>
     
+    <!-- ========================================== -->
+    <!-- UDP Discovery Logging Configuration       -->
+    <!-- ========================================== -->
+    
+    <!-- Server Discovery Listener: Nhận và xử lý discovery requests -->
+    <!-- Đổi thành DEBUG để xem chi tiết từng packet nhận/gửi -->
+    <logger name="org.example.zalu.server.ServerDiscoveryListener" level="INFO"/>
+    
+    <!-- Client Discovery: Tìm kiếm server trong LAN -->
+    <!-- Đổi thành DEBUG để xem chi tiết quá trình broadcast và network interfaces -->
+    <logger name="org.example.zalu.client.ServerDiscoveryClient" level="INFO"/>
+    
+    <!-- Login Controller: Auto-discovery khi khởi động -->
+    <!-- Đổi thành DEBUG để xem chi tiết quá trình auto-discovery -->
+    <logger name="org.example.zalu.controller.auth.LoginController" level="INFO"/>
+    
+    <!-- ========================================== -->
+    
     <!-- Root logger -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

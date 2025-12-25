@@ -1,5 +1,8 @@
 package org.example.zalu.util.audio;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.sound.sampled.*;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,6 +13,7 @@ import java.io.IOException;
  * Lưu ý: Cần quyền truy cập microphone
  */
 public class AudioRecorder {
+    private static final Logger logger = LoggerFactory.getLogger(AudioRecorder.class);
     private TargetDataLine targetDataLine;
     private AudioFormat audioFormat;
     private boolean isRecording = false;
@@ -31,7 +35,7 @@ public class AudioRecorder {
         try {
             DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
             if (!AudioSystem.isLineSupported(dataLineInfo)) {
-                System.err.println("Microphone không được hỗ trợ với format này");
+                logger.warn("Microphone không được hỗ trợ với format này");
                 return false;
             }
 
@@ -57,8 +61,7 @@ public class AudioRecorder {
 
             return true;
         } catch (LineUnavailableException e) {
-            System.err.println("Không thể mở microphone: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Không thể mở microphone: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -82,7 +85,7 @@ public class AudioRecorder {
             try {
                 audioOutputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Lỗi khi đóng audio output stream: {}", e.getMessage(), e);
             }
             return audioData;
         }
@@ -102,15 +105,13 @@ public class AudioRecorder {
             AudioInputStream audioInputStream = new AudioInputStream(
                     new java.io.ByteArrayInputStream(audioData),
                     audioFormat,
-                    audioData.length / audioFormat.getFrameSize()
-            );
+                    audioData.length / audioFormat.getFrameSize());
 
             AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputFile);
             audioInputStream.close();
             return true;
         } catch (IOException e) {
-            System.err.println("Lỗi khi lưu file audio: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Lỗi khi lưu file audio: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -136,10 +137,9 @@ public class AudioRecorder {
                 try {
                     audioOutputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Lỗi khi đóng audio output stream: {}", e.getMessage(), e);
                 }
             }
         }
     }
 }
-

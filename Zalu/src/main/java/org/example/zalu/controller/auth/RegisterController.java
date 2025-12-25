@@ -19,15 +19,25 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class RegisterController {
-    @FXML private TextField usernameField;
-    @FXML private TextField fullNameField;
-    @FXML private PasswordField passwordField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private Label statusLabel;
-    @FXML private StackPane loadingOverlay;
-    @FXML private ProgressIndicator loadingIndicator;
-    @FXML private Label loadingLabel;
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RegisterController.class);
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField phoneField;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private StackPane loadingOverlay;
+    @FXML
+    private ProgressIndicator loadingIndicator;
+    @FXML
+    private Label loadingLabel;
 
     private Stage stage;
 
@@ -63,14 +73,15 @@ public class RegisterController {
 
         statusLabel.setText("Đang gửi yêu cầu đăng ký...");
         disableFields(true);
-        
+
         // Hiển thị loading overlay
         showLoading("Đang đăng ký tài khoản...");
 
         // Đảm bảo đã kết nối trước khi gửi request
         try {
             if (!ChatClient.isConnected() && !ChatClient.connectToServer()) {
-                throw new ServerConnectionException("Không thể kết nối tới server. Vui lòng kiểm tra lại kết nối mạng/server.");
+                throw new ServerConnectionException(
+                        "Không thể kết nối tới server. Vui lòng kiểm tra lại kết nối mạng/server.");
             }
         } catch (ServerConnectionException e) {
             hideLoading();
@@ -85,7 +96,8 @@ public class RegisterController {
 
         // Gửi yêu cầu đăng ký bằng ChatClient
         try {
-            String request = "REGISTER_REQUEST|" + username + "|" + fullName + "|" + password + "|" + email + "|" + phone;
+            String request = "REGISTER_REQUEST|" + username + "|" + fullName + "|" + password + "|" + email + "|"
+                    + phone;
             ChatClient.sendRequest(request);
         } catch (Exception e) {
             hideLoading();
@@ -95,22 +107,24 @@ public class RegisterController {
             return;
         }
 
-        // Đăng ký lắng nghe phản hồi từ server (xử lý ngay khi nhận được, không chờ timeout)
+        // Đăng ký lắng nghe phản hồi từ server (xử lý ngay khi nhận được, không chờ
+        // timeout)
         ChatEventManager.getInstance().registerErrorCallback(msg -> {
             if (msg.startsWith("REGISTER_RESPONSE|")) {
                 Platform.runLater(() -> {
                     hideLoading();
                     if (msg.contains("SUCCESS")) {
                         statusLabel.setText("Đăng ký thành công!");
-                        showAlert(Alert.AlertType.INFORMATION, "Thành công", "Tài khoản đã được tạo!\nBây giờ bạn có thể đăng nhập.");
+                        showAlert(Alert.AlertType.INFORMATION, "Thành công",
+                                "Tài khoản đã được tạo!\nBây giờ bạn có thể đăng nhập.");
                         disableFields(false);
                         // Unregister callback trước khi chuyển màn hình
                         ChatEventManager.getInstance().unregisterAllCallbacks();
                         switchToLogin();
                     } else if (msg.contains("FAIL")) {
-                        String error = msg.contains("|FAIL|") 
-                            ? msg.substring(msg.indexOf("|FAIL|") + 6) 
-                            : "Đăng ký thất bại";
+                        String error = msg.contains("|FAIL|")
+                                ? msg.substring(msg.indexOf("|FAIL|") + 6)
+                                : "Đăng ký thất bại";
                         statusLabel.setText("Đăng ký thất bại");
                         showAlert(Alert.AlertType.ERROR, "Thất bại", error);
                         disableFields(false);
@@ -130,7 +144,7 @@ public class RegisterController {
                 });
             }
         });
-        
+
         // Timeout fallback: Nếu sau 10 giây không nhận được response, hiển thị lỗi
         new Thread(() -> {
             try {
@@ -145,27 +159,28 @@ public class RegisterController {
                         ChatEventManager.getInstance().unregisterAllCallbacks();
                     }
                 });
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+            }
         }).start();
     }
 
-    private void validateInput(String username, String fullName, String password, String email, String phone) 
+    private void validateInput(String username, String fullName, String password, String email, String phone)
             throws ValidationException, InvalidInputException {
         // Kiểm tra các trường bắt buộc
         if (username.isEmpty() || fullName.isEmpty() || password.isEmpty() || email.isEmpty() || phone.isEmpty()) {
             throw new ValidationException("Vui lòng nhập đầy đủ thông tin!");
         }
-        
+
         // Kiểm tra định dạng email
         if (!isValidEmail(email)) {
             throw new InvalidInputException("Email không hợp lệ!");
         }
-        
+
         // Kiểm tra định dạng số điện thoại
         if (!isValidPhone(phone)) {
             throw new InvalidInputException("Số điện thoại phải 10-11 chữ số!");
         }
-        
+
         // Kiểm tra độ dài mật khẩu
         if (password.length() < 6) {
             throw new InvalidInputException("Mật khẩu phải ít nhất 6 ký tự!");
@@ -197,7 +212,7 @@ public class RegisterController {
         emailField.setDisable(disable);
         phoneField.setDisable(disable);
     }
-    
+
     private void showLoading(String message) {
         if (loadingOverlay != null) {
             if (loadingLabel != null && message != null) {
@@ -208,7 +223,7 @@ public class RegisterController {
             loadingOverlay.toFront();
         }
     }
-    
+
     private void hideLoading() {
         if (loadingOverlay != null) {
             loadingOverlay.setVisible(false);
@@ -236,7 +251,7 @@ public class RegisterController {
             stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to switch to login view", e);
             showAlert(Alert.AlertType.ERROR, "Lỗi", "Không mở được trang đăng nhập");
         }
     }

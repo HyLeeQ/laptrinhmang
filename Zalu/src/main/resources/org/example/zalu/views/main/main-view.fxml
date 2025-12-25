@@ -16,17 +16,16 @@
                 </StackPane>
                 <VBox spacing="12" styleClass="nav-btn-group">
                     <Button text="💬" styleClass="nav-btn nav-btn-active"/>
-                    <Button text="👥" onAction="#viewFriendRequests" styleClass="nav-btn"/>
-                    <Button text="📞" onAction="#createGroup" styleClass="nav-btn"/>
+                    <Button text="➕" onAction="#viewFriendRequests" styleClass="nav-btn"/>
+                    <Button text="👥" onAction="#createGroup" styleClass="nav-btn"/>
                 </VBox>
                 <Region VBox.vgrow="ALWAYS"/>
                 <VBox spacing="12" alignment="CENTER" styleClass="nav-bottom">
-                    <Button text="⚙" onAction="#openProfileView" styleClass="nav-btn"/>
-                    <Button text="⤴" onAction="#logout" styleClass="nav-btn"/>
+                    <Button fx:id="settingsBtn" text="⚙" onAction="#openSettingsMenu" styleClass="nav-btn"/>
                 </VBox>
             </VBox>
 
-            <VBox styleClass="sidebar">
+            <VBox styleClass="sidebar" prefWidth="320" minWidth="280" maxWidth="400">
                 <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
 
                 <!-- Header sidebar -->
@@ -35,7 +34,7 @@
                         <Label text="Zalu" styleClass="app-name"/>
                         <Region HBox.hgrow="ALWAYS"/>
                         <HBox alignment="CENTER_RIGHT" spacing="8">
-                            <Button text="👤" styleClass="sidebar-icon-btn" onAction="#viewFriendRequests"/>
+                            <Button text="➕" styleClass="sidebar-icon-btn" onAction="#viewFriendRequests"/>
                             <Button text="👥" styleClass="sidebar-icon-btn" onAction="#createGroup"/>
                         </HBox>
                     </HBox>
@@ -48,7 +47,7 @@
                 </VBox>
 
                 <!-- Danh sách chat -->
-                <ListView fx:id="chatList" styleClass="chat-list-view"/>
+                <ListView fx:id="chatList" styleClass="chat-list-view" VBox.vgrow="ALWAYS"/>
 
             </VBox>
         </HBox>

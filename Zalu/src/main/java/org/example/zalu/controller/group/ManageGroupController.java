@@ -20,6 +20,8 @@ import org.example.zalu.dao.GroupDAO;
 import org.example.zalu.dao.UserDAO;
 import org.example.zalu.model.User;
 import org.example.zalu.service.AvatarService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -29,17 +31,28 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ManageGroupController {
-    @FXML private Label groupNameLabel;
-    @FXML private TextField groupNameField;
-    @FXML private ListView<MemberWithRole> membersListView;
-    @FXML private ImageView groupAvatarView;
-    @FXML private Button changeAvatarButton;
-    @FXML private Button updateNameButton;
-    @FXML private Button removeMemberButton;
-    @FXML private Button promoteAdminButton;
-    @FXML private Button demoteAdminButton;
-    @FXML private Button deleteGroupButton;
-    
+    private static final Logger logger = LoggerFactory.getLogger(ManageGroupController.class);
+    @FXML
+    private Label groupNameLabel;
+    @FXML
+    private TextField groupNameField;
+    @FXML
+    private ListView<MemberWithRole> membersListView;
+    @FXML
+    private ImageView groupAvatarView;
+    @FXML
+    private Button changeAvatarButton;
+    @FXML
+    private Button updateNameButton;
+    @FXML
+    private Button removeMemberButton;
+    @FXML
+    private Button promoteAdminButton;
+    @FXML
+    private Button demoteAdminButton;
+    @FXML
+    private Button deleteGroupButton;
+
     private Stage dialogStage;
     private int groupId;
     private int currentUserId;
@@ -50,55 +63,64 @@ public class ManageGroupController {
     private String currentUserRole;
     private boolean isAdmin;
     private static final int MAX_AVATAR_SIZE = 2 * 1024 * 1024; // 2MB
-    
+
     // Inner class để lưu member với role
     public static class MemberWithRole {
         private User user;
         private String role;
-        
+
         public MemberWithRole(User user, String role) {
             this.user = user;
             this.role = role;
         }
-        
-        public User getUser() { return user; }
-        public String getRole() { return role; }
-        public void setRole(String role) { this.role = role; }
-        
+
+        public User getUser() {
+            return user;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
+        }
+
         @Override
         public String toString() {
             String displayName = (user.getFullName() != null && !user.getFullName().trim().isEmpty())
-                    ? user.getFullName() : user.getUsername();
+                    ? user.getFullName()
+                    : user.getUsername();
             return displayName + (role != null && role.equals("admin") ? " (Admin)" : "");
         }
     }
-    
+
     public void initialize() {
         groupDAO = new GroupDAO();
         userDAO = new UserDAO();
-        
+
         members = FXCollections.observableArrayList();
         membersListView.setItems(members);
-        
+
         membersListView.setCellFactory(param -> new ListCell<MemberWithRole>() {
             private HBox itemBox;
             private javafx.scene.shape.Circle avatar;
             private Label nameLabel;
             private Label roleLabel;
-            
+
             {
                 itemBox = new HBox(12);
                 itemBox.setAlignment(Pos.CENTER_LEFT);
                 itemBox.setPadding(new Insets(8, 12, 8, 12));
                 itemBox.setStyle("-fx-background-radius: 8;");
-                
+
                 // Avatar
                 StackPane avatarContainer = new StackPane();
                 avatar = new javafx.scene.shape.Circle(20, javafx.scene.paint.Color.web("#0088ff"));
                 avatar.setStroke(javafx.scene.paint.Color.WHITE);
                 avatar.setStrokeWidth(2);
                 avatarContainer.getChildren().add(avatar);
-                
+
                 // Name and role
                 VBox infoBox = new VBox(4);
                 nameLabel = new Label();
@@ -106,12 +128,12 @@ public class ManageGroupController {
                 roleLabel = new Label();
                 roleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #8e8e93;");
                 infoBox.getChildren().addAll(nameLabel, roleLabel);
-                
+
                 Region spacer = new Region();
                 HBox.setHgrow(spacer, Priority.ALWAYS);
-                
+
                 itemBox.getChildren().addAll(avatarContainer, infoBox, spacer);
-                
+
                 // Listen for selection changes
                 selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
                     itemBox.getStyleClass().remove("selected-member-item");
@@ -120,7 +142,8 @@ public class ManageGroupController {
                         // Add checkmark icon if not exists
                         if (itemBox.getChildren().size() == 3) { // avatar, info, spacer
                             Label checkIcon = new Label("✓");
-                            checkIcon.setStyle("-fx-font-size: 18px; -fx-text-fill: #0088ff; -fx-font-weight: bold; -fx-padding: 0 8 0 0;");
+                            checkIcon.setStyle(
+                                    "-fx-font-size: 18px; -fx-text-fill: #0088ff; -fx-font-weight: bold; -fx-padding: 0 8 0 0;");
                             itemBox.getChildren().add(checkIcon);
                         }
                     } else {
@@ -131,7 +154,7 @@ public class ManageGroupController {
                     }
                 });
             }
-            
+
             @Override
             protected void updateItem(MemberWithRole memberWithRole, boolean empty) {
                 super.updateItem(memberWithRole, empty);
@@ -143,9 +166,10 @@ public class ManageGroupController {
                     setText(null);
                     User user = memberWithRole.getUser();
                     String displayName = (user.getFullName() != null && !user.getFullName().trim().isEmpty())
-                            ? user.getFullName() : user.getUsername();
+                            ? user.getFullName()
+                            : user.getUsername();
                     nameLabel.setText(displayName);
-                    
+
                     String role = memberWithRole.getRole();
                     if (role != null && role.equals("admin")) {
                         roleLabel.setText("Quản trị viên");
@@ -154,11 +178,12 @@ public class ManageGroupController {
                         roleLabel.setText("Thành viên");
                         roleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #8e8e93;");
                     }
-                    
+
                     // Load avatar
                     try {
                         if (user.getAvatarData() != null && user.getAvatarData().length > 0) {
-                            Image avatarImage = new Image(new ByteArrayInputStream(user.getAvatarData()), 40, 40, true, true);
+                            Image avatarImage = new Image(new ByteArrayInputStream(user.getAvatarData()), 40, 40, true,
+                                    true);
                             javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(20, 20, 20);
                             ImageView avatarView = new ImageView(avatarImage);
                             avatarView.setClip(clip);
@@ -178,18 +203,19 @@ public class ManageGroupController {
                             }
                         }
                     } catch (Exception e) {
-                        System.err.println("Error loading avatar: " + e.getMessage());
+                        logger.error("Error loading avatar: {}", e.getMessage(), e);
                     }
-                    
+
                     setGraphic(itemBox);
-                    
+
                     // Set initial selected state
                     itemBox.getStyleClass().remove("selected-member-item");
                     if (isSelected()) {
                         itemBox.getStyleClass().add("selected-member-item");
                         if (itemBox.getChildren().size() == 3) {
                             Label checkIcon = new Label("✓");
-                            checkIcon.setStyle("-fx-font-size: 18px; -fx-text-fill: #0088ff; -fx-font-weight: bold; -fx-padding: 0 8 0 0;");
+                            checkIcon.setStyle(
+                                    "-fx-font-size: 18px; -fx-text-fill: #0088ff; -fx-font-weight: bold; -fx-padding: 0 8 0 0;");
                             itemBox.getChildren().add(checkIcon);
                         }
                     } else {
@@ -202,11 +228,11 @@ public class ManageGroupController {
             }
         });
     }
-    
+
     public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
-    
+
     public void setCurrentUserId(int userId) {
         this.currentUserId = userId;
         // Sau khi set cả groupId và currentUserId, mới check admin và load data
@@ -217,24 +243,24 @@ public class ManageGroupController {
             updateUIForAdminStatus();
         }
     }
-    
+
     private void checkAdminStatus() {
         if (groupId <= 0 || currentUserId <= 0) {
-            System.err.println("Warning: Cannot check admin status - groupId or currentUserId not set");
+            logger.warn("Cannot check admin status - groupId or currentUserId not set");
             isAdmin = false;
             return;
         }
         try {
             currentUserRole = groupDAO.getMemberRole(groupId, currentUserId);
             isAdmin = currentUserRole != null && currentUserRole.equals("admin");
-            System.out.println("ManageGroupController: Admin check - groupId=" + groupId + ", userId=" + currentUserId + ", role=" + currentUserRole + ", isAdmin=" + isAdmin);
+            logger.debug("Admin check - groupId={}, userId={}, role={}, isAdmin={}", groupId, currentUserId,
+                    currentUserRole, isAdmin);
         } catch (SQLException e) {
-            System.err.println("Error checking admin status: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error checking admin status: {}", e.getMessage(), e);
             isAdmin = false;
         }
     }
-    
+
     private void updateUIForAdminStatus() {
         // Chỉ admin mới có thể thay đổi tên, avatar, xóa thành viên, xóa nhóm
         boolean canManage = isAdmin;
@@ -246,25 +272,26 @@ public class ManageGroupController {
         deleteGroupButton.setDisable(!canManage);
         groupNameField.setEditable(canManage);
     }
-    
+
     public void setDialogStage(Stage stage) {
         this.dialogStage = stage;
     }
-    
+
     public void setOnGroupUpdated(Runnable callback) {
         this.onGroupUpdated = callback;
     }
-    
+
     private void loadGroupInfo() {
         try {
             org.example.zalu.model.GroupInfo group = groupDAO.getGroupById(groupId);
             if (group != null) {
                 groupNameLabel.setText(group.getName());
                 groupNameField.setText(group.getName());
-                
+
                 // Load avatar
                 if (group.getAvatarData() != null && group.getAvatarData().length > 0) {
-                    Image avatarImage = new Image(new ByteArrayInputStream(group.getAvatarData()), 100, 100, true, true);
+                    Image avatarImage = new Image(new ByteArrayInputStream(group.getAvatarData()), 100, 100, true,
+                            true);
                     groupAvatarView.setImage(avatarImage);
                 } else {
                     // Sử dụng default avatar
@@ -278,7 +305,7 @@ public class ManageGroupController {
             showAlert("Lỗi", "Không thể tải thông tin nhóm: " + e.getMessage());
         }
     }
-    
+
     private void loadMembers() {
         try {
             List<GroupDAO.GroupMemberInfo> memberInfos = groupDAO.getGroupMembersWithRole(groupId);
@@ -290,43 +317,44 @@ public class ManageGroupController {
                         members.add(new MemberWithRole(member, info.getRole()));
                     }
                 } catch (org.example.zalu.exception.auth.UserNotFoundException e) {
-                    System.out.println("Member with ID " + info.getUserId() + " not found, skipping...");
-                } catch (org.example.zalu.exception.database.DatabaseException | org.example.zalu.exception.database.DatabaseConnectionException e) {
-                    System.err.println("Error loading member: " + e.getMessage());
+                    logger.debug("Member with ID {} not found, skipping", info.getUserId());
+                } catch (org.example.zalu.exception.database.DatabaseException
+                        | org.example.zalu.exception.database.DatabaseConnectionException e) {
+                    logger.error("Error loading member: {}", e.getMessage(), e);
                 }
             }
         } catch (SQLException e) {
             showAlert("Lỗi", "Không thể tải danh sách thành viên: " + e.getMessage());
         }
     }
-    
+
     @FXML
     private void handleUpdateGroupName() {
         if (!isAdmin) {
             showAlert("Lỗi", "Chỉ admin mới có thể đổi tên nhóm.");
             return;
         }
-        
+
         String newName = groupNameField.getText().trim();
         if (newName.isEmpty()) {
             showAlert("Lỗi", "Tên nhóm không được để trống.");
             groupNameField.requestFocus();
             return;
         }
-        
+
         if (newName.length() > 100) {
             showAlert("Lỗi", "Tên nhóm không được vượt quá 100 ký tự.");
             groupNameField.requestFocus();
             return;
         }
-        
+
         // Kiểm tra xem tên có thay đổi không
         String currentName = groupNameLabel.getText();
         if (newName.equals(currentName)) {
             showAlert("Thông báo", "Tên nhóm không có thay đổi.");
             return;
         }
-        
+
         try {
             boolean success = groupDAO.updateGroupName(groupId, newName);
             if (success) {
@@ -341,38 +369,38 @@ public class ManageGroupController {
                 showAlert("Lỗi", "Không thể cập nhật tên nhóm. Vui lòng thử lại.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Lỗi khi cập nhật tên nhóm: {}", e.getMessage(), e);
             showAlert("Lỗi", "Lỗi khi cập nhật tên nhóm: " + e.getMessage());
         }
     }
-    
+
     @FXML
     private void handleChangeAvatar() {
         if (!isAdmin) {
             showAlert("Lỗi", "Chỉ admin mới có thể đổi avatar nhóm.");
             return;
         }
-        
+
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Chọn ảnh đại diện nhóm");
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Hình ảnh", "*.jpg", "*.jpeg", "*.png", "*.gif", "*.bmp"),
-                new FileChooser.ExtensionFilter("Tất cả", "*.*")
-        );
+                new FileChooser.ExtensionFilter("Tất cả", "*.*"));
         File selected = chooser.showOpenDialog(dialogStage);
         if (selected != null && selected.exists()) {
             try {
                 // Kiểm tra kích thước file
                 long fileSize = selected.length();
                 if (fileSize > MAX_AVATAR_SIZE) {
-                    showAlert("Lỗi", String.format("File quá lớn (%.2f MB)! Kích thước tối đa: 2MB. Vui lòng chọn ảnh nhỏ hơn.", 
-                        fileSize / (1024.0 * 1024.0)));
+                    showAlert("Lỗi",
+                            String.format("File quá lớn (%.2f MB)! Kích thước tối đa: 2MB. Vui lòng chọn ảnh nhỏ hơn.",
+                                    fileSize / (1024.0 * 1024.0)));
                     return;
                 }
-                
+
                 // Đọc file
                 byte[] bytes = Files.readAllBytes(selected.toPath());
-                
+
                 // Validate image format
                 try {
                     Image testImage = new Image(new ByteArrayInputStream(bytes));
@@ -384,7 +412,7 @@ public class ManageGroupController {
                     showAlert("Lỗi", "Không thể đọc file ảnh. Vui lòng chọn file khác.");
                     return;
                 }
-                
+
                 // Cập nhật avatar
                 boolean success = groupDAO.updateGroupAvatar(groupId, bytes);
                 if (success) {
@@ -400,43 +428,45 @@ public class ManageGroupController {
                     showAlert("Lỗi", "Không thể cập nhật avatar. Database có thể chưa hỗ trợ tính năng này.");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Lỗi khi đọc file: {}", e.getMessage(), e);
                 showAlert("Lỗi", "Lỗi khi đọc file: " + e.getMessage());
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("Lỗi khi cập nhật avatar: {}", e.getMessage(), e);
                 showAlert("Lỗi", "Lỗi khi cập nhật avatar: " + e.getMessage());
             }
         }
     }
-    
+
     @FXML
     private void handleRemoveMember() {
         if (!isAdmin) {
             showAlert("Lỗi", "Chỉ admin mới có thể xóa thành viên.");
             return;
         }
-        
+
         MemberWithRole selected = membersListView.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showAlert("Chưa chọn", "Vui lòng chọn thành viên để xóa khỏi nhóm.");
             return;
         }
-        
+
         User selectedUser = selected.getUser();
         String displayName = (selectedUser.getFullName() != null && !selectedUser.getFullName().trim().isEmpty())
-                ? selectedUser.getFullName() : selectedUser.getUsername();
-        
+                ? selectedUser.getFullName()
+                : selectedUser.getUsername();
+
         if (selectedUser.getId() == currentUserId) {
-            showAlert("Lỗi", "Bạn không thể xóa chính mình khỏi nhóm.\n\nHãy sử dụng nút \"Rời nhóm\" nếu bạn muốn rời khỏi nhóm này.");
+            showAlert("Lỗi",
+                    "Bạn không thể xóa chính mình khỏi nhóm.\n\nHãy sử dụng nút \"Rời nhóm\" nếu bạn muốn rời khỏi nhóm này.");
             return;
         }
-        
+
         // Không cho phép xóa admin khác
         if (selected.getRole() != null && selected.getRole().equals("admin")) {
             showAlert("Lỗi", "Không thể xóa quản trị viên khỏi nhóm.\n\nHãy hạ quyền quản trị viên trước khi xóa.");
             return;
         }
-        
+
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận xóa thành viên");
         confirm.setHeaderText("Xóa thành viên khỏi nhóm");
@@ -459,40 +489,41 @@ public class ManageGroupController {
                         showAlert("Lỗi", "Không thể xóa thành viên. Vui lòng thử lại.");
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error("Lỗi khi xóa thành viên: {}", e.getMessage(), e);
                     showAlert("Lỗi", "Lỗi khi xóa thành viên: " + e.getMessage());
                 }
             }
         });
     }
-    
+
     @FXML
     private void handlePromoteAdmin() {
         if (!isAdmin) {
             showAlert("Lỗi", "Chỉ admin mới có thể thăng quyền admin.");
             return;
         }
-        
+
         MemberWithRole selected = membersListView.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showAlert("Chưa chọn", "Vui lòng chọn thành viên để thăng quyền admin.");
             return;
         }
-        
+
         User selectedUser = selected.getUser();
         String displayName = (selectedUser.getFullName() != null && !selectedUser.getFullName().trim().isEmpty())
-                ? selectedUser.getFullName() : selectedUser.getUsername();
-        
+                ? selectedUser.getFullName()
+                : selectedUser.getUsername();
+
         if (selected.getRole() != null && selected.getRole().equals("admin")) {
             showAlert("Thông báo", displayName + " đã là quản trị viên.");
             return;
         }
-        
+
         if (selectedUser.getId() == currentUserId) {
             showAlert("Thông báo", "Bạn đã là quản trị viên.");
             return;
         }
-        
+
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận thăng quyền");
         confirm.setHeaderText("Thăng quyền quản trị viên");
@@ -518,40 +549,41 @@ public class ManageGroupController {
                         showAlert("Lỗi", "Không thể thăng quyền admin. Database có thể chưa hỗ trợ tính năng này.");
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error("Lỗi khi thăng quyền admin: {}", e.getMessage(), e);
                     showAlert("Lỗi", "Lỗi khi thăng quyền admin: " + e.getMessage());
                 }
             }
         });
     }
-    
+
     @FXML
     private void handleDemoteAdmin() {
         if (!isAdmin) {
             showAlert("Lỗi", "Chỉ admin mới có thể hạ quyền admin.");
             return;
         }
-        
+
         MemberWithRole selected = membersListView.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showAlert("Chưa chọn", "Vui lòng chọn quản trị viên để hạ quyền.");
             return;
         }
-        
+
         User selectedUser = selected.getUser();
         String displayName = (selectedUser.getFullName() != null && !selectedUser.getFullName().trim().isEmpty())
-                ? selectedUser.getFullName() : selectedUser.getUsername();
-        
+                ? selectedUser.getFullName()
+                : selectedUser.getUsername();
+
         if (selectedUser.getId() == currentUserId) {
             showAlert("Lỗi", "Bạn không thể hạ quyền chính mình.");
             return;
         }
-        
+
         if (selected.getRole() == null || !selected.getRole().equals("admin")) {
             showAlert("Thông báo", "\"" + displayName + "\" không phải quản trị viên.");
             return;
         }
-        
+
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận hạ quyền");
         confirm.setHeaderText("Hạ quyền quản trị viên");
@@ -573,13 +605,13 @@ public class ManageGroupController {
                         showAlert("Lỗi", "Không thể hạ quyền admin. Database có thể chưa hỗ trợ tính năng này.");
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error("Lỗi khi hạ quyền admin: {}", e.getMessage(), e);
                     showAlert("Lỗi", "Lỗi khi hạ quyền admin: " + e.getMessage());
                 }
             }
         });
     }
-    
+
     @FXML
     private void handleLeaveGroup() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
@@ -606,14 +638,14 @@ public class ManageGroupController {
             }
         });
     }
-    
+
     @FXML
     private void handleDeleteGroup() {
         if (!isAdmin) {
             showAlert("Lỗi", "Chỉ admin mới có thể xóa nhóm.");
             return;
         }
-        
+
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Xác nhận");
         confirm.setHeaderText(null);
@@ -638,14 +670,14 @@ public class ManageGroupController {
             }
         });
     }
-    
+
     @FXML
     private void handleClose() {
         if (dialogStage != null) {
             dialogStage.close();
         }
     }
-    
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -654,4 +686,3 @@ public class ManageGroupController {
         alert.showAndWait();
     }
 }
-

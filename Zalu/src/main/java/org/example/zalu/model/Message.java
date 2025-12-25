@@ -13,37 +13,49 @@ public class Message implements Serializable {
     private String fileName;
     private boolean isRead;
     private LocalDateTime createdAt;
-    private int groupId = 0;  // Mới: 0 cho 1-1, >0 cho group chat
-    private boolean isDeleted = false;  // Xóa cho mình
-    private boolean isRecalled = false;  // Thu hồi (xóa cho cả hai)
-    private boolean isEdited = false;  // Đã chỉnh sửa
-    private String editedContent = null;  // Nội dung sau khi sửa
-    private int repliedToMessageId = 0;  // ID tin nhắn được trả lời (0 = không phải reply)
-    private String repliedToContent = null;  // Nội dung preview tin nhắn được trả lời
-    private boolean isPinned = false;  // Tin nhắn đã được ghim
+    private int groupId = 0; // Mới: 0 cho 1-1, >0 cho group chat
+    private boolean isDeleted = false; // Xóa cho mình
+    private boolean isRecalled = false; // Thu hồi (xóa cho cả hai)
+    private boolean isEdited = false; // Đã chỉnh sửa
+    private String editedContent = null; // Nội dung sau khi sửa
+    private int repliedToMessageId = 0; // ID tin nhắn được trả lời (0 = không phải reply)
+    private String repliedToContent = null; // Nội dung preview tin nhắn được trả lời
+    private boolean isPinned = false; // Tin nhắn đã được ghim
+
+    public enum MessageStatus {
+        SENDING,
+        SENT,
+        FAILED
+    }
+
+    private MessageStatus status = MessageStatus.SENT;
+    private String tempId = null;
 
     // Constructor mặc định
     public Message() {
     }
 
     // THÊM MỚI: Constructor 8-param đầy đủ (tương thích DAO cũ, default groupId=0)
-    public Message(int id, int senderId, int receiverId, String content, byte[] fileData, String fileName, boolean isRead, LocalDateTime createdAt) {
-        this(id, senderId, receiverId, content, fileData, fileName, isRead, createdAt, 0);  // Gọi 9-param với groupId=0
+    public Message(int id, int senderId, int receiverId, String content, byte[] fileData, String fileName,
+            boolean isRead, LocalDateTime createdAt) {
+        this(id, senderId, receiverId, content, fileData, fileName, isRead, createdAt, 0); // Gọi 9-param với groupId=0
     }
 
     // Constructor 9-param đầy đủ (cho cả text và file)
-    public Message(int id, int senderId, int receiverId, String content, byte[] fileData, String fileName, boolean isRead, LocalDateTime createdAt, int groupId) {
+    public Message(int id, int senderId, int receiverId, String content, byte[] fileData, String fileName,
+            boolean isRead, LocalDateTime createdAt, int groupId) {
         this.id = id;
         this.senderId = senderId;
         this.receiverId = receiverId;
-        // SỬA: Cho phép content null cho file message (chỉ check empty nếu content != null)
+        // SỬA: Cho phép content null cho file message (chỉ check empty nếu content !=
+        // null)
         if (content != null) {
             if (content.trim().isEmpty()) {
                 throw new IllegalArgumentException("Content cannot be empty (trimmed)");
             }
             this.content = content.trim();
         } else {
-            this.content = null;  // Giữ null cho file
+            this.content = null; // Giữ null cho file
         }
         this.fileData = fileData;
         this.fileName = fileName;
@@ -62,7 +74,8 @@ public class Message implements Serializable {
     }
 
     // Constructor cho text group message (groupId >0)
-    public Message(int id, int senderId, int receiverId, String content, boolean isRead, LocalDateTime timestamp, int groupId) {
+    public Message(int id, int senderId, int receiverId, String content, boolean isRead, LocalDateTime timestamp,
+            int groupId) {
         this(id, senderId, receiverId, content, null, null, isRead, timestamp, groupId);
     }
 
@@ -102,7 +115,7 @@ public class Message implements Serializable {
             }
             this.content = content.trim();
         } else {
-            this.content = null;  // Cho phép null cho file
+            this.content = null; // Cho phép null cho file
         }
     }
 
@@ -160,61 +173,77 @@ public class Message implements Serializable {
     public void setFile(boolean isFile) {
         this.isFile = isFile;
     }
-    
+
     // Getters/Setters cho delete/recall/edit/reply
     public boolean isDeleted() {
         return isDeleted;
     }
-    
+
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
-    
+
     public boolean isRecalled() {
         return isRecalled;
     }
-    
+
     public void setRecalled(boolean recalled) {
         isRecalled = recalled;
     }
-    
+
     public boolean isEdited() {
         return isEdited;
     }
-    
+
     public void setEdited(boolean edited) {
         isEdited = edited;
     }
-    
+
     public String getEditedContent() {
         return editedContent;
     }
-    
+
     public void setEditedContent(String editedContent) {
         this.editedContent = editedContent;
     }
-    
+
     public int getRepliedToMessageId() {
         return repliedToMessageId;
     }
-    
+
     public void setRepliedToMessageId(int repliedToMessageId) {
         this.repliedToMessageId = repliedToMessageId;
     }
-    
+
     public String getRepliedToContent() {
         return repliedToContent;
     }
-    
+
     public void setRepliedToContent(String repliedToContent) {
         this.repliedToContent = repliedToContent;
     }
-    
+
     public boolean isPinned() {
         return isPinned;
     }
-    
+
     public void setPinned(boolean pinned) {
         isPinned = pinned;
+    }
+
+    public MessageStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MessageStatus status) {
+        this.status = status;
+    }
+
+    public String getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(String tempId) {
+        this.tempId = tempId;
     }
 }

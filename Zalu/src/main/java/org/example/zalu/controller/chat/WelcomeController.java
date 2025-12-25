@@ -11,6 +11,8 @@ import org.example.zalu.controller.MainController;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WelcomeController {
     @FXML
@@ -20,8 +22,10 @@ public class WelcomeController {
     @FXML
     private Button goToMainButton;
 
+    private static final Logger logger = LoggerFactory.getLogger(WelcomeController.class);
+
     private Stage stage;
-    private String userName;
+
     private int userId;
     private boolean isEmbedded = false; // Flag để biết có đang được embed trong main view không
 
@@ -30,7 +34,6 @@ public class WelcomeController {
     }
 
     public void setUserInfo(String userName, int userId) {
-        this.userName = userName;
         this.userId = userId;
         if (userInfoLabel != null) {
             userInfoLabel.setText("Tài khoản: " + userName);
@@ -50,12 +53,12 @@ public class WelcomeController {
     }
 
     @FXML
-    private void switchToMain(){
+    private void switchToMain() {
         // Nếu đã được embed trong main view, không làm gì
         if (isEmbedded) {
             return;
         }
-        
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/zalu/views/main/main-view.fxml"));
             Parent root = loader.load();
@@ -67,7 +70,7 @@ public class WelcomeController {
             stage.setTitle("Chat Application - Main");
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error switching to main view", e);
         }
     }
 }
