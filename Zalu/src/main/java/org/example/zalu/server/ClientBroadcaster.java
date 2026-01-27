@@ -18,29 +18,56 @@ public class ClientBroadcaster {
     }
 
     /**
-     * Broadcast message đến một user cụ thể
+     * Broadcast message đến cả người gửi và người nhận
      */
     public void broadcastMessage(Message msg, int receiverId) {
-        ObjectOutputStream target = clients.get(receiverId);
-        if (target != null) {
+        int senderId = msg.getSenderId();
+
+        // Gửi cho người nhận
+        ObjectOutputStream receiverOut = clients.get(receiverId);
+        if (receiverOut != null) {
             try {
                 if (msg.getFileData() != null) {
-                    target.writeObject("NEW_FILE|" + msg.getSenderId() + "|" + receiverId + "|" + msg.getFileName()
+                    receiverOut.writeObject("NEW_FILE|" + senderId + "|" + receiverId + "|" + msg.getFileName()
                             + "|" + msg.getFileData().length);
-                    target.writeObject(msg.getFileData());
+                    receiverOut.writeObject(msg.getFileData());
                 } else {
-                    String msgContent = "NEW_MESSAGE|" + msg.getSenderId() + "|" + receiverId + "|" + msg.getContent();
+                    String msgContent = "NEW_MESSAGE|" + senderId + "|" + receiverId + "|" + msg.getContent();
                     if (msg.getRepliedToMessageId() > 0 && msg.getRepliedToContent() != null) {
                         msgContent += "|REPLY_TO|" + msg.getRepliedToMessageId() + "|" + msg.getRepliedToContent();
                     }
                     if (msg.getTempId() != null) {
                         msgContent += "|TEMP_ID|" + msg.getTempId();
                     }
-                    target.writeObject(msgContent);
+                    receiverOut.writeObject(msgContent);
                 }
-                target.flush();
+                receiverOut.flush();
             } catch (Exception e) {
                 System.out.println("Không gửi được cho user " + receiverId);
+            }
+        }
+
+        // Gửi cho người gửi (để cập nhật UI của họ)
+        ObjectOutputStream senderOut = clients.get(senderId);
+        if (senderOut != null && senderId != receiverId) { // Tránh gửi 2 lần nếu tự nhắn mình
+            try {
+                if (msg.getFileData() != null) {
+                    senderOut.writeObject("NEW_FILE|" + senderId + "|" + receiverId + "|" + msg.getFileName()
+                            + "|" + msg.getFileData().length);
+                    senderOut.writeObject(msg.getFileData());
+                } else {
+                    String msgContent = "NEW_MESSAGE|" + senderId + "|" + receiverId + "|" + msg.getContent();
+                    if (msg.getRepliedToMessageId() > 0 && msg.getRepliedToContent() != null) {
+                        msgContent += "|REPLY_TO|" + msg.getRepliedToMessageId() + "|" + msg.getRepliedToContent();
+                    }
+                    if (msg.getTempId() != null) {
+                        msgContent += "|TEMP_ID|" + msg.getTempId();
+                    }
+                    senderOut.writeObject(msgContent);
+                }
+                senderOut.flush();
+            } catch (Exception e) {
+                System.out.println("Không gửi được cho sender " + senderId);
             }
         }
     }

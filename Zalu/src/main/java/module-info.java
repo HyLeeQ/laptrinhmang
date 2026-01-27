@@ -3,6 +3,9 @@ module org.example.zalu {
     requires transitive javafx.fxml;
     requires transitive javafx.media;
     requires transitive javafx.graphics;
+    requires javafx.swing;
+
+    requires webcam.capture;
 
     requires org.controlsfx.controls;
     requires net.synedra.validatorfx;

@@ -112,6 +112,15 @@ public class ClientCache {
         avatarCache.remove(userId);
     }
 
+    public void clearUserCache(int userId) {
+        userCache.remove(userId);
+    }
+
+    public void clearMessagesCache(int chatId) {
+        messageCache.remove(chatId);
+        saveCache();
+    }
+
     public void clear() {
         userCache.clear();
         messageCache.clear();

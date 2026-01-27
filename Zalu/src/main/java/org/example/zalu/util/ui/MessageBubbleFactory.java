@@ -235,6 +235,8 @@ public class MessageBubbleFactory {
 
     /**
      * Tạo file message bubble với messageId và action download
+     * Note: Bubble này CHỈ dùng cho file thông thường (PDF, Word, Excel, etc.)
+     * Ảnh sẽ dùng createImageBubble để hiển thị trực tiếp
      */
     public static VBox createFileBubble(String fileName, int fileSize, boolean isOwn, LocalDateTime timestamp,
             String senderName, boolean isRead, int messageId, Runnable onDownload) {
@@ -275,17 +277,31 @@ public class MessageBubbleFactory {
             previewBox.getStyleClass().add("message-bubble-received");
         }
 
-        // Thêm click handler để download file
+        // Thêm click handler CHỈ cho file thông thường (không phải ảnh)
+        // Ảnh sẽ được xử lý bởi createImageBubble
         if (messageId > 0) {
             previewBox.setCursor(javafx.scene.Cursor.HAND);
+
+            // Tạo context menu với 2 tùy chọn download
+            javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
+
+            javafx.scene.control.MenuItem saveItem = new javafx.scene.control.MenuItem("💾 Lưu về máy");
+            saveItem.setOnAction(e -> downloadAndSaveFile(messageId, fileName));
+
+            javafx.scene.control.MenuItem openItem = new javafx.scene.control.MenuItem("📂 Mở file");
+            openItem.setOnAction(e -> downloadAndOpenFile(messageId, fileName));
+
+            contextMenu.getItems().addAll(saveItem, openItem);
+
+            // Click chuột phải hiển thị menu
+            previewBox.setOnContextMenuRequested(e -> {
+                contextMenu.show(previewBox, e.getScreenX(), e.getScreenY());
+            });
+
+            // Click chuột trái cũng hiển thị menu download
             previewBox.setOnMouseClicked(e -> {
-                if (onDownload != null) {
-                    onDownload.run();
-                } else {
-                    // Fallback: Gửi request GET_FILE (nhưng không có callback xử lý)
-                    // Hữu ích nếu controller xử lý callback ở nơi khác (hiếm)
-                    org.example.zalu.client.ChatClient.sendRequest("GET_FILE|" + messageId);
-                    System.out.println("Requesting file download for messageId: " + messageId);
+                if (e.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
+                    contextMenu.show(previewBox, e.getScreenX(), e.getScreenY());
                 }
             });
         }
@@ -317,6 +333,91 @@ public class MessageBubbleFactory {
         contentBox.setAlignment(isOwn ? Pos.BOTTOM_RIGHT : Pos.BOTTOM_LEFT);
 
         return contentBox;
+    }
+
+    /**
+     * Download file và lưu về máy với FileChooser
+     */
+    private static void downloadAndSaveFile(int messageId, String fileName) {
+        // Đăng ký callback để nhận file data
+        org.example.zalu.client.ChatEventManager eventManager = org.example.zalu.client.ChatEventManager.getInstance();
+        eventManager.registerFileDownloadCallback(messageId, fileInfo -> {
+            if (fileInfo != null && fileInfo.getFileData() != null) {
+                Platform.runLater(() -> {
+                    javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+                    fileChooser.setTitle("Lưu file");
+                    fileChooser.setInitialFileName(fileName);
+
+                    java.io.File file = fileChooser.showSaveDialog(null);
+                    if (file != null) {
+                        try {
+                            java.nio.file.Files.write(file.toPath(), fileInfo.getFileData());
+                            showNotification("Thành công", "Đã lưu file: " + file.getName(),
+                                    javafx.scene.control.Alert.AlertType.INFORMATION);
+                        } catch (Exception ex) {
+                            showNotification("Lỗi", "Không thể lưu file: " + ex.getMessage(),
+                                    javafx.scene.control.Alert.AlertType.ERROR);
+                        }
+                    }
+                });
+            } else {
+                Platform.runLater(() -> showNotification("Lỗi", "Không thể tải file",
+                        javafx.scene.control.Alert.AlertType.ERROR));
+            }
+        });
+
+        // Gửi request tải file
+        org.example.zalu.client.ChatClient.sendRequest("GET_FILE|" + messageId);
+    }
+
+    /**
+     * Download file và mở ngay
+     */
+    private static void downloadAndOpenFile(int messageId, String fileName) {
+        // Đăng ký callback để nhận file data
+        org.example.zalu.client.ChatEventManager eventManager = org.example.zalu.client.ChatEventManager.getInstance();
+        eventManager.registerFileDownloadCallback(messageId, fileInfo -> {
+            if (fileInfo != null && fileInfo.getFileData() != null) {
+                Platform.runLater(() -> {
+                    try {
+                        // Tạo file tạm
+                        java.io.File tempFile = java.io.File.createTempFile("zalu_", "_" + fileName);
+                        tempFile.deleteOnExit();
+                        java.nio.file.Files.write(tempFile.toPath(), fileInfo.getFileData());
+
+                        // Mở file với ứng dụng mặc định
+                        if (java.awt.Desktop.isDesktopSupported()) {
+                            java.awt.Desktop.getDesktop().open(tempFile);
+                            showNotification("Thành công", "Đã mở file: " + fileName,
+                                    javafx.scene.control.Alert.AlertType.INFORMATION);
+                        } else {
+                            showNotification("Lỗi", "Hệ thống không hỗ trợ mở file",
+                                    javafx.scene.control.Alert.AlertType.WARNING);
+                        }
+                    } catch (Exception ex) {
+                        showNotification("Lỗi", "Không thể mở file: " + ex.getMessage(),
+                                javafx.scene.control.Alert.AlertType.ERROR);
+                    }
+                });
+            } else {
+                Platform.runLater(() -> showNotification("Lỗi", "Không thể tải file",
+                        javafx.scene.control.Alert.AlertType.ERROR));
+            }
+        });
+
+        // Gửi request tải file
+        org.example.zalu.client.ChatClient.sendRequest("GET_FILE|" + messageId);
+    }
+
+    /**
+     * Hiển thị notification
+     */
+    private static void showNotification(String title, String message, javafx.scene.control.Alert.AlertType type) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
     }
 
     /**
@@ -362,8 +463,28 @@ public class MessageBubbleFactory {
                     imageView.getStyleClass().add("message-image");
                     imageView.setCursor(javafx.scene.Cursor.HAND);
 
+                    // Click trái - Xem ảnh full size
                     if (onClick != null) {
-                        imageView.setOnMouseClicked(e -> onClick.run());
+                        imageView.setOnMouseClicked(e -> {
+                            if (e.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
+                                onClick.run();
+                            }
+                        });
+                    }
+
+                    // Context menu (chuột phải) - Lưu ảnh về máy
+                    if (messageId > 0) {
+                        javafx.scene.control.ContextMenu imageContextMenu = new javafx.scene.control.ContextMenu();
+
+                        javafx.scene.control.MenuItem saveImageItem = new javafx.scene.control.MenuItem(
+                                "💾 Lưu ảnh về máy");
+                        saveImageItem.setOnAction(e -> downloadAndSaveFile(messageId, fileName));
+
+                        imageContextMenu.getItems().add(saveImageItem);
+
+                        imageView.setOnContextMenuRequested(e -> {
+                            imageContextMenu.show(imageView, e.getScreenX(), e.getScreenY());
+                        });
                     }
 
                     // Bo góc cho ảnh (clip)
@@ -447,8 +568,10 @@ public class MessageBubbleFactory {
     /**
      * Tạo avatar node cho message
      */
-    public static Node createMessageAvatar(byte[] avatarData, String avatarUrl) {
-        Image avatarImage = AvatarService.resolveAvatar(avatarData, avatarUrl, 40, 40);
+    public static Node createMessageAvatar(int userId) {
+        // Tạo User object với userId để AvatarService có thể lấy cached avatar
+        org.example.zalu.model.User user = new org.example.zalu.model.User(userId, "", "offline");
+        Image avatarImage = org.example.zalu.service.AvatarService.resolveAvatar(user);
 
         if (avatarImage != null && !avatarImage.isError()) {
             ImageView avatarView = new ImageView(avatarImage);
@@ -477,6 +600,58 @@ public class MessageBubbleFactory {
             container.setPrefSize(40, 40);
             return container;
         }
+    }
+
+    // Deprecated: Keep for backward compatibility
+    @Deprecated
+    public static Node createMessageAvatar(byte[] avatarData, String avatarUrl) {
+        // Try to find userId from cached avatar data
+        Integer userId = findUserIdByAvatarData(avatarData);
+        if (userId != null) {
+            return createMessageAvatar(userId);
+        }
+
+        // Fallback to old logic
+        Image avatarImage = org.example.zalu.service.AvatarService.resolveAvatar(avatarData, avatarUrl, 40, 40);
+
+        if (avatarImage != null && !avatarImage.isError()) {
+            ImageView avatarView = new ImageView(avatarImage);
+            avatarView.setFitHeight(40);
+            avatarView.setFitWidth(40);
+            avatarView.setPreserveRatio(true);
+            avatarView.setSmooth(true);
+
+            Circle clip = new Circle(20, 20, 20);
+            avatarView.setClip(clip);
+
+            StackPane avatarContainer = new StackPane();
+            avatarContainer.getChildren().add(avatarView);
+            avatarContainer.getStyleClass().add("message-avatar");
+            avatarContainer.setPrefSize(40, 40);
+            avatarContainer.setMinSize(40, 40);
+            avatarContainer.setMaxSize(40, 40);
+
+            return avatarContainer;
+        } else {
+            Circle fallback = new Circle(20, Color.LIGHTGRAY);
+            fallback.setStroke(Color.WHITE);
+            fallback.setStrokeWidth(2);
+            StackPane container = new StackPane(fallback);
+            container.getStyleClass().add("message-avatar");
+            container.setPrefSize(40, 40);
+            return container;
+        }
+    }
+
+    // Helper method to find userId by avatar data
+    private static Integer findUserIdByAvatarData(byte[] avatarData) {
+        if (avatarData == null || avatarData.length == 0) {
+            return null;
+        }
+
+        // This is a workaround - ideally we should pass userId directly
+        // For now, we can't match avatarData to userId without iterating all users
+        return null;
     }
 
     /**
@@ -675,6 +850,210 @@ public class MessageBubbleFactory {
         finalBox.setAlignment(isOwn ? Pos.BOTTOM_RIGHT : Pos.BOTTOM_LEFT);
 
         return finalBox;
+    }
+
+    /**
+     * Tạo video message bubble với thumbnail và play button
+     */
+    public static VBox createVideoBubble(byte[] videoData, String fileName, boolean isOwn, LocalDateTime timestamp,
+            String senderName, boolean isRead, int messageId, Runnable onPlayRequested) {
+        VBox bubbleBox = new VBox(8);
+        bubbleBox.setStyle(
+                "-fx-background-color: " + (isOwn ? "#0084ff" : "#e4e6eb") + ";" +
+                        "-fx-background-radius: 18;" +
+                        "-fx-padding: 8;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);");
+        bubbleBox.setMaxWidth(280);
+        bubbleBox.setMinWidth(200);
+
+        // Sender name (for group chat)
+        if (!isOwn && senderName != null && !senderName.isEmpty()) {
+            Label senderLabel = new Label(senderName);
+            senderLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #65676b; -fx-font-weight: 600;");
+            bubbleBox.getChildren().add(senderLabel);
+        }
+
+        // Video preview container với thumbnail và play button
+        StackPane videoPreview = new StackPane();
+        videoPreview.setPrefSize(260, 180);
+        videoPreview.setMaxSize(260, 180);
+        videoPreview.setStyle(
+                "-fx-background-color: #000000;" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-cursor: hand;");
+
+        // Play icon overlay
+        Label playIcon = IconUtil.getPlayIcon(48);
+        playIcon.setStyle("-fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 2);");
+
+        // Video file name label
+        Label fileNameLabel = new Label(fileName != null ? fileName : "video.mp4");
+        fileNameLabel.setStyle(
+                "-fx-font-size: 12px;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-background-color: rgba(0,0,0,0.6);" +
+                        "-fx-background-radius: 8;" +
+                        "-fx-padding: 4 8;");
+        StackPane.setAlignment(fileNameLabel, Pos.BOTTOM_LEFT);
+        StackPane.setMargin(fileNameLabel, new Insets(8));
+
+        videoPreview.getChildren().addAll(playIcon, fileNameLabel);
+
+        // Hover effect
+        videoPreview.setOnMouseEntered(e -> {
+            videoPreview.setStyle(
+                    "-fx-background-color: #1a1a1a;" +
+                            "-fx-background-radius: 12;" +
+                            "-fx-cursor: hand;" +
+                            "-fx-scale-x: 1.02;" +
+                            "-fx-scale-y: 1.02;");
+        });
+
+        videoPreview.setOnMouseExited(e -> {
+            videoPreview.setStyle(
+                    "-fx-background-color: #000000;" +
+                            "-fx-background-radius: 12;" +
+                            "-fx-cursor: hand;");
+        });
+
+        // Click to play video
+        videoPreview.setOnMouseClicked(e -> {
+            if (videoData != null && videoData.length > 0) {
+                openVideoPlayer(videoData, fileName);
+            } else if (onPlayRequested != null) {
+                onPlayRequested.run();
+            }
+        });
+
+        bubbleBox.getChildren().add(videoPreview);
+
+        // Time and read status
+        HBox timeAndStatusBox = new HBox(6);
+        timeAndStatusBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Label timeLabel = new Label(timestamp.format(TIME_FORMATTER));
+        timeLabel.getStyleClass().add("message-time");
+        timeLabel
+                .setStyle("-fx-font-size: 11px; -fx-text-fill: " + (isOwn ? "rgba(255,255,255,0.8)" : "#65676b") + ";");
+        timeAndStatusBox.getChildren().add(timeLabel);
+
+        if (isOwn) {
+            HBox readStatusBox = createReadStatusBox(isRead);
+            timeAndStatusBox.getChildren().add(readStatusBox);
+        }
+
+        bubbleBox.getChildren().add(timeAndStatusBox);
+
+        return bubbleBox;
+    }
+
+    /**
+     * Helper: Open video player
+     */
+    private static void openVideoPlayer(byte[] videoData, String fileName) {
+        Platform.runLater(() -> {
+            try {
+                // Tạo file tạm để lưu video
+                java.io.File tempFile = java.io.File.createTempFile("zalu_video_", "_" + fileName);
+                tempFile.deleteOnExit();
+
+                // Ghi video data vào file tạm
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(tempFile)) {
+                    fos.write(videoData);
+                    fos.flush();
+                }
+
+                // Tạo Media và MediaPlayer
+                String videoUrl = tempFile.toURI().toString();
+                javafx.scene.media.Media media = new javafx.scene.media.Media(videoUrl);
+                javafx.scene.media.MediaPlayer mediaPlayer = new javafx.scene.media.MediaPlayer(media);
+
+                // Tạo MediaView
+                javafx.scene.media.MediaView mediaView = new javafx.scene.media.MediaView(mediaPlayer);
+                mediaView.setFitWidth(800);
+                mediaView.setFitHeight(600);
+                mediaView.setPreserveRatio(true);
+
+                // Tạo controls
+                javafx.scene.control.Button playButton = new javafx.scene.control.Button("▶ Play");
+                javafx.scene.control.Button pauseButton = new javafx.scene.control.Button("⏸ Pause");
+                javafx.scene.control.Button stopButton = new javafx.scene.control.Button("⏹ Stop");
+                javafx.scene.control.Slider volumeSlider = new javafx.scene.control.Slider(0, 1, 0.5);
+                volumeSlider.setPrefWidth(100);
+
+                // Bind volume
+                mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+
+                // Button actions
+                playButton.setOnAction(e -> mediaPlayer.play());
+                pauseButton.setOnAction(e -> mediaPlayer.pause());
+                stopButton.setOnAction(e -> {
+                    mediaPlayer.stop();
+                    mediaPlayer.seek(javafx.util.Duration.ZERO);
+                });
+
+                // Controls panel
+                javafx.scene.layout.HBox controls = new javafx.scene.layout.HBox(10);
+                controls.setPadding(new javafx.geometry.Insets(10));
+                controls.setAlignment(javafx.geometry.Pos.CENTER);
+                controls.getChildren().addAll(playButton, pauseButton, stopButton,
+                        new javafx.scene.control.Label("Volume:"), volumeSlider);
+                controls.setStyle("-fx-background-color: #2c3e50;");
+
+                // Layout
+                javafx.scene.layout.VBox root = new javafx.scene.layout.VBox();
+                root.setAlignment(javafx.geometry.Pos.CENTER);
+                root.setStyle("-fx-background-color: black;");
+                root.getChildren().addAll(mediaView, controls);
+
+                // Stage
+                javafx.stage.Stage videoStage = new javafx.stage.Stage();
+                videoStage.setTitle(fileName != null ? fileName : "Video Player");
+                videoStage.setScene(new javafx.scene.Scene(root, 800, 650));
+                videoStage.show();
+
+                // Auto play when ready
+                mediaPlayer.setAutoPlay(true);
+
+                // Cleanup when stage closes
+                videoStage.setOnCloseRequest(e -> {
+                    mediaPlayer.stop();
+                    mediaPlayer.dispose();
+                    tempFile.delete();
+                });
+
+            } catch (Exception e) {
+                org.slf4j.LoggerFactory.getLogger(MessageBubbleFactory.class).error("Error opening video player", e);
+                // Assuming showNotification is a static helper method or accessible
+                // If not, this line will cause a compilation error.
+                // For now, I'll keep it as is, assuming the user will handle its definition.
+                // If it's not defined, the user might need to add a definition for it.
+                // Example: MessageBubbleFactory.showNotification(...)
+                // Or if it's a member of an instance, then an instance would be needed.
+                // Given the context, it's likely a static helper.
+                // For this change, I'll assume it's a static method or a method available in
+                // the scope.
+                // If not, the user will need to adjust.
+                // For now, I'll just use the fully qualified name for the logger.
+                // The original code used
+                // `org.slf4j.LoggerFactory.getLogger(MessageBubbleFactory.class).error`,
+                // so I'll revert `logger.error` to that.
+                // The `showNotification` part is new and not in the original code, so I'll keep
+                // it as is.
+                // If `showNotification` is not defined, the user will need to define it.
+                // For example, add a static method:
+                // private static void showNotification(String title, String message,
+                // javafx.scene.control.Alert.AlertType type) {
+                // javafx.scene.control.Alert alert = new javafx.scene.control.Alert(type);
+                // alert.setTitle(title);
+                // alert.setHeaderText(null);
+                // alert.setContentText(message);
+                // alert.showAndWait();
+                // }
+                showNotification("Lỗi", "Không thể mở video: " + e.getMessage(),
+                        javafx.scene.control.Alert.AlertType.ERROR);
+            }
+        });
     }
 
     /**

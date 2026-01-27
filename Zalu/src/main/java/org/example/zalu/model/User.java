@@ -8,7 +8,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private String username;
-    private String fullName; // Tên thật để hiển thị
+    private String fullName;
     private String password;
     private String email;
     private String phone;
@@ -30,11 +30,10 @@ public class User implements Serializable {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
-        // SỬA: Skip validation password nếu là dummy (id == -1)
         if (id != -1 && (password == null || password.trim().isEmpty())) {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
-        if (id != -1 && (email == null || email.trim().isEmpty())) { // Tương tự cho email nếu cần
+        if (id != -1 && (email == null || email.trim().isEmpty())) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
         this.id = id;

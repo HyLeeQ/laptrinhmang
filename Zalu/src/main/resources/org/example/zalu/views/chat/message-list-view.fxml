@@ -21,7 +21,7 @@
                 <Region HBox.hgrow="ALWAYS"/>
                 <HBox spacing="24">
                     <Button fx:id="searchButton" text="🔍" styleClass="header-icon" onAction="#toggleSearchBar"/>
-                    <Button text="📞" styleClass="header-icon"/>
+                    <Button fx:id="videoCallButton" text="📞" styleClass="header-icon" onAction="#handleVideoCall"/>
                     <Button text="⋮" styleClass="header-icon" onAction="#toggleInfoPanel"/>
                 </HBox>
             </children>

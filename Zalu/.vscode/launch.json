@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ZaluApplication",
+            "request": "launch",
+            "mainClass": "org.example.zalu/org.example.zalu.ZaluApplication",
+            "projectName": "Zalu"
+        },
+        {
+            "type": "java",
+            "name": "ChatServer",
+            "request": "launch",
+            "mainClass": "org.example.zalu/org.example.zalu.server.ChatServer",
+            "projectName": "Zalu"
+        },
+        {
+            "type": "java",
+            "name": "ChatServer",
+            "request": "launch",
+            "mainClass": "org.example.zalu.server.ChatServer",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "ChatServer",
+            "request": "launch",
+            "mainClass": "org.example.zalu.server.ChatServer",
+            "projectName": "Zalu",
+            "vmArgs": "--add-modules javafx.controls,javafx.fxml,javafx.media"
+        },
+        {
+            "type": "java",
+            "name": "ZaluApplication (Client)",
+            "request": "launch",
+            "mainClass": "org.example.zalu.ZaluApplication",
+            "projectName": "Zalu",
+            "vmArgs": "--add-modules javafx.controls,javafx.fxml,javafx.media"
+        }
+    ]
+}
+

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.MainController"
+            styleClass="root" stylesheets="@/styles.css">
+
+    <left>
+        <HBox spacing="0">
+            <VBox alignment="TOP_CENTER" spacing="20" prefWidth="90" styleClass="nav-rail">
+                <StackPane alignment="CENTER" styleClass="nav-avatar-wrapper">
+                    <ImageView fx:id="navAvatarImage" fitHeight="56" fitWidth="56" preserveRatio="false" styleClass="nav-avatar"/>
+                </StackPane>
+                <VBox spacing="12" styleClass="nav-btn-group">
+                    <Button text="💬" styleClass="nav-btn nav-btn-active"/>
+                    <Button text="➕" onAction="#viewFriendRequests" styleClass="nav-btn"/>
+                    <Button text="👥" onAction="#createGroup" styleClass="nav-btn"/>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <VBox spacing="12" alignment="CENTER" styleClass="nav-bottom">
+                    <Button fx:id="settingsBtn" text="⚙" onAction="#openSettingsMenu" styleClass="nav-btn"/>
+                </VBox>
+            </VBox>
+
+            <VBox styleClass="sidebar" prefWidth="320" minWidth="280" maxWidth="400">
+                <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+                <!-- Header sidebar -->
+                <VBox styleClass="sidebar-header">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Zalu" styleClass="app-name"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <HBox alignment="CENTER_RIGHT" spacing="8">
+                            <Button text="➕" styleClass="sidebar-icon-btn" onAction="#viewFriendRequests"/>
+                            <Button text="👥" styleClass="sidebar-icon-btn" onAction="#createGroup"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Search -->
+                <VBox spacing="0">
+                    <padding><Insets top="12" right="16" bottom="12" left="16"/></padding>
+                    <TextField promptText="Tìm kiếm bạn bè..." styleClass="search-box"/>
+                </VBox>
+
+                <!-- Danh sách chat -->
+                <ListView fx:id="chatList" styleClass="chat-list-view" VBox.vgrow="ALWAYS"/>
+
+            </VBox>
+        </HBox>
+    </left>
+
+    <center>
+        <VBox fx:id="chatContainer" styleClass="chat-container" spacing="0" VBox.vgrow="ALWAYS">
+            <!-- Placeholder khi chưa chọn bạn -->
+            <StackPane styleClass="placeholder-container">
+                <Label text="Chọn một cuộc trò chuyện để bắt đầu nhắn tin 💬"
+                       styleClass="placeholder-text" />
+            </StackPane>
+        </VBox>
+    </center>
+</BorderPane>

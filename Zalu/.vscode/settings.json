@@ -1,0 +1,14 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "C:\\Program Files\\jdk-21.0.8_windows-x64_bin\\jdk-21.0.8",
+            "default": true
+        }
+    ],
+    "java.project.referencedLibraries": [
+        "target/dependency/**/*.jar"
+    ]
+}

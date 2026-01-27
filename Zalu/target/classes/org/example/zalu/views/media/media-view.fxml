@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.media.MediaViewController"
+            styleClass="friend-requests-root" stylesheets="@/styles.css" prefWidth="800" prefHeight="700">
+    <center>
+        <VBox styleClass="friend-shell" spacing="20">
+            <padding><Insets top="28" right="36" bottom="32" left="36"/></padding>
+            
+            <VBox spacing="6" styleClass="friend-header">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Ảnh / Video" styleClass="friend-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="✕" onAction="#handleClose" styleClass="close-header-btn" prefWidth="32" prefHeight="32"/>
+                </HBox>
+                <Label fx:id="subtitleLabel" text="Ảnh và video đã chia sẻ trong cuộc trò chuyện" styleClass="friend-subtitle"/>
+            </VBox>
+            
+            <VBox spacing="12">
+                <FlowPane fx:id="mediaGridPane" hgap="12" vgap="12" prefWrapLength="700" styleClass="media-grid-pane"/>
+                <HBox alignment="CENTER" spacing="8">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="viewAllButton" text="Xem tất cả" onAction="#handleViewAll" styleClass="info-light-btn" visible="false"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                </HBox>
+            </VBox>
+            
+            <ScrollPane fitToWidth="true" styleClass="add-friend-scroll" vbarPolicy="AS_NEEDED" visible="false" managed="false" fx:id="allMediaScrollPane">
+                <FlowPane fx:id="allMediaGridPane" hgap="12" vgap="12" prefWrapLength="700" styleClass="media-grid-pane"/>
+            </ScrollPane>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <HBox spacing="12" styleClass="footer-actions" alignment="CENTER_RIGHT">
+                <Button text="Đóng" onAction="#handleClose" styleClass="back-btn"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
+

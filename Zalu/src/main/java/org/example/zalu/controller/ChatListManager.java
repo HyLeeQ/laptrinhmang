@@ -49,6 +49,7 @@ public class ChatListManager {
         ChatEventManager.getInstance().registerOnlineUsersCallback(this::onOnlineUsersReceived);
         ChatEventManager.getInstance().registerFriendsCallback(this::onFriendsUpdated);
         ChatEventManager.getInstance().registerFriendsListFullCallback(this::onFriendsListFullReceived);
+        ChatEventManager.getInstance().registerUnreadCountCallback(this::onUnreadCountReceived);
     }
 
     public void refreshFriendList(int currentUserId) {
@@ -114,6 +115,17 @@ public class ChatListManager {
                 }
                 chatList.refresh();
                 mainController.updateChatHeaderStatus();
+            }
+        });
+    }
+
+    private void onUnreadCountReceived(Map<Integer, Integer> unreadCountMap) {
+        Platform.runLater(() -> {
+            if (unreadCountMap != null) {
+                logger.info("Received unread count map: {} entries", unreadCountMap.size());
+                // Cập nhật unread counts từ server
+                unreadCounts.putAll(unreadCountMap);
+                chatList.refresh();
             }
         });
     }
@@ -303,6 +315,31 @@ public class ChatListManager {
 
     public List<User> getCachedFriendsList() {
         return new ArrayList<>(loadedUsers.values());
+    }
+
+    /**
+     * Refresh thông tin của một user cụ thể trong danh sách
+     * Được gọi khi user cập nhật profile (avatar, name, etc.)
+     */
+    public void refreshUserInList(int userId) {
+        // Request user info mới từ server
+        ChatEventManager.getInstance().registerGetUserByIdCallback(users -> {
+            if (users != null && !users.isEmpty()) {
+                for (User updatedUser : users) {
+                    if (updatedUser.getId() == userId) {
+                        // Cập nhật trong loadedUsers
+                        loadedUsers.put(userId, updatedUser);
+
+                        // Refresh chat list để hiển thị thông tin mới
+                        Platform.runLater(() -> {
+                            chatList.refresh();
+                            logger.info("Refreshed user {} in chat list", userId);
+                        });
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     public void clearData() {

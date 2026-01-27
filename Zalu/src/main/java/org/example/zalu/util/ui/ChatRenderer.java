@@ -241,6 +241,8 @@ public class ChatRenderer {
                 }
             } else {
                 // Tin nhắn nhận: căn trái với avatar
+                // TODO: Need senderId to use cached avatar
+                // For now, use deprecated method
                 Node avatarNode = MessageBubbleFactory.createMessageAvatar(senderAvatarData, senderAvatarUrl);
                 mainBox.getChildren().addAll(avatarNode, bubbleBox);
                 HBox.setMargin(avatarNode, new Insets(0, 8, 0, 12));
@@ -256,6 +258,8 @@ public class ChatRenderer {
             mainBox.setUserData(repliedToMessageId != null && repliedToMessageId > 0 ? -1 : null); // Will be set by
                                                                                                    // MessageListController
             chatArea.getChildren().add(mainBox);
+            logger.debug("Added text message to chatArea. Total children: {}, isOwn: {}", chatArea.getChildren().size(),
+                    isOwn);
             scrollToBottom();
         });
     }
@@ -684,6 +688,44 @@ public class ChatRenderer {
         });
     }
 
+    // Add video message với thumbnail và play button
+    public void addVideoMessage(byte[] videoData, String fileName, boolean isOwn, LocalDateTime timestamp,
+            String senderName, byte[] senderAvatarData, String senderAvatarUrl, boolean isRead, int messageId) {
+        Platform.runLater(() -> {
+            if (chatArea == null)
+                return;
+
+            try {
+                // Sử dụng MessageBubbleFactory để tạo video bubble
+                VBox videoBubble = MessageBubbleFactory.createVideoBubble(videoData, fileName, isOwn, timestamp,
+                        senderName, isRead, messageId, null);
+
+                HBox mainBox = new HBox();
+                if (isOwn) {
+                    // Tin nhắn của mình: căn phải
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+                    mainBox.getChildren().addAll(spacer, videoBubble);
+                    mainBox.setAlignment(Pos.CENTER_RIGHT);
+                    HBox.setMargin(videoBubble, new Insets(0, 12, 0, 60));
+                } else {
+                    Node avatarNode = MessageBubbleFactory.createMessageAvatar(senderAvatarData, senderAvatarUrl);
+                    mainBox.getChildren().addAll(avatarNode, videoBubble);
+                    HBox.setMargin(avatarNode, new Insets(0, 8, 0, 12));
+                    mainBox.setAlignment(Pos.CENTER_LEFT);
+                    HBox.setMargin(videoBubble, new Insets(0, 60, 0, 0));
+                }
+
+                mainBox.setPadding(new Insets(5));
+                chatArea.getChildren().add(mainBox);
+                scrollToBottom();
+
+            } catch (Exception e) {
+                logger.error("Lỗi khi tạo video message", e);
+            }
+        });
+    }
+
     // Download file (giữ nguyên, thêm msgId từ Message)
     private void downloadFile(int msgId, String fileName) {
         String getCmd = "GET_FILE|" + msgId;
@@ -753,6 +795,9 @@ public class ChatRenderer {
             } else if (isAudioFile(msg.getFileName())) {
                 addVoiceMessage(msg.getFileData(), msg.getFileName(), isOwn, msg.getCreatedAt(),
                         null, null, null, msg.getIsRead());
+            } else if (isVideoFile(msg.getFileName())) {
+                addVideoMessage(msg.getFileData(), msg.getFileName(), isOwn, msg.getCreatedAt(),
+                        null, null, null, msg.getIsRead(), msg.getId());
             } else {
                 int size = msg.getFileData() != null ? msg.getFileData().length : 0;
                 addFileMessage(msg.getFileName(), size, isOwn, msg.getCreatedAt(),

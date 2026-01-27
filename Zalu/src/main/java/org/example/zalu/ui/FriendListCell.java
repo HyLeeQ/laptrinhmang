@@ -47,13 +47,14 @@ public class FriendListCell extends ListCell<User> {
         Circle statusDot = new Circle(8, isOnline ? Color.GREEN : Color.GRAY);
 
         VBox infoBox = new VBox(2);
-        String displayName = (user.getFullName() != null && !user.getFullName().trim().isEmpty()) 
-                ? user.getFullName() 
+        String displayName = (user.getFullName() != null && !user.getFullName().trim().isEmpty())
+                ? user.getFullName()
                 : user.getUsername();
         Label nameLabel = new Label(displayName);
         nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
 
-        String preview = lastMessages != null ? lastMessages.getOrDefault(user.getId(), "Bắt đầu trò chuyện...") : "Bắt đầu trò chuyện...";
+        String preview = lastMessages != null ? lastMessages.getOrDefault(user.getId(), "Bắt đầu trò chuyện...")
+                : "Bắt đầu trò chuyện...";
         Label previewLabel = new Label(preview);
         previewLabel.setStyle("-fx-text-fill: gray; -fx-font-size: 12; -fx-max-width: 150;");
         previewLabel.setWrapText(true);
@@ -75,42 +76,16 @@ public class FriendListCell extends ListCell<User> {
         circle.setStroke(Color.rgb(255, 255, 255, 0.9));
         circle.setStrokeWidth(2);
 
-        Image avatarImage = null;
-        if (user.getAvatarData() != null && user.getAvatarData().length > 0) {
-            avatarImage = new Image(new ByteArrayInputStream(user.getAvatarData()), 50, 50, true, true);
-        } else {
-            avatarImage = loadImageFromPath(user.getAvatarUrlRaw());
-        }
-
-        if (avatarImage == null || avatarImage.isError()) {
-            avatarImage = loadImageFromPath(DEFAULT_AVATAR);
-        }
+        // Sử dụng AvatarService để resolve avatar
+        Image avatarImage = org.example.zalu.service.AvatarService.resolveAvatar(user);
 
         if (avatarImage != null && !avatarImage.isError()) {
             circle.setFill(new ImagePattern(avatarImage));
+        } else {
+            // Fallback: màu mặc định
+            circle.setFill(Color.web("#1a73e8"));
         }
+
         return circle;
     }
-
-    private Image loadImageFromPath(String path) {
-        try {
-            String resolved = path;
-            if (resolved == null || resolved.trim().isEmpty() || resolved.equals("/default-avatar.jpg")) {
-                resolved = DEFAULT_AVATAR;
-            }
-            if (resolved.startsWith("http") || resolved.startsWith("file:")) {
-                return new Image(resolved, 50, 50, true, true, false);
-            }
-            String normalized = resolved.startsWith("/") ? resolved : "/" + resolved;
-            var stream = getClass().getResourceAsStream(normalized);
-            if (stream != null) {
-                Image img = new Image(stream, 50, 50, true, true);
-                stream.close();
-                return img;
-            }
-        } catch (Exception ignored) {
-        }
-        return null;
-    }
 }
-

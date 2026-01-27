@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.chat.MessageListController"
+            styleClass="message-list-root" stylesheets="@/styles.css">
+
+    <!-- Header: Avatar + Tên + Trạng thái -->
+    <top>
+        <HBox fx:id="chatHeader" styleClass="chat-header" visible="false" managed="false">
+            <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+            <children>
+                <ImageView fx:id="friendAvatar" fitHeight="44" fitWidth="44" styleClass="avatar-image"/>
+                <VBox spacing="4">
+                    <Label fx:id="friendNameLabel" text="Zalu" styleClass="friend-name"/>
+                    <Label fx:id="friendStatusLabel" text="Chọn một cuộc trò chuyện" styleClass="friend-status"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox spacing="24">
+                    <Button fx:id="searchButton" text="🔍" styleClass="header-icon" onAction="#toggleSearchBar"/>
+                    <Button fx:id="videoCallButton" text="📞" styleClass="header-icon" onAction="#handleVideoCall"/>
+                    <Button text="⋮" styleClass="header-icon" onAction="#toggleInfoPanel"/>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Khu vực tin nhắn -->
+    <center>
+        <VBox>
+            <!-- Search bar -->
+            <HBox fx:id="searchBar" styleClass="search-bar" visible="false" managed="false" spacing="8">
+                <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+                <TextField fx:id="searchField" promptText="Tìm kiếm trong cuộc trò chuyện..." HBox.hgrow="ALWAYS" onAction="#handleSearch" onKeyReleased="#handleSearchKeyReleased"/>
+                <Button fx:id="searchPrevButton" text="▲" onAction="#handleSearchPrevious" disable="true"/>
+                <Button fx:id="searchNextButton" text="▼" onAction="#handleSearchNext" disable="true"/>
+                <Label fx:id="searchResultLabel" text="0/0"/>
+                <Button text="✕" onAction="#handleCloseSearch"/>
+            </HBox>
+            
+            <!-- Pinned messages section -->
+            <VBox fx:id="pinnedMessagesSection" styleClass="pinned-messages-section" visible="false" managed="false">
+                <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="📌 Tin nhắn đã ghim" styleClass="pinned-section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Ẩn" onAction="#handleHidePinnedMessages" styleClass="pinned-hide-btn"/>
+                </HBox>
+                <VBox fx:id="pinnedMessagesContainer" spacing="4"/>
+            </VBox>
+            
+            <ScrollPane fx:id="chatScrollPane" fitToWidth="true" fitToHeight="true" styleClass="messages-scroll" pannable="true">
+                <VBox fx:id="chatArea" styleClass="messages-vbox"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox fx:id="infoPanel" styleClass="info-panel" prefWidth="340" visible="false" managed="false">
+            <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+            <Label text="Thông tin hội thoại" styleClass="info-title"/>
+            <TabPane fx:id="infoTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="info-tabpane">
+                <tabs>
+                    <Tab fx:id="directTab" text="Nhắn 1-1">
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="info-scroll">
+                            <VBox spacing="16" styleClass="info-tab-content">
+                                <HBox spacing="12" alignment="CENTER_LEFT">
+                                    <StackPane styleClass="info-avatar-frame">
+                                        <ImageView fx:id="infoAvatar" fitHeight="60" fitWidth="60"/>
+                                    </StackPane>
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label fx:id="infoNameLabel" text="Tên bạn bè" styleClass="info-name" wrapText="true"/>
+                                        <Label fx:id="infoStatusLabel" text="Trạng thái" styleClass="info-status"/>
+                                    </VBox>
+                                </HBox>
+                            <VBox spacing="8" styleClass="info-pill-row">
+                                <HBox spacing="8">
+                                    <Button text="👤 Xem hồ sơ" onAction="#handleViewBio" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                    <Button text="🔔 Tắt thông báo" onAction="#handleMuteConversation" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                </HBox>
+                                <HBox spacing="8">
+                                    <Button text="📌 Ghim" onAction="#handlePinConversation" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                    <Button text="➕ Nhóm" onAction="#handleCreateGroupFromFriend" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label text="Ảnh / Video gần đây" styleClass="section-title"/>
+                                <FlowPane fx:id="mediaPreviewPane" hgap="8" vgap="8" prefWrapLength="260" styleClass="media-preview-pane"/>
+                                <Button text="Xem tất cả" onAction="#handleViewAllMedia" styleClass="info-light-btn"/>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label text="File" styleClass="section-title"/>
+                                <ListView fx:id="directFileListView" prefHeight="120"/>
+                                <Button text="Xem tất cả file" onAction="#handleViewAllFiles" styleClass="info-light-btn"/>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label text="Link" styleClass="section-title"/>
+                                <ListView fx:id="directLinkListView" prefHeight="100"/>
+                                <Button text="Xem tất cả link" onAction="#handleViewAllLinks" styleClass="info-light-btn"/>
+                            </VBox>
+
+                            <VBox spacing="12" styleClass="section-card">
+                                <Label text="Thiết lập bảo mật" styleClass="section-title"/>
+                                <Label text="Tin nhắn tự xóa: Không bao giờ" styleClass="info-note"/>
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="hideConversationCheck" onAction="#handleToggleHideConversation"/>
+                                    <Label text="Ẩn trò chuyện"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Button text="⚠️ Báo xấu" onAction="#handleReportConversation" styleClass="danger-outline-btn"/>
+                                <Button text="🗑 Xóa lịch sử trò chuyện" onAction="#handleClearHistory" styleClass="danger-btn"/>
+                            </VBox>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+                    <Tab fx:id="groupTab" text="Nhắn nhóm">
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="info-scroll">
+                            <VBox spacing="16" styleClass="info-tab-content">
+                                <HBox spacing="12" alignment="CENTER_LEFT">
+                                    <StackPane styleClass="info-avatar-frame group-placeholder"/>
+                                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                        <Label fx:id="groupNameInfoLabel" text="Tên nhóm" styleClass="info-name" wrapText="true"/>
+                                        <Label fx:id="groupMemberCountLabel" text="0 thành viên" styleClass="info-status"/>
+                                    </VBox>
+                                </HBox>
+                            <VBox spacing="8" styleClass="info-pill-row">
+                                <HBox spacing="8">
+                                    <Button text="🔔 Tắt thông báo" onAction="#handleMuteConversation" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                    <Button text="📌 Ghim" onAction="#handlePinConversation" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                </HBox>
+                                <HBox spacing="8">
+                                    <Button text="➕ Thêm thành viên" onAction="#handleAddMember" styleClass="info-action-btn" HBox.hgrow="ALWAYS" maxWidth="Infinity" wrapText="true"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label text="Thành viên nhóm" styleClass="section-title"/>
+                                <ListView fx:id="groupMembersList" prefHeight="180"/>
+                                <Button text="Quản lý nhóm" onAction="#handleManageGroup" styleClass="info-light-btn"/>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label text="File" styleClass="section-title"/>
+                                <ListView fx:id="groupFileListView" prefHeight="120"/>
+                                <Button text="Xem tất cả file" onAction="#handleViewAllGroupFiles" styleClass="info-light-btn"/>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Label text="Link" styleClass="section-title"/>
+                                <ListView fx:id="groupLinkListView" prefHeight="100"/>
+                                <Button text="Xem tất cả link" onAction="#handleViewAllGroupLinks" styleClass="info-light-btn"/>
+                            </VBox>
+
+                            <VBox spacing="12" styleClass="section-card">
+                                <Label text="Thiết lập bảo mật" styleClass="section-title"/>
+                                <Label text="Tin nhắn tự xóa: Chỉ dành cho quản trị" styleClass="info-note"/>
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="groupHideConversationCheck" onAction="#handleToggleGroupHideConversation"/>
+                                    <Label text="Ẩn trò chuyện"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox spacing="8">
+                                <Button text="⚠️ Báo xấu" onAction="#handleGroupReport" styleClass="danger-outline-btn"/>
+                                <Button text="🗑 Xóa lịch sử trò chuyện" onAction="#handleGroupClearHistory" styleClass="danger-btn"/>
+                                <Button text="🚪 Rời nhóm" onAction="#handleLeaveGroup" styleClass="danger-btn"/>
+                            </VBox>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+                </tabs>
+            </TabPane>
+        </VBox>
+    </right>
+
+</BorderPane>

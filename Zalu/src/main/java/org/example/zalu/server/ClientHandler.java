@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -349,7 +350,35 @@ public class ClientHandler extends Thread {
         out.flush();
         logger.debug("Đã gửi danh sách {} online users cho user {}", onlineUserIds.size(), userId);
 
-        // 6. Broadcast USER_ONLINE cho tất cả friends
+        // 6. Gửi unread count cho từng friend và group
+        Map<Integer, Integer> unreadCountMap = new HashMap<>();
+        try {
+            // Đếm unread messages cho từng friend
+            for (int friendId : friendIds) {
+                int unreadCount = messageDAO.getUnreadCountForConversation(userId, friendId);
+                if (unreadCount > 0) {
+                    unreadCountMap.put(friendId, unreadCount);
+                }
+            }
+
+            // Đếm unread messages cho từng group
+            for (org.example.zalu.model.GroupInfo group : userGroups) {
+                int unreadCount = messageDAO.getUnreadCountForGroup(userId, group.getId());
+                if (unreadCount > 0) {
+                    unreadCountMap.put(-group.getId(), unreadCount); // Negative ID for groups
+                }
+            }
+
+            out.writeObject(unreadCountMap);
+            out.flush();
+            logger.debug("Đã gửi unread count map với {} entries cho user {}", unreadCountMap.size(), userId);
+        } catch (Exception e) {
+            logger.error("Lỗi khi tính unread count", e);
+            out.writeObject(new HashMap<Integer, Integer>()); // Send empty map on error
+            out.flush();
+        }
+
+        // 7. Broadcast USER_ONLINE cho tất cả friends
         try {
             for (int friendId : friendIds) {
                 broadcaster.broadcastToUser(friendId, "USER_ONLINE|" + userId);
@@ -412,10 +441,10 @@ public class ClientHandler extends Thread {
     }
 
     private void handleMessage(String msg) throws Exception {
-        // Tăng biến đếm tổng message
-        ChatServer.TOTAL_MESSAGES_SENT.incrementAndGet();
-
         if (msg.startsWith("SEND_MESSAGE|")) {
+            // Tăng biến đếm tin nhắn đã gửi (chỉ cho SEND_MESSAGE thực sự)
+            ChatServer.TOTAL_MESSAGES_SENT.incrementAndGet();
+
             // Kiểm tra bị cấm chat không
             if (ChatServer.isUserMuted(userId)) {
                 out.writeObject("SYSTEM_ANNOUNCEMENT|Bạn đang bị cấm chat, không thể gửi tin nhắn!");
@@ -591,6 +620,9 @@ public class ClientHandler extends Thread {
             }
             return;
         } else if (msg.startsWith("SEND_GROUP_MESSAGE|")) {
+            // Tăng biến đếm tin nhắn đã gửi (group message)
+            ChatServer.TOTAL_MESSAGES_SENT.incrementAndGet();
+
             // Format: SEND_GROUP_MESSAGE|groupId|content or
             // SEND_GROUP_MESSAGE|groupId|content|REPLY_TO|repliedToMessageId|repliedToContent
             String[] p = msg.split("\\|");
@@ -940,7 +972,22 @@ public class ClientHandler extends Thread {
             try {
                 String[] p = msg.split("\\|");
                 if (p.length >= 3) {
+                    int requestUserId = Integer.parseInt(p[1]);
                     int groupId = Integer.parseInt(p[2]);
+
+                    // SECURITY CHECK: Verify user is still a member of the group
+                    boolean isMember = groupDAO.isMemberOfGroup(groupId, requestUserId);
+                    if (!isMember) {
+                        logger.warn("User {} attempted to access group {} messages but is not a member", requestUserId,
+                                groupId);
+                        java.util.Map<String, Object> errorResponse = new java.util.HashMap<>();
+                        errorResponse.put("type", "CONVERSATION_HISTORY_FAIL");
+                        errorResponse.put("error", "NOT_A_MEMBER");
+                        out.writeObject(errorResponse);
+                        out.flush();
+                        return;
+                    }
+
                     List<Message> messages = messageDAO.getMessagesForGroup(groupId);
 
                     java.util.Map<String, Object> response = new java.util.HashMap<>();
@@ -999,6 +1046,25 @@ public class ClientHandler extends Thread {
                 out.writeObject(response);
             } catch (Exception e) {
                 logger.error("Error getting friends not in group", e);
+                out.writeObject(new ArrayList<User>());
+            }
+        } else if (msg.startsWith("GET_GROUP_MEMBERS|")) {
+            // Format: GET_GROUP_MEMBERS|groupId
+            try {
+                String[] p = msg.split("\\|");
+                int groupId = Integer.parseInt(p[1]);
+                List<Integer> memberIds = groupDAO.getGroupMembers(groupId);
+                List<User> members = new ArrayList<>();
+                for (int memberId : memberIds) {
+                    User u = userDAO.getUserById(memberId);
+                    if (u != null) {
+                        members.add(u);
+                    }
+                }
+                out.writeObject(members);
+                logger.debug("Sent {} group members for group {}", members.size(), groupId);
+            } catch (Exception e) {
+                logger.error("Error getting group members", e);
                 out.writeObject(new ArrayList<User>());
             }
         } else if (msg.startsWith("ADD_GROUP_MEMBER|")) {
@@ -1160,6 +1226,17 @@ public class ClientHandler extends Thread {
                 String[] p = msg.split("\\|");
                 if (p.length >= 2) {
                     int groupId = Integer.parseInt(p[1]);
+                    int requestUserId = p.length >= 3 ? Integer.parseInt(p[2]) : userId;
+
+                    // SECURITY CHECK: Verify user is still a member of the group
+                    boolean isMember = groupDAO.isMemberOfGroup(groupId, requestUserId);
+                    if (!isMember) {
+                        logger.warn("User {} attempted to access group {} messages but is not a member", requestUserId,
+                                groupId);
+                        out.writeObject(new ArrayList<>());
+                        return;
+                    }
+
                     List<Message> messages = messageDAO.getMessagesForGroup(groupId);
                     out.writeObject(messages);
                     logger.debug("Đã gửi {} tin nhắn cho nhóm {}", messages.size(), groupId);
@@ -1170,6 +1247,9 @@ public class ClientHandler extends Thread {
                     | org.example.zalu.exception.database.DatabaseException
                     | org.example.zalu.exception.database.DatabaseConnectionException e) {
                 logger.error("Lỗi khi lấy tin nhắn nhóm", e);
+                out.writeObject(new ArrayList<>());
+            } catch (SQLException e) {
+                logger.error("Lỗi SQL khi kiểm tra membership", e);
                 out.writeObject(new ArrayList<>());
             }
         } else if (msg.startsWith("GET_USER_BY_ID|")) {
@@ -1220,6 +1300,86 @@ public class ClientHandler extends Thread {
             handlePinMessage(msg);
         } else if (msg.startsWith("MARK_AS_READ|")) {
             handleMarkAsRead(msg);
+        } else if (msg.startsWith("VIDEO_CALL_REQUEST|")) {
+            // Format: VIDEO_CALL_REQUEST|callerId|callerName|receiverId
+            String[] p = msg.split("\\|");
+            if (p.length >= 4) {
+                try {
+                    int callerId = Integer.parseInt(p[1]);
+                    String callerName = p[2];
+                    int receiverId = Integer.parseInt(p[3]);
+
+                    // Kiểm tra receiver có online không
+                    if (clients.containsKey(receiverId)) {
+                        // Forward request đến receiver
+                        broadcaster.broadcastToUser(receiverId,
+                                "VIDEO_CALL_INCOMING|" + callerId + "|" + callerName);
+
+                        // Confirm đã gửi request
+                        out.writeObject("VIDEO_CALL_REQUEST|SENT");
+                        logger.info("Forwarded video call request from {} to {}", callerId, receiverId);
+                    } else {
+                        // User offline
+                        out.writeObject("VIDEO_CALL_REQUEST|FAIL|USER_OFFLINE");
+                        logger.warn("Video call request failed: user {} is offline", receiverId);
+                    }
+                } catch (Exception e) {
+                    logger.error("Error handling VIDEO_CALL_REQUEST", e);
+                    out.writeObject("VIDEO_CALL_REQUEST|FAIL|ERROR");
+                }
+            }
+        } else if (msg.startsWith("VIDEO_CALL_ACCEPT|")) {
+            // Format: VIDEO_CALL_ACCEPT|receiverId|receiverName|callerId
+            String[] p = msg.split("\\|");
+            if (p.length >= 4) {
+                try {
+                    int receiverId = Integer.parseInt(p[1]);
+                    String receiverName = p[2];
+                    int callerId = Integer.parseInt(p[3]);
+
+                    // Forward accept đến caller
+                    broadcaster.broadcastToUser(callerId,
+                            "VIDEO_CALL_ACCEPTED|" + receiverId + "|" + receiverName);
+
+                    logger.info("User {} accepted video call from {}", receiverId, callerId);
+                } catch (Exception e) {
+                    logger.error("Error handling VIDEO_CALL_ACCEPT", e);
+                }
+            }
+        } else if (msg.startsWith("VIDEO_CALL_REJECT|")) {
+            // Format: VIDEO_CALL_REJECT|receiverId|callerId
+            String[] p = msg.split("\\|");
+            if (p.length >= 3) {
+                try {
+                    int receiverId = Integer.parseInt(p[1]);
+                    int callerId = Integer.parseInt(p[2]);
+
+                    // Forward reject đến caller
+                    broadcaster.broadcastToUser(callerId,
+                            "VIDEO_CALL_REJECTED|" + receiverId);
+
+                    logger.info("User {} rejected video call from {}", receiverId, callerId);
+                } catch (Exception e) {
+                    logger.error("Error handling VIDEO_CALL_REJECT", e);
+                }
+            }
+        } else if (msg.startsWith("VIDEO_CALL_END|")) {
+            // Format: VIDEO_CALL_END|userId|otherUserId
+            String[] p = msg.split("\\|");
+            if (p.length >= 3) {
+                try {
+                    int userId = Integer.parseInt(p[1]);
+                    int otherUserId = Integer.parseInt(p[2]);
+
+                    // Forward end signal đến other user
+                    broadcaster.broadcastToUser(otherUserId,
+                            "VIDEO_CALL_ENDED|" + userId);
+
+                    logger.info("Video call ended between {} and {}", userId, otherUserId);
+                } catch (Exception e) {
+                    logger.error("Error handling VIDEO_CALL_END", e);
+                }
+            }
         }
         out.flush();
     }

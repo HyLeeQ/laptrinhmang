@@ -11,7 +11,7 @@ import java.net.URL;
  */
 public class AvatarService {
     private static Image defaultAvatar;
-    
+
     /**
      * Resolve avatar image từ User object
      */
@@ -19,43 +19,70 @@ public class AvatarService {
         if (user == null) {
             return getDefaultAvatar();
         }
-        return resolveAvatar(user.getAvatarData(), user.getAvatarUrl());
+
+        // 1. Check ClientCache trước (avatar đã download)
+        byte[] cachedAvatarData = org.example.zalu.client.ClientCache.getInstance().getAvatar(user.getId());
+        if (cachedAvatarData != null && cachedAvatarData.length > 0) {
+            try {
+                Image cachedImage = new Image(new ByteArrayInputStream(cachedAvatarData), 48, 48, true, true);
+                if (!cachedImage.isError()) {
+                    System.out.println("AvatarService: Using cached avatar for user " + user.getId());
+                    return cachedImage;
+                }
+            } catch (Exception e) {
+                System.err.println("Error loading cached avatar: " + e.getMessage());
+            }
+        }
+
+        // 2. Fallback về avatarData hoặc avatarPath
+        return resolveAvatar(user.getAvatarData(), user.getAvatarUrlRaw());
     }
-    
+
     /**
      * Resolve avatar image từ avatarData hoặc avatarPath
      */
     public static Image resolveAvatar(byte[] avatarData, String avatarPath) {
         Image image = null;
-        
+
+        // Debug log
+        System.out.println("AvatarService.resolveAvatar called:");
+        System.out.println("  - avatarData: " + (avatarData != null ? avatarData.length + " bytes" : "null"));
+        System.out.println("  - avatarPath: " + (avatarPath != null ? "'" + avatarPath + "'" : "null"));
+
         // Ưu tiên avatarData (BLOB)
         if (avatarData != null && avatarData.length > 0) {
             try {
                 image = new Image(new ByteArrayInputStream(avatarData), 48, 48, true, true);
+                System.out.println("  → Loaded from avatarData successfully");
             } catch (Exception e) {
                 System.err.println("Error loading avatar from data: " + e.getMessage());
             }
         }
-        
+
         // Fallback về avatarPath
         if (image == null && avatarPath != null && !avatarPath.isEmpty()) {
             image = loadImageFromPath(avatarPath);
+            if (image != null) {
+                System.out.println("  → Loaded from avatarPath successfully");
+            }
         }
-        
+
         // Fallback về default
         if (image == null) {
             image = getDefaultAvatar();
+            System.out.println("  → Using default avatar");
         }
-        
+
         return image;
     }
-    
+
     /**
      * Load image từ path (URL, file path, hoặc resource path)
      */
     public static Image loadImageFromPath(String path) {
-        if (path == null || path.isBlank()) return null;
-        
+        if (path == null || path.isBlank())
+            return null;
+
         try {
             if (path.startsWith("http")) {
                 return new Image(path, 48, 48, true, true, false);
@@ -74,7 +101,7 @@ public class AvatarService {
         }
         return null;
     }
-    
+
     /**
      * Get default avatar
      */
@@ -84,7 +111,7 @@ public class AvatarService {
         }
         return defaultAvatar;
     }
-    
+
     /**
      * Get default avatar với kích thước tùy chỉnh
      */
@@ -95,13 +122,13 @@ public class AvatarService {
         }
         return img;
     }
-    
+
     /**
      * Load avatar với kích thước tùy chỉnh
      */
     public static Image resolveAvatar(byte[] avatarData, String avatarPath, double width, double height) {
         Image image = null;
-        
+
         if (avatarData != null && avatarData.length > 0) {
             try {
                 image = new Image(new ByteArrayInputStream(avatarData), width, height, true, true);
@@ -109,7 +136,7 @@ public class AvatarService {
                 System.err.println("Error loading avatar from data: " + e.getMessage());
             }
         }
-        
+
         if (image == null && avatarPath != null && !avatarPath.isEmpty()) {
             try {
                 if (avatarPath.startsWith("http")) {
@@ -128,12 +155,11 @@ public class AvatarService {
                 System.err.println("Error loading avatar from path: " + e.getMessage());
             }
         }
-        
+
         if (image == null || image.isError()) {
             image = getDefaultAvatar(width, height);
         }
-        
+
         return image;
     }
 }
-

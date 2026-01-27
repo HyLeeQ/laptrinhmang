@@ -20,6 +20,7 @@ import javafx.util.Callback;
 
 import org.example.zalu.client.ChatClient;
 import org.example.zalu.client.ChatEventManager;
+import org.example.zalu.client.VideoCallManager;
 import org.example.zalu.controller.auth.LoginController;
 import org.example.zalu.controller.chat.ChatController;
 import org.example.zalu.controller.chat.MessageListController;
@@ -76,6 +77,7 @@ public class MainController {
     private MessageUpdateService messageUpdateService;
     private NavigationManager navigationManager;
     private ChatListManager chatListManager;
+    private VideoCallManager videoCallManager;
 
     @FXML
     public void initialize() {
@@ -164,6 +166,14 @@ public class MainController {
         if (userId > 0) {
             refreshFriendList();
             fetchCurrentUserProfile();
+            // Initialize VideoCallManager after user is set
+            if (videoCallManager == null && currentUser != null) {
+                videoCallManager = new VideoCallManager(
+                        ChatClient.getOut(),
+                        ChatClient.getIn(),
+                        currentUser);
+                logger.info("VideoCallManager initialized for user {}", userId);
+            }
         }
         if (navigationManager != null) {
             navigationManager.setCurrentUserId(userId);
@@ -539,11 +549,20 @@ public class MainController {
 
             updateLastMessages();
 
+            // Tăng unread count CHỈ cho tin nhắn MỚI (is_read = FALSE)
+            // Tin nhắn cũ từ login đã có count chính xác từ server
             if (chatListManager != null) {
                 Map<Integer, Integer> counts = chatListManager.getUnreadCounts();
                 for (Message msg : messages) {
-                    if (msg.getSenderId() == currentUserId)
-                        continue; // Tin nhắn mình gửi không tăng unread
+                    // Chỉ xử lý tin nhắn CHƯA ĐỌC
+                    if (msg.getIsRead()) {
+                        continue; // Tin nhắn đã đọc không tăng count
+                    }
+
+                    // Tin nhắn mình gửi không tăng unread
+                    if (msg.getSenderId() == currentUserId) {
+                        continue;
+                    }
 
                     int chatId = 0;
                     if (msg.getGroupId() > 0) {
@@ -558,7 +577,7 @@ public class MainController {
                             continue;
                     }
 
-                    // Increment local count
+                    // Increment local count cho tin nhắn mới
                     counts.put(chatId, counts.getOrDefault(chatId, 0) + 1);
                 }
                 chatList.refresh();
@@ -619,6 +638,14 @@ public class MainController {
                 try {
                     int readerId = Integer.parseInt(parts[1]);
                     logger.info("MainController: Messages read by user {}", readerId);
+
+                    // Reset unread count về 0 cho friend này
+                    if (chatListManager != null) {
+                        chatListManager.getUnreadCounts().put(readerId, 0);
+                        Platform.runLater(() -> chatList.refresh());
+                    }
+
+                    // Cập nhật read status trong message list
                     if (messageListController != null) {
                         messageListController.updateReadStatus(readerId);
                     }
@@ -669,9 +696,21 @@ public class MainController {
                     // Clear avatar cache để reload avatar mới
                     org.example.zalu.client.ClientCache.getInstance().clearAvatarCache(updatedUserId);
 
-                    // Refresh chat list để reload avatar
+                    // Clear user cache để reload thông tin user mới
+                    org.example.zalu.client.ClientCache.getInstance().clearUserCache(updatedUserId);
+
+                    // Request user info mới từ server
+                    ChatClient.sendRequest("GET_USER_BY_ID|" + updatedUserId);
+
+                    // Refresh chat list để reload avatar và thông tin
                     Platform.runLater(() -> {
+                        // Nếu user này là bạn bè, refresh friend list
+                        if (chatListManager != null) {
+                            chatListManager.refreshUserInList(updatedUserId);
+                        }
+
                         chatList.refresh();
+
                         // Nếu đang chat với user này, cập nhật header
                         if (currentFriendId == updatedUserId) {
                             updateChatHeaderStatus();
@@ -772,6 +811,98 @@ public class MainController {
                 } catch (NumberFormatException e) {
                     logger.warn("Error parsing userIds from FRIEND_ACCEPTED: {}", message);
                 }
+            }
+        } else if (message.startsWith("VIDEO_CALL_INCOMING|")) {
+            // Video call incoming - show accept/reject dialog
+            String[] parts = message.split("\\|");
+            if (parts.length >= 3 && videoCallManager != null) {
+                try {
+                    int callerId = Integer.parseInt(parts[1]);
+                    String callerName = parts[2];
+                    logger.info("Incoming video call from {} (ID: {})", callerName, callerId);
+                    videoCallManager.receiveIncomingCall(callerId, callerName);
+                } catch (NumberFormatException e) {
+                    logger.error("Error parsing VIDEO_CALL_INCOMING", e);
+                }
+            }
+        } else if (message.startsWith("VIDEO_CALL_ACCEPTED|")) {
+            // Video call accepted - open video window
+            String[] parts = message.split("\\|");
+            if (parts.length >= 3 && videoCallManager != null) {
+                try {
+                    int receiverId = Integer.parseInt(parts[1]);
+                    String receiverName = parts[2];
+                    logger.info("Video call accepted by {} (ID: {})", receiverName, receiverId);
+                    videoCallManager.onCallAccepted(receiverId, receiverName);
+                } catch (NumberFormatException e) {
+                    logger.error("Error parsing VIDEO_CALL_ACCEPTED", e);
+                }
+            }
+        } else if (message.startsWith("VIDEO_CALL_REJECTED|")) {
+            // Video call rejected
+            String[] parts = message.split("\\|");
+            if (parts.length >= 2 && videoCallManager != null) {
+                try {
+                    int receiverId = Integer.parseInt(parts[1]);
+                    logger.info("Video call rejected by user ID: {}", receiverId);
+                    videoCallManager.onCallRejected(receiverId);
+                } catch (NumberFormatException e) {
+                    logger.error("Error parsing VIDEO_CALL_REJECTED", e);
+                }
+            }
+        } else if (message.startsWith("VIDEO_CALL_ENDED|")) {
+            // Video call ended
+            String[] parts = message.split("\\|");
+            if (parts.length >= 2 && videoCallManager != null) {
+                try {
+                    int userId = Integer.parseInt(parts[1]);
+                    logger.info("Video call ended by user ID: {}", userId);
+                    videoCallManager.onCallEnded(userId);
+                } catch (NumberFormatException e) {
+                    logger.error("Error parsing VIDEO_CALL_ENDED", e);
+                }
+            }
+        } else if (message.startsWith("LEAVE_GROUP|")) {
+            // Handle LEAVE_GROUP response
+            if (message.equals("LEAVE_GROUP|SUCCESS")) {
+                logger.info("Successfully left group, closing chat and clearing cache");
+                Platform.runLater(() -> {
+                    // If currently viewing the group that was left, close it
+                    if (currentGroupId > 0) {
+                        // Clear cache for this group
+                        int chatId = -currentGroupId;
+                        org.example.zalu.client.ClientCache.getInstance().clearMessagesCache(chatId);
+
+                        // Reset current group
+                        currentGroupId = -1;
+
+                        // Show welcome screen
+                        if (messageListController != null) {
+                            messageListController.clearChat();
+                            messageListController.showWelcomeScreen("Bạn đã rời nhóm");
+                        }
+
+                        // Clear selection
+                        if (chatList != null) {
+                            chatList.getSelectionModel().clearSelection();
+                        }
+
+                        // Show welcome view
+                        showWelcomeInMessageArea();
+                    }
+
+                    // Refresh friend list to remove the group
+                    refreshFriendList();
+                });
+            } else if (message.startsWith("LEAVE_GROUP|FAIL")) {
+                logger.warn("Failed to leave group: {}", message);
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Lỗi");
+                    alert.setHeaderText("Không thể rời nhóm");
+                    alert.setContentText("Đã xảy ra lỗi khi rời nhóm. Vui lòng thử lại.");
+                    alert.show();
+                });
             }
         }
     }
@@ -1121,6 +1252,46 @@ public class MainController {
         }
         messageUpdateService.updateLastMessages(chatList.getItems(), currentUserId);
         chatList.refresh();
+    }
+
+    /**
+     * Initiate video call with currently selected friend
+     * Can be called from UI button or context menu
+     */
+    public void initiateVideoCall() {
+        ChatItem selectedItem = chatList.getSelectionModel().getSelectedItem();
+
+        if (selectedItem == null) {
+            showInfoAlert("Chưa chọn người nhận", "Vui lòng chọn một người bạn để thực hiện video call.");
+            return;
+        }
+
+        if (selectedItem.isGroup()) {
+            showInfoAlert("Không thể gọi nhóm", "Video call chỉ hỗ trợ cuộc gọi 1-1.");
+            return;
+        }
+
+        if (videoCallManager == null) {
+            showInfoAlert("Lỗi", "Video call chưa được khởi tạo.");
+            logger.error("VideoCallManager is null when trying to initiate call");
+            return;
+        }
+
+        User friend = selectedItem.getUser();
+        if (friend != null) {
+            logger.info("Initiating video call to: {} (ID: {})", friend.getFullName(), friend.getId());
+            videoCallManager.initiateVideoCall(friend.getId(), friend.getFullName());
+        }
+    }
+
+    private void showInfoAlert(String title, String content) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(content);
+            alert.showAndWait();
+        });
     }
 
 }

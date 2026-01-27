@@ -63,6 +63,7 @@ public class ChatEventManager {
     private static Consumer<String> memberRoleCallback = null;
     private static Consumer<List<Message>> searchMessagesCallback = null;
     private static Consumer<List<Message>> pinnedMessagesCallback = null;
+    private static Consumer<java.util.Map<Integer, Integer>> unreadCountCallback = null; // New: unread count map
     // Lưu metadata file tạm thời để gắn vào file data
     private static Message pendingFileMessage = null;
     // Lưu thông tin file download đang chờ
@@ -297,9 +298,28 @@ public class ChatEventManager {
             return;
         }
 
-        // Xử lý Map (cho GET_PENDING_REQUESTS và GET_FRIENDS_LIST_FULL)
+        // Xử lý Map (cho GET_PENDING_REQUESTS, GET_FRIENDS_LIST_FULL, và UNREAD_COUNT)
         if (obj instanceof java.util.Map) {
             java.util.Map<?, ?> map = (java.util.Map<?, ?>) obj;
+
+            // Check if this is an unread count map (Integer -> Integer)
+            if (!map.isEmpty() && map.keySet().iterator().next() instanceof Integer) {
+                boolean isUnreadCountMap = true;
+                for (Object value : map.values()) {
+                    if (!(value instanceof Integer)) {
+                        isUnreadCountMap = false;
+                        break;
+                    }
+                }
+
+                if (isUnreadCountMap && unreadCountCallback != null) {
+                    @SuppressWarnings("unchecked")
+                    java.util.Map<Integer, Integer> unreadMap = (java.util.Map<Integer, Integer>) map;
+                    logger.info("Received unread count map: {} entries", unreadMap.size());
+                    Platform.runLater(() -> unreadCountCallback.accept(unreadMap));
+                    return;
+                }
+            }
 
             if (map.containsKey("type") && "FRIENDS_NOT_IN_GROUP".equals(map.get("type"))) {
                 Object data = map.get("data");
@@ -594,6 +614,12 @@ public class ChatEventManager {
                 if (currentUserId > 0) {
                     ChatClient.sendRequest("GET_GROUPS|" + currentUserId);
                 }
+            } else if (message.startsWith("LEAVE_GROUP|")) {
+                // Handle LEAVE_GROUP response
+                if (broadcastCallback != null) {
+                    Platform.runLater(() -> broadcastCallback.accept(message));
+                }
+                // If success, groups will be updated via GROUPS_UPDATE broadcast
             } else if (message.startsWith("ERROR|") || message.startsWith("FAIL|")) {
                 if (errorCallback != null) {
                     Platform.runLater(() -> errorCallback.accept(message));
@@ -743,6 +769,16 @@ public class ChatEventManager {
                 if (updateProfileCallback != null) {
                     Platform.runLater(() -> updateProfileCallback.accept(message));
                 }
+            } else if (message.startsWith("VIDEO_CALL_INCOMING|") ||
+                    message.startsWith("VIDEO_CALL_ACCEPTED|") ||
+                    message.startsWith("VIDEO_CALL_REJECTED|") ||
+                    message.startsWith("VIDEO_CALL_ENDED|") ||
+                    message.startsWith("VIDEO_CALL_REQUEST|")) {
+                // Video call events - forward to broadcast callback
+                if (broadcastCallback != null) {
+                    Platform.runLater(() -> broadcastCallback.accept(message));
+                }
+                logger.debug("Video call event: {}", message);
             } else if (message.startsWith("USER_AVATAR|")) {
                 String[] parts = message.split("\\|");
                 if (parts.length >= 3 && !parts[1].equals("FAIL")) {
@@ -921,6 +957,10 @@ public class ChatEventManager {
 
     public void registerMessageSentCallback(Consumer<String[]> callback) {
         messageSentCallback = callback;
+    }
+
+    public void registerUnreadCountCallback(Consumer<java.util.Map<Integer, Integer>> callback) {
+        unreadCountCallback = callback;
     }
 
     public static ObservableList<Integer> getSharedFriends() {

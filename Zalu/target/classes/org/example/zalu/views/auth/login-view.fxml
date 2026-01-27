@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.example.zalu.controller.auth.LoginController"
+           stylesheets="@/styles.css" styleClass="auth-root">
+    <children>
+        <HBox alignment="CENTER" spacing="0" prefWidth="780" styleClass="auth-shell">
+            <children>
+                <VBox spacing="12" prefWidth="320" styleClass="auth-hero">
+                    <children>
+                        <Label text="Zalu Chat" styleClass="hero-kicker"/>
+                        <Label text="Kết nối dễ dàng" styleClass="hero-title"/>
+                        <Label text="Trải nghiệm nhắn tin mượt mà và bảo mật cùng bạn bè, người thân và đồng nghiệp."
+                               wrapText="true" styleClass="hero-text"/>
+                        <Region VBox.vgrow="ALWAYS"/>
+                        <Label text="Luôn sẵn sàng 24/7" styleClass="hero-footnote"/>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER_LEFT" spacing="18" prefWidth="360" styleClass="auth-card">
+                    <children>
+                        <VBox spacing="4">
+                            <Label text="Chào mừng trở lại" styleClass="auth-heading"/>
+                            <Label text="Đăng nhập để tiếp tục cuộc trò chuyện của bạn." styleClass="auth-subtext"/>
+                        </VBox>
+                        <VBox spacing="8">
+                            <Label text="Tên đăng nhập" styleClass="field-label"/>
+                            <TextField fx:id="usernameField" promptText="Nhập username" styleClass="form-field"/>
+                        </VBox>
+                        <VBox spacing="8">
+                            <Label text="Mật khẩu" styleClass="field-label"/>
+                            <PasswordField fx:id="passwordField" promptText="••••••" styleClass="form-field"/>
+                        </VBox>
+                        <Label fx:id="statusLabel" text="Sẵn sàng đăng nhập" styleClass="status-label"/>
+                        <Button text="Đăng nhập" onAction="#login" prefHeight="48" prefWidth="360" styleClass="primary-btn"/>
+                        <HBox alignment="CENTER" spacing="6" prefWidth="360">
+                            <Label text="Chưa có tài khoản?" styleClass="auth-subtext"/>
+                            <Hyperlink text="Đăng ký ngay" onAction="#switchToRegister" styleClass="link-btn"/>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        
+        <!-- Loading Overlay -->
+        <StackPane fx:id="loadingOverlay" styleClass="loading-overlay" visible="false" managed="false">
+            <VBox alignment="CENTER" spacing="16">
+                <ProgressIndicator fx:id="loadingIndicator" progress="-1" prefWidth="60" prefHeight="60"/>
+                <Label fx:id="loadingLabel" text="Đang xử lý..." styleClass="loading-label"/>
+            </VBox>
+        </StackPane>
+    </children>
+</StackPane>

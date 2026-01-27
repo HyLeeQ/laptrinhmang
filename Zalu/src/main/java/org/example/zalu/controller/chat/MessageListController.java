@@ -129,6 +129,7 @@ public class MessageListController {
     // DAOs removed
     private final java.util.Map<String, HBox> pendingMessageNodes = new java.util.concurrent.ConcurrentHashMap<>();
     private final List<Message> currentConversationMessages = new ArrayList<>();
+    private final java.util.Map<Integer, org.example.zalu.model.User> groupMembersCache = new java.util.concurrent.ConcurrentHashMap<>();
     private MainController mainController;
 
     // Typing indicator auto-hide timer
@@ -413,7 +414,7 @@ public class MessageListController {
         // Cập nhật badge sau khi đã đọc (reset về 0)
         if (mainController != null) {
             mainController.updateUnreadCountForFriend(friend.getId(), 0);
-            Platform.runLater(() -> mainController.refreshFriendList());
+            // Chỉ refresh UI, không cần reload toàn bộ friend list
         }
     }
 
@@ -652,8 +653,26 @@ public class MessageListController {
 
         if (currentGroup != null) {
             if (!isOwn) {
-                senderName = "User " + msg.getSenderId(); // Fallback
-                // TODO: Look up in cached group members
+                // Look up sender info from cache
+                org.example.zalu.model.User sender = groupMembersCache.get(msg.getSenderId());
+                if (sender != null) {
+                    senderName = sender.getFullName();
+                    senderAvatarData = sender.getAvatarData();
+                    senderAvatarUrl = sender.getAvatarUrl();
+                } else {
+                    // Fallback if not in cache yet
+                    senderName = "User " + msg.getSenderId();
+                    // Try to load from ClientCache
+                    org.example.zalu.model.User cachedUser = org.example.zalu.client.ClientCache.getInstance()
+                            .getUser(msg.getSenderId());
+                    if (cachedUser != null) {
+                        senderName = cachedUser.getFullName();
+                        senderAvatarData = cachedUser.getAvatarData();
+                        senderAvatarUrl = cachedUser.getAvatarUrl();
+                        // Add to group members cache
+                        groupMembersCache.put(msg.getSenderId(), cachedUser);
+                    }
+                }
             }
         } else if (currentFriend != null) {
             if (!isOwn) {
@@ -708,6 +727,10 @@ public class MessageListController {
                 VBox imageBox = MessageBubbleFactory.createImageBubble(msg.getFileData(), msg.getFileName(), isOwn,
                         msg.getCreatedAt(), senderName, msg.getIsRead(), msg.getId(), null);
                 return wrapInMainBox(imageBox, isOwn, senderAvatarData, senderAvatarUrl);
+            } else if (ChatRenderer.isVideoFile(msg.getFileName())) {
+                VBox videoBox = MessageBubbleFactory.createVideoBubble(msg.getFileData(), msg.getFileName(), isOwn,
+                        msg.getCreatedAt(), senderName, msg.getIsRead(), msg.getId(), null);
+                return wrapInMainBox(videoBox, isOwn, senderAvatarData, senderAvatarUrl);
             } else {
                 int fileSize = msg.getFileData() != null ? msg.getFileData().length : 0;
                 VBox fileBox = MessageBubbleFactory.createFileBubble(msg.getFileName(), fileSize, isOwn,
@@ -739,21 +762,22 @@ public class MessageListController {
 
     public void addLocalTextMessage(Message msg) {
         boolean isOwn = msg.getSenderId() == currentUserId;
+
+        // Render tin nhắn ngay lập tức
         chatRenderer.addTextMessage(msg.getContent(), isOwn, msg.getCreatedAt(), null, null, null,
                 Message.MessageStatus.SENDING);
 
-        // Save node for later resolution if tempId is present
-        // Đợi UI render xong trước khi lưu node
+        // Lưu node ngay lập tức (không đợi qua Platform.runLater của controller)
+        // Chúng ta lấy node vừa được add vào cuối chatArea
         if (msg.getTempId() != null) {
-            Platform.runLater(() -> {
-                if (!chatArea.getChildren().isEmpty()) {
-                    Node lastNode = chatArea.getChildren().get(chatArea.getChildren().size() - 1);
-                    if (lastNode instanceof HBox) {
-                        pendingMessageNodes.put(msg.getTempId(), (HBox) lastNode);
-                        logger.debug("Saved pending message node: tempId={}", msg.getTempId());
-                    }
+            javafx.collections.ObservableList<Node> children = chatArea.getChildren();
+            if (!children.isEmpty()) {
+                Node lastNode = children.get(children.size() - 1);
+                if (lastNode instanceof HBox) {
+                    pendingMessageNodes.put(msg.getTempId(), (HBox) lastNode);
+                    logger.debug("Registered pending node for 1-1 chat: tempId={}", msg.getTempId());
                 }
-            });
+            }
         }
 
         currentConversationMessages.add(msg);
@@ -822,6 +846,9 @@ public class MessageListController {
         if (messages != null)
             currentConversationMessages.addAll(messages);
 
+        // Load group members information for displaying names
+        loadGroupMembersInfo(group.getId());
+
         // Hiển thị header khi chọn chat
         if (chatHeader != null) {
             chatHeader.setVisible(true);
@@ -867,8 +894,23 @@ public class MessageListController {
         // Cập nhật badge sau khi đã đọc (reset về 0)
         if (mainController != null) {
             mainController.updateUnreadCountForGroup(group.getId(), 0);
-            Platform.runLater(() -> mainController.refreshFriendList());
+            // Chỉ refresh UI, không cần reload toàn bộ friend list
         }
+    }
+
+    private void loadGroupMembersInfo(int groupId) {
+        // Request group members info from server
+        org.example.zalu.client.ChatEventManager.getInstance().registerGetUserByIdCallback(users -> {
+            if (users != null) {
+                for (org.example.zalu.model.User user : users) {
+                    groupMembersCache.put(user.getId(), user);
+                    logger.debug("Cached group member: {} (ID: {})", user.getFullName(), user.getId());
+                }
+            }
+        });
+
+        // Get list of member IDs and request their info
+        org.example.zalu.client.ChatClient.sendRequest("GET_GROUP_MEMBERS|" + groupId);
     }
 
     // Mark group messages as read

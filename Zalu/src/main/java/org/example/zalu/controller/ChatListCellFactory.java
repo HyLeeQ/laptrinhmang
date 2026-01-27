@@ -87,11 +87,13 @@ public class ChatListCellFactory implements Callback<ListView<ChatItem>, ListCel
 
             nameLabel = new Label();
             nameLabel.getStyleClass().add("chat-list-name");
-            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #1c1e21;"); // Tăng từ 15px
+            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #1c1e21; " +
+                    "-fx-font-family: 'Segoe UI', 'Tahoma', 'Arial', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;");
 
             previewLabel = new Label();
             previewLabel.getStyleClass().add("chat-list-preview");
-            previewLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #8e8e93; -fx-font-weight: 400;"); // Tăng từ 13px
+            previewLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #8e8e93; -fx-font-weight: 400; " +
+                    "-fx-font-family: 'Segoe UI', 'Tahoma', 'Arial', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;");
             previewLabel.setMaxWidth(Double.MAX_VALUE); // Cho phép tự động điều chỉnh
             previewLabel.setWrapText(false);
             previewLabel.setEllipsisString("...");

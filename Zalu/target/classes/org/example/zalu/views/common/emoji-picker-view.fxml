@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.zalu.controller.common.EmojiPickerController"
+      styleClass="emoji-picker-root" stylesheets="@/styles.css">
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+    <spacing>12</spacing>
+    
+    <HBox alignment="CENTER_LEFT" spacing="8">
+        <Label text="😊" styleClass="emoji-picker-icon"/>
+        <Label text="Emoji" styleClass="emoji-picker-title"/>
+    </HBox>
+    
+    <Separator styleClass="emoji-separator"/>
+    
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="emoji-picker-scroll">
+        <FlowPane fx:id="emojiGrid" hgap="6" vgap="6" prefWrapLength="280" styleClass="emoji-grid"/>
+    </ScrollPane>
+</VBox>
+
+

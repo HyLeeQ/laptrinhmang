@@ -350,6 +350,10 @@ public class ChatClient {
         return out;
     }
 
+    public static ObjectInputStream getIn() {
+        return in;
+    }
+
     public interface LoginCallback {
         void onSuccess(int userId);
 

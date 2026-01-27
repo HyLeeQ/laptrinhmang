@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.zalu.controller.media.LinksViewController"
+            styleClass="friend-requests-root" stylesheets="@/styles.css" prefWidth="700" prefHeight="700">
+    <center>
+        <VBox styleClass="friend-shell" spacing="20">
+            <padding><Insets top="28" right="36" bottom="32" left="36"/></padding>
+            
+            <VBox spacing="6" styleClass="friend-header">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Link" styleClass="friend-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="✕" onAction="#handleClose" styleClass="close-header-btn" prefWidth="32" prefHeight="32"/>
+                </HBox>
+                <Label fx:id="subtitleLabel" text="Link đã chia sẻ trong cuộc trò chuyện" styleClass="friend-subtitle"/>
+            </VBox>
+            
+            <ScrollPane fitToWidth="true" styleClass="add-friend-scroll" vbarPolicy="AS_NEEDED">
+                <ListView fx:id="linksListView" styleClass="request-list"/>
+            </ScrollPane>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <HBox spacing="12" styleClass="footer-actions" alignment="CENTER_RIGHT">
+                <Button text="Đóng" onAction="#handleClose" styleClass="back-btn"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
+
