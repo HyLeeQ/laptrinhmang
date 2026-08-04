@@ -1,7 +1,10 @@
 package org.example.zalu.controller.profile;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -18,6 +21,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.zalu.model.User;
@@ -65,6 +72,13 @@ public class ProfileController {
     private User currentUser;
     private static final String DEFAULT_AVATAR = "/images/default-avatar.jpg";
     private static final long MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+    // --- Stats labels (created programmatically) ---
+    private Label statMsgLabel;
+    private Label statFileLabel;
+    private Label statFriendLabel;
+    private Label statGroupLabel;
+    private Label statJoinedLabel;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -146,12 +160,83 @@ public class ProfileController {
         }
         newPasswordField.setVisible(false);
         newPasswordField.setManaged(false);
+
+        // Đăng ký callback nhận thống kê cá nhân
+        org.example.zalu.client.ChatEventManager.getInstance().registerUserStatsCallback(stats -> {
+            Platform.runLater(() -> {
+                if (stats == null) return;
+                if (statMsgLabel    != null) statMsgLabel.setText(String.valueOf(stats.getOrDefault("messageCount", 0)));
+                if (statFileLabel   != null) statFileLabel.setText(String.valueOf(stats.getOrDefault("fileCount", 0)));
+                if (statFriendLabel != null) statFriendLabel.setText(String.valueOf(stats.getOrDefault("friendCount", 0)));
+                if (statGroupLabel  != null) statGroupLabel.setText(String.valueOf(stats.getOrDefault("groupCount", 0)));
+                if (statJoinedLabel != null) statJoinedLabel.setText(String.valueOf(stats.getOrDefault("joinedDate", "")));
+                // Hiển thị panel stats nếu đang ẩn
+                if (statusLabel != null && statusLabel.getParent() instanceof VBox) {
+                    VBox parentBox = (VBox) statusLabel.getParent();
+                    // Thêm stats panel nếu chưa có (tag check)
+                    boolean alreadyAdded = parentBox.getChildren().stream()
+                            .anyMatch(n -> "statsPanel".equals(n.getUserData()));
+                    if (!alreadyAdded) {
+                        HBox statsPanel = buildStatsPanel();
+                        statsPanel.setUserData("statsPanel");
+                        // Chèn vào trước statusLabel
+                        int idx = parentBox.getChildren().indexOf(statusLabel);
+                        if (idx >= 0) parentBox.getChildren().add(idx, statsPanel);
+                        else parentBox.getChildren().add(statsPanel);
+                    }
+                }
+            });
+        });
+    }
+
+    /** Tạo panel thống kê cá nhân (5 card) */
+    private HBox buildStatsPanel() {
+        String cardStyle = "-fx-background-color: #f0f4ff; -fx-background-radius: 10; "
+                + "-fx-padding: 10 14; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 6, 0, 0, 2);";
+
+        statMsgLabel    = new Label("...");
+        statFileLabel   = new Label("...");
+        statFriendLabel = new Label("...");
+        statGroupLabel  = new Label("...");
+        statJoinedLabel = new Label("...");
+
+        HBox panel = new HBox(10,
+                buildStatCard("💬", "Tin nhắn",  statMsgLabel,    "#3498db", cardStyle),
+                buildStatCard("📁", "File",       statFileLabel,   "#9b59b6", cardStyle),
+                buildStatCard("👥", "Bạn bè",    statFriendLabel, "#27ae60", cardStyle),
+                buildStatCard("🏠", "Nhóm",      statGroupLabel,  "#e67e22", cardStyle),
+                buildStatCard("📅", "Tham gia",  statJoinedLabel, "#7f8c8d", cardStyle));
+        panel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        panel.setPadding(new Insets(8, 0, 8, 0));
+        for (javafx.scene.Node card : panel.getChildren()) {
+            HBox.setHgrow(card, Priority.ALWAYS);
+        }
+        return panel;
+    }
+
+    private VBox buildStatCard(String icon, String label, Label valueLabel, String color, String style) {
+        Label iconLbl  = new Label(icon);
+        iconLbl.setStyle("-fx-font-size: 16px;");
+        Label titleLbl = new Label(label);
+        titleLbl.setStyle("-fx-font-size: 10px; -fx-text-fill: #7f8c8d; -fx-font-weight: bold;");
+        valueLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: " + color + ";");
+        VBox card = new VBox(3, iconLbl, titleLbl, valueLabel);
+        card.setStyle(style);
+        card.setAlignment(Pos.CENTER);
+        return card;
+    }
+
+    // ── ORIGINAL initialize() tail ── (genderGroup setup moved above stats registration)
+    private void initializeTail() {
+        // intentionally empty – moved inline to initialize()
     }
 
     private void loadUserProfile() {
         if (currentUserId <= 0)
             return;
         org.example.zalu.client.ChatClient.sendRequest("GET_USER_BY_ID|" + currentUserId);
+        // Cũng yêu cầu thống kê cá nhân
+        org.example.zalu.client.ChatClient.sendRequest("GET_USER_STATS|" + currentUserId);
     }
 
     private void updateUIWithUser(User user) {

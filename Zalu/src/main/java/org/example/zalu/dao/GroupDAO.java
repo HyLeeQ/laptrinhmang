@@ -526,4 +526,80 @@ public class GroupDAO {
             return 0;
         }
     }
+
+    // ============================================================
+    // ADMIN METHODS
+    // ============================================================
+
+    /**
+     * Lấy toàn bộ danh sách nhóm kèm thông tin chi tiết (dành cho admin).
+     */
+    public List<AdminGroupRow> getAllGroups() throws SQLException {
+        List<AdminGroupRow> result = new ArrayList<>();
+        String sql = "SELECT g.id, g.name, u.username AS creator_username, " +
+                "COUNT(gm.user_id) AS member_count, g.created_at " +
+                "FROM groups g " +
+                "LEFT JOIN users u ON g.created_by = u.id " +
+                "LEFT JOIN group_members gm ON g.id = gm.group_id " +
+                "GROUP BY g.id, g.name, u.username, g.created_at " +
+                "ORDER BY g.created_at DESC";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                AdminGroupRow row = new AdminGroupRow();
+                row.id = rs.getInt("id");
+                row.name = rs.getString("name");
+                row.creatorUsername = rs.getString("creator_username");
+                row.memberCount = rs.getInt("member_count");
+                row.createdAt = rs.getTimestamp("created_at") != null
+                        ? rs.getTimestamp("created_at").toLocalDateTime() : null;
+                result.add(row);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Tìm kiếm nhóm theo tên (dành cho admin).
+     */
+    public List<AdminGroupRow> searchGroups(String query) throws SQLException {
+        List<AdminGroupRow> result = new ArrayList<>();
+        String sql = "SELECT g.id, g.name, u.username AS creator_username, " +
+                "COUNT(gm.user_id) AS member_count, g.created_at " +
+                "FROM groups g " +
+                "LEFT JOIN users u ON g.created_by = u.id " +
+                "LEFT JOIN group_members gm ON g.id = gm.group_id " +
+                "WHERE g.name LIKE ? " +
+                "GROUP BY g.id, g.name, u.username, g.created_at " +
+                "ORDER BY g.created_at DESC";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + query + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    AdminGroupRow row = new AdminGroupRow();
+                    row.id = rs.getInt("id");
+                    row.name = rs.getString("name");
+                    row.creatorUsername = rs.getString("creator_username");
+                    row.memberCount = rs.getInt("member_count");
+                    row.createdAt = rs.getTimestamp("created_at") != null
+                            ? rs.getTimestamp("created_at").toLocalDateTime() : null;
+                    result.add(row);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Row dùng để hiển thị trong bảng Quản lý Nhóm ở ServerUI.
+     */
+    public static class AdminGroupRow {
+        public int id;
+        public String name;
+        public String creatorUsername;
+        public int memberCount;
+        public java.time.LocalDateTime createdAt;
+    }
 }

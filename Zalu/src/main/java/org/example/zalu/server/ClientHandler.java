@@ -295,6 +295,19 @@ public class ClientHandler extends Thread {
             return false;
         }
 
+        // Kiểm tra tài khoản có bị khóa không
+        try {
+            if (userDAO.isUserLocked(user.getId())) {
+                logger.warn("Server: Login bị từ chối – tài khoản bị khóa: {} (id={})", p[1], user.getId());
+                out.writeObject("LOGIN_RESPONSE|FAIL|Tài khoản đã bị khóa bởi Admin. Vui lòng liên hệ quản trị viên.");
+                out.flush();
+                return false;
+            }
+        } catch (Exception lockEx) {
+            logger.error("Lỗi kiểm tra khóa tài khoản khi login", lockEx);
+            // Cho phép login nếu không kiểm tra được (an toàn hơn)
+        }
+
         userId = user.getId();
         clients.put(userId, out);
         onlineUsers.put(userId, user.getUsername());
@@ -410,6 +423,19 @@ public class ClientHandler extends Thread {
 
         try {
             User user = userDAO.getUserById(resumeId);
+
+            // Kiểm tra tài khoản có bị khóa không
+            try {
+                if (userDAO.isUserLocked(resumeId)) {
+                    logger.warn("Server: Resume session bị từ chối – tài khoản bị khóa: id={}", resumeId);
+                    out.writeObject("RESUME_SESSION|FAIL|ACCOUNT_LOCKED");
+                    out.flush();
+                    return false;
+                }
+            } catch (Exception lockEx) {
+                logger.error("Lỗi kiểm tra khóa tài khoản khi resume session", lockEx);
+            }
+
             userId = resumeId;
             clients.put(userId, out);
             onlineUsers.put(userId, user.getUsername());
@@ -1272,9 +1298,69 @@ public class ClientHandler extends Thread {
                 logger.error("Lỗi khi lấy thông tin user", e);
                 out.writeObject(null);
             }
+        } else if (msg.startsWith("GET_USER_STATS|")) {
+            // Format: GET_USER_STATS|userId
+            try {
+                String[] p = msg.split("\\|");
+                int targetId = p.length >= 2 ? Integer.parseInt(p[1]) : userId;
+
+                long msgCount    = messageDAO.getMessageCountByUser(targetId);
+                long fileCount   = messageDAO.getFileCountByUser(targetId);
+                int  friendCount = friendDAO.getFriendsByUserId(targetId).size();
+                int  groupCount  = groupDAO.getUserGroups(targetId).size();
+
+                // Lấy ngày tạo tài khoản từ UserDAO
+                String joinedDate = "";
+                try {
+                    org.example.zalu.model.User u = userDAO.getUserById(targetId);
+                    if (u != null && u.getCreatedAt() != null) {
+                        joinedDate = u.getCreatedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    }
+                } catch (Exception ignored) {}
+
+                java.util.Map<String, Object> stats = new java.util.HashMap<>();
+                stats.put("type", "USER_STATS_RESULT");
+                stats.put("messageCount", msgCount);
+                stats.put("fileCount",    fileCount);
+                stats.put("friendCount",  friendCount);
+                stats.put("groupCount",   groupCount);
+                stats.put("joinedDate",   joinedDate);
+                out.writeObject(stats);
+                out.flush();
+            } catch (Exception e) {
+                logger.error("Lỗi GET_USER_STATS: {}", e.getMessage());
+                out.writeObject(new java.util.HashMap<>());
+                out.flush();
+            }
         } else if (msg.equals("KEEP_ALIVE")) {
             out.writeObject("KEEP_ALIVE_OK");
+        } else if (msg.startsWith("REPORT_USER|")) {
+            // Format: REPORT_USER|reportedUserId|reason|description
+            try {
+                String[] p = msg.split("\\|", 4);
+                if (p.length >= 3) {
+                    int reportedId = Integer.parseInt(p[1]);
+                    String reason = p[2];
+                    String description = p.length >= 4 ? p[3] : "";
+                    
+                    org.example.zalu.model.UserReport report = new org.example.zalu.model.UserReport(
+                        userId, reportedId, reason, description
+                    );
+                    
+                    boolean success = ChatServer.getReportDAO().createReport(report);
+                    if (success) {
+                        out.writeObject("REPORT_USER_SUCCESS");
+                        logger.info("User {} reported user {} for: {}", userId, reportedId, reason);
+                    } else {
+                        out.writeObject("REPORT_USER_FAIL");
+                    }
+                }
+            } catch (Exception e) {
+                logger.error("Lỗi khi xử lý REPORT_USER: {}", e.getMessage());
+                try { out.writeObject("REPORT_USER_FAIL"); } catch (Exception ignored) {}
+            }
         } else if (msg.startsWith("TYPING|")) {
+
             // Format: TYPING|senderId|receiverId
             String[] p = msg.split("\\|");
             if (p.length >= 3) {

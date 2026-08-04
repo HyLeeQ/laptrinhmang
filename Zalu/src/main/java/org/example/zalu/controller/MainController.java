@@ -58,9 +58,16 @@ public class MainController {
     @FXML
     private Button settingsBtn;
 
+    @FXML
+    private javafx.scene.shape.Circle friendRequestDot;
+
+    @FXML
+    private javafx.scene.shape.Circle navFriendRequestDot;
+
     private boolean isDarkMode = false;
     private ChatController chatController;
     private MessageListController messageListController;
+    private Parent messageListRoot;
     private Parent chatInputRoot;
 
     private Stage stage;
@@ -350,6 +357,17 @@ public class MainController {
             logger.warn("Cannot view friend requests: User not logged in");
             return;
         }
+
+        // Hide notification dot when viewing friend requests
+        if (friendRequestDot != null) {
+            friendRequestDot.setVisible(false);
+            friendRequestDot.setManaged(false);
+        }
+        if (navFriendRequestDot != null) {
+            navFriendRequestDot.setVisible(false);
+            navFriendRequestDot.setManaged(false);
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/org/example/zalu/views/friend/friend-request-view.fxml"));
@@ -631,6 +649,20 @@ public class MainController {
     private void onBroadcastMessage(String message) {
         if (message == null)
             return;
+
+        if (message.startsWith("FRIEND_REQUEST_RECEIVED|")) {
+            Platform.runLater(() -> {
+                if (friendRequestDot != null) {
+                    friendRequestDot.setVisible(true);
+                    friendRequestDot.setManaged(true);
+                }
+                if (navFriendRequestDot != null) {
+                    navFriendRequestDot.setVisible(true);
+                    navFriendRequestDot.setManaged(true);
+                }
+            });
+            return;
+        }
 
         if (message.startsWith("MESSAGES_READ|")) {
             String[] parts = message.split("\\|");
@@ -918,7 +950,7 @@ public class MainController {
                 // Load phần tin nhắn
                 FXMLLoader messageLoader = new FXMLLoader(
                         getClass().getResource("/org/example/zalu/views/chat/message-list-view.fxml"));
-                Parent messageRoot = messageLoader.load();
+                messageListRoot = messageLoader.load();
                 messageListController = messageLoader.getController();
                 messageListController.setCurrentUserId(currentUserId);
                 messageListController.setMainController(this);
@@ -1012,34 +1044,19 @@ public class MainController {
     }
 
     private void ensureMessageViewInContainer() {
-        if (messageListController == null || chatContainer == null)
+        if (messageListController == null || chatContainer == null || messageListRoot == null)
             return;
         try {
             boolean hasWelcomeView = chatContainer.getChildren().stream()
-                    .anyMatch(node -> node.getStyleClass().contains("welcome-root"));
+                    .anyMatch(node -> node.getStyleClass().contains("welcome-root") || node.getStyleClass().contains("placeholder-text"));
             if (hasWelcomeView || chatContainer.getChildren().isEmpty()) {
-                FXMLLoader messageLoader = new FXMLLoader(
-                        getClass().getResource("/org/example/zalu/views/chat/message-list-view.fxml"));
-                Parent messageRoot = messageLoader.load();
-                messageListController = messageLoader.getController();
-                messageListController.setCurrentUserId(currentUserId);
-                messageListController.setMainController(this);
-                if (chatInputRoot == null) {
-                    FXMLLoader chatLoader = new FXMLLoader(
-                            getClass().getResource("/org/example/zalu/views/chat/chat-input-view.fxml"));
-                    chatInputRoot = chatLoader.load();
-                    chatController = chatLoader.getController();
-                    chatController.setCurrentUserId(currentUserId);
-                    chatController.setMessageListController(messageListController);
-                    chatController.setStage(stage);
-                }
                 chatContainer.getChildren().clear();
-                chatContainer.getChildren().add(messageRoot);
-                VBox.setVgrow(messageRoot, Priority.ALWAYS);
+                chatContainer.getChildren().add(messageListRoot);
+                VBox.setVgrow(messageListRoot, Priority.ALWAYS);
                 if (chatInputRoot != null)
                     chatContainer.getChildren().add(chatInputRoot);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("Error ensuring message view in container", e);
         }
     }

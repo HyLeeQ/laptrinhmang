@@ -2,7 +2,7 @@
 -- Zalu Chat Application - Database Schema
 -- ============================================
 -- Database: laptrinhmang_db
--- Version : 2.0 (2025-11)
+-- Version : 2.1 (2026-08) — added is_locked
 -- ============================================
 
 -- 0. CREATE DATABASE & DEFAULT CHARSET
@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS users (
     birthdate DATE,
     gender VARCHAR(20) DEFAULT 'other',
     status VARCHAR(20) DEFAULT 'offline',
+    is_locked BOOLEAN NOT NULL DEFAULT FALSE,
     last_login_at TIMESTAMP NULL,
     last_seen_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -162,6 +163,22 @@ CREATE TABLE IF NOT EXISTS user_activity_logs (
     INDEX idx_activity_target (target_user_id),
     INDEX idx_activity_group (group_id),
     INDEX idx_activity_created_at (created_at)
+) ENGINE=InnoDB;
+
+-- ============================================
+-- 8. USER REPORTS
+-- ============================================
+CREATE TABLE IF NOT EXISTS user_reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reporter_id INT NOT NULL,
+    reported_user_id INT NOT NULL,
+    reason VARCHAR(100) NOT NULL,
+    description TEXT,
+    status VARCHAR(20) DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_report_reporter FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_report_reported FOREIGN KEY (reported_user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_report_status (status)
 ) ENGINE=InnoDB;
 
 -- ============================================

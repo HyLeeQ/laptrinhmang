@@ -41,6 +41,7 @@ public class ChatEventManager {
     private static Consumer<String> broadcastCallback = null;
     private static Consumer<String> errorCallback = null;
     private static Consumer<List<Integer>> pendingRequestsCallback = null;
+    private static Consumer<String> friendRequestSentCallback = null;
     private static Consumer<List<org.example.zalu.model.GroupInfo>> groupsCallback = null;
     private static Consumer<List<Integer>> onlineUsersCallback = null;
     private static final java.util.Map<Integer, Consumer<FileDownloadInfo>> fileDownloadCallbacks = new java.util.concurrent.ConcurrentHashMap<>();
@@ -64,6 +65,7 @@ public class ChatEventManager {
     private static Consumer<List<Message>> searchMessagesCallback = null;
     private static Consumer<List<Message>> pinnedMessagesCallback = null;
     private static Consumer<java.util.Map<Integer, Integer>> unreadCountCallback = null; // New: unread count map
+    private static Consumer<java.util.Map<String, Object>> userStatsCallback = null;   // Profile stats
     // Lưu metadata file tạm thời để gắn vào file data
     private static Message pendingFileMessage = null;
     // Lưu thông tin file download đang chờ
@@ -418,6 +420,15 @@ public class ChatEventManager {
                 }
                 return;
             }
+
+            if (map.containsKey("type") && "USER_STATS_RESULT".equals(map.get("type"))) {
+                @SuppressWarnings("unchecked")
+                java.util.Map<String, Object> stats = (java.util.Map<String, Object>) map;
+                if (userStatsCallback != null) {
+                    Platform.runLater(() -> userStatsCallback.accept(stats));
+                }
+                return;
+            }
         }
         // Xử lý User đơn lẻ (cho GET_USER_BY_ID)
         if (obj instanceof org.example.zalu.model.User) {
@@ -609,11 +620,19 @@ public class ChatEventManager {
                     pendingFileMessage = newFileMsg;
                     // Chờ nhận file data (byte[]) tiếp theo
                 }
+            } else if (message.equals("FRIENDS_UPDATE")) {
+                // Server broadcast khi danh sách bạn bè thay đổi
+                // (lời mời được chấp nhận, xóa bạn, v.v.)
+                // → Tải lại toàn bộ danh sách để cập nhật UI ngay lập tức
+                if (currentUserId > 0) {
+                    ChatClient.sendRequest("GET_FRIENDS_LIST_FULL|" + currentUserId);
+                }
             } else if (message.equals("GROUPS_UPDATE")) {
                 // Yêu cầu client reload danh sách nhóm
                 if (currentUserId > 0) {
                     ChatClient.sendRequest("GET_GROUPS|" + currentUserId);
                 }
+
             } else if (message.startsWith("LEAVE_GROUP|")) {
                 // Handle LEAVE_GROUP response
                 if (broadcastCallback != null) {
@@ -643,9 +662,9 @@ public class ChatEventManager {
                 }
             } else if (message.startsWith("FRIEND_REQUEST_SENT|")) {
                 // Format: FRIEND_REQUEST_SENT|OK hoặc FRIEND_REQUEST_SENT|FAIL
-                // Gửi qua broadcastCallback để AddFriendController có thể xử lý
-                if (broadcastCallback != null) {
-                    Platform.runLater(() -> broadcastCallback.accept(message));
+                // Gửi qua friendRequestSentCallback để AddFriendController có thể xử lý
+                if (friendRequestSentCallback != null) {
+                    Platform.runLater(() -> friendRequestSentCallback.accept(message));
                 }
             } else if (message.startsWith("ACCEPT_FRIEND_OK") || message.startsWith("ACCEPT_FRIEND_FAIL")) {
                 // Gửi qua broadcastCallback
@@ -886,6 +905,10 @@ public class ChatEventManager {
         errorCallback = callback;
     }
 
+    public void registerFriendRequestSentCallback(Consumer<String> callback) {
+        friendRequestSentCallback = callback;
+    }
+
     public void registerPendingRequestsCallback(Consumer<List<Integer>> callback) {
         pendingRequestsCallback = callback;
     }
@@ -963,6 +986,10 @@ public class ChatEventManager {
         unreadCountCallback = callback;
     }
 
+    public void registerUserStatsCallback(Consumer<java.util.Map<String, Object>> callback) {
+        userStatsCallback = callback;
+    }
+
     public static ObservableList<Integer> getSharedFriends() {
         return sharedFriends;
     }
@@ -977,6 +1004,7 @@ public class ChatEventManager {
         broadcastCallback = null;
         errorCallback = null;
         pendingRequestsCallback = null;
+        friendRequestSentCallback = null;
         groupsCallback = null;
         onlineUsersCallback = null;
         fileDownloadCallbacks.clear();
@@ -984,6 +1012,7 @@ public class ChatEventManager {
         getUserByIdCallback = null;
         pendingRequestsMapCallback = null;
         getMessagesCallback = null;
+        userStatsCallback = null;
     }
 
     public BlockingDeque<Object> getEventQueue() {

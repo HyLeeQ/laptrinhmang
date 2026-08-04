@@ -16,7 +16,14 @@
                 </StackPane>
                 <VBox spacing="12" styleClass="nav-btn-group">
                     <Button text="💬" styleClass="nav-btn nav-btn-active"/>
-                    <Button text="➕" onAction="#viewFriendRequests" styleClass="nav-btn"/>
+                    <StackPane>
+                        <Button text="➕" onAction="#viewFriendRequests" styleClass="nav-btn"/>
+                        <javafx.scene.shape.Circle fx:id="navFriendRequestDot" radius="4" fill="#ff3b30" visible="false" managed="false" StackPane.alignment="TOP_RIGHT">
+                            <StackPane.margin>
+                                <Insets top="4" right="4"/>
+                            </StackPane.margin>
+                        </javafx.scene.shape.Circle>
+                    </StackPane>
                     <Button text="👥" onAction="#createGroup" styleClass="nav-btn"/>
                 </VBox>
                 <Region VBox.vgrow="ALWAYS"/>
@@ -34,7 +41,14 @@
                         <Label text="Zalu" styleClass="app-name"/>
                         <Region HBox.hgrow="ALWAYS"/>
                         <HBox alignment="CENTER_RIGHT" spacing="8">
-                            <Button text="➕" styleClass="sidebar-icon-btn" onAction="#viewFriendRequests"/>
+                            <StackPane>
+                                <Button text="➕" styleClass="sidebar-icon-btn" onAction="#viewFriendRequests"/>
+                                <javafx.scene.shape.Circle fx:id="friendRequestDot" radius="4" fill="#ff3b30" visible="false" managed="false" StackPane.alignment="TOP_RIGHT">
+                                    <StackPane.margin>
+                                        <Insets top="2" right="2"/>
+                                    </StackPane.margin>
+                                </javafx.scene.shape.Circle>
+                            </StackPane>
                             <Button text="👥" styleClass="sidebar-icon-btn" onAction="#createGroup"/>
                         </HBox>
                     </HBox>

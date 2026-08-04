@@ -172,12 +172,13 @@ public class ManageGroupController {
 
                     String role = memberWithRole.getRole();
                     if (role != null && role.equals("admin")) {
-                        roleLabel.setText("Quản trị viên");
-                        roleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #0088ff; -fx-font-weight: 600;");
+                        roleLabel.setText("👑 Quản trị viên");
+                        roleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #e67e22; -fx-font-weight: bold;");
                     } else {
-                        roleLabel.setText("Thành viên");
+                        roleLabel.setText("👤 Thành viên");
                         roleLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #8e8e93;");
                     }
+
 
                     // Load avatar
                     try {

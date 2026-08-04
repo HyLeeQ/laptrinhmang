@@ -125,17 +125,39 @@ public class LoginController {
             public void onFail(String message) {
                 Platform.runLater(() -> {
                     hideLoading();
-                    statusLabel.setText("Đăng nhập thất bại");
                     logger.warn("Login failed for user: {}. Reason: {}", username, message);
 
                     // Xóa mật khẩu và focus vào ô mật khẩu để người dùng nhập lại
                     passwordField.clear();
-                    passwordField.requestFocus();
 
-                    // Hiển thị thông báo lỗi (sau khi xóa password để UX tốt hơn)
-                    showAlert(Alert.AlertType.ERROR, "Lỗi đăng nhập", message);
+                    // Phân biệt lỗi tài khoản bị khóa vs sai mật khẩu
+                    boolean isLocked = message != null &&
+                            (message.contains("bị khóa") || message.contains("Admin") || message.contains("LOCKED"));
+
+                    if (isLocked) {
+                        // Tài khoản bị khóa → hiện dialog riêng, không cho nhập lại
+                        statusLabel.setText("🔒 Tài khoản bị khóa");
+                        statusLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+
+                        Alert lockedAlert = new Alert(Alert.AlertType.ERROR);
+                        lockedAlert.setTitle("🔒 Tài khoản bị tạm khóa");
+                        lockedAlert.setHeaderText("Tài khoản của bạn đã bị Admin khóa");
+                        lockedAlert.setContentText(
+                                "Tài khoản \"" + username + "\" hiện không thể đăng nhập.\n\n" +
+                                "Lý do: Tài khoản bị Admin hệ thống tạm khóa.\n\n" +
+                                "Vui lòng liên hệ quản trị viên để được hỗ trợ.");
+                        lockedAlert.getDialogPane().setStyle(
+                                "-fx-border-color: #e74c3c; -fx-border-width: 2;");
+                        lockedAlert.showAndWait();
+                    } else {
+                        statusLabel.setText("Đăng nhập thất bại");
+                        statusLabel.setStyle("-fx-text-fill: #e74c3c;");
+                        passwordField.requestFocus();
+                        showAlert(Alert.AlertType.ERROR, "Lỗi đăng nhập", message);
+                    }
                 });
             }
+
         });
     }
 

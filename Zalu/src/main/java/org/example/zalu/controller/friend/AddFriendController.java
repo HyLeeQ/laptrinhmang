@@ -262,6 +262,8 @@ public class AddFriendController {
                     }
                     // Refresh danh sách tìm kiếm để ẩn user đã gửi lời mời
                     searchFriend();
+                    // Switch back to initial interface
+                    backToMain();
                 });
             } else if (message.startsWith("FRIEND_REQUEST_SENT|FAIL")) {
                 // #region agent log
@@ -283,7 +285,7 @@ public class AddFriendController {
         };
 
         // Đăng ký callback vào eventManager
-        eventManager.registerBroadcastCallback(tempCallback);
+        eventManager.registerFriendRequestSentCallback(tempCallback);
 
         // Tự động unregister sau 5 giây để tránh memory leak
         new Thread(() -> {

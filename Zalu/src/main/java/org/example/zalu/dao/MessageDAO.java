@@ -939,4 +939,133 @@ public class MessageDAO {
         }
         return messages;
     }
+
+    // ============================================================
+    // ADMIN STAT METHODS
+    // ============================================================
+
+    /**
+     * Lấy số lượng tin nhắn theo từng ngày trong N ngày gần nhất.
+     * Trả về danh sách các mảng [epochDay, count], sắp xếp theo ngày tăng dần.
+     *
+     * @param days số ngày muốn thống kê (ví dụ: 7)
+     */
+    public List<long[]> getMessageCountLastNDays(int days)
+            throws DatabaseException, DatabaseConnectionException {
+        List<long[]> result = new ArrayList<>();
+        String sql = "SELECT DATE(created_at) AS msg_date, COUNT(*) AS cnt " +
+                "FROM messages " +
+                "WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
+                "  AND is_deleted = FALSE AND is_recalled = FALSE " +
+                "GROUP BY DATE(created_at) " +
+                "ORDER BY msg_date ASC";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, days);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    java.sql.Date d = rs.getDate("msg_date");
+                    long cnt = rs.getLong("cnt");
+                    // epochDay = days since 1970-01-01 (used as X-axis label seed)
+                    result.add(new long[]{d.toLocalDate().toEpochDay(), cnt});
+                }
+            }
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            }
+            throw new DatabaseException("Lỗi khi thống kê tin nhắn theo ngày", e);
+        }
+        return result;
+    }
+
+    /**
+     * Lấy danh sách top N user gửi nhiều tin nhắn nhất (không tính tin nhắn đã xóa/thu hồi).
+     *
+     * @param limit số lượng user muốn lấy (ví dụ: 5)
+     */
+    public List<ActiveUserRow> getTopActiveUsers(int limit)
+            throws DatabaseException, DatabaseConnectionException {
+        List<ActiveUserRow> result = new ArrayList<>();
+        String sql = "SELECT m.sender_id, u.username, COUNT(*) AS msg_count " +
+                "FROM messages m " +
+                "JOIN users u ON m.sender_id = u.id " +
+                "WHERE m.is_deleted = FALSE AND m.is_recalled = FALSE " +
+                "GROUP BY m.sender_id, u.username " +
+                "ORDER BY msg_count DESC " +
+                "LIMIT ?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ActiveUserRow row = new ActiveUserRow();
+                    row.userId = rs.getInt("sender_id");
+                    row.username = rs.getString("username");
+                    row.messageCount = rs.getLong("msg_count");
+                    result.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout") ||
+                    e.getMessage().toLowerCase().contains("cannot establish"))) {
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            }
+            throw new DatabaseException("Lỗi khi lấy top active users", e);
+        }
+        return result;
+    }
+
+    // ── User profile stat helpers ─────────────────────────────
+
+    /**
+     * Đếm tổng số tin nhắn đã gửi của user (không tính tin nhắn đã xóa/thu hồi).
+     */
+    public long getMessageCountByUser(int userId)
+            throws DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT COUNT(*) FROM messages WHERE sender_id = ? AND is_deleted = FALSE AND is_recalled = FALSE";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout")))
+                throw new DatabaseConnectionException("Không thể kết nối database", e);
+            throw new DatabaseException("Lỗi đếm tin nhắn của user", e);
+        }
+        return 0L;
+    }
+
+    /**
+     * Đếm tổng số file đã gửi của user.
+     */
+    public long getFileCountByUser(int userId)
+            throws DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT COUNT(*) FROM messages WHERE sender_id = ? AND file_name IS NOT NULL AND is_deleted = FALSE";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            if (e.getMessage() != null && (e.getMessage().toLowerCase().contains("connection") ||
+                    e.getMessage().toLowerCase().contains("timeout")))
+                throw new DatabaseConnectionException("Không thể kết nối database", e);
+            throw new DatabaseException("Lỗi đếm file của user", e);
+        }
+        return 0L;
+    }
+
+    public static class ActiveUserRow {
+        public int userId;
+        public String username;
+        public long messageCount;
+    }
 }

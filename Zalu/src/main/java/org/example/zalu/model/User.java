@@ -20,6 +20,7 @@ public class User implements Serializable {
     private LocalDateTime createdAt;
     private static final String DEFAULT_AVATAR_PATH = "/images/default-avatar.jpg";
     private String gender = "other";
+    private boolean locked = false;
 
     public User() {
     }
@@ -201,9 +202,17 @@ public class User implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
     @Override
     public String toString() {
         return "User{id=" + id + ", fullName='" + fullName + "' (username='" + username + "'), email='" + email
-                + "', status='" + status + "'}";
+                + "', status='" + status + "', locked=" + locked + "'}";
     }
 }

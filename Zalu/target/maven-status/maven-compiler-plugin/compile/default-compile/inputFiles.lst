@@ -31,6 +31,8 @@ D:\Java\LTM\Zalu\src\main\java\org\example\zalu\controller\profile\ProfileContro
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\FriendDAO.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\GroupDAO.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\MessageDAO.java
+D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\ReportDAO.java
+D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\UserActivityDAO.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\UserDAO.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\dao\VoiceMessageDAO.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\exception\auth\InvalidCredentialsException.java
@@ -60,6 +62,7 @@ D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\GroupInfo.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\Message.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\User.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\UserActivity.java
+D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\UserReport.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\VideoCallSession.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\model\VoiceMessage.java
 D:\Java\LTM\Zalu\src\main\java\org\example\zalu\server\ChatServer.java

@@ -236,8 +236,8 @@ public class MessageListController {
                     if (oldNode != null) {
                         oldNode.setUserData(realId);
 
-                        // For 1-1 chat, re-render the message with SENT status
-                        if (currentFriend != null && confirmedMsg != null) {
+                        // Re-render the message with SENT status
+                        if (confirmedMsg != null) {
                             int index = chatArea.getChildren().indexOf(oldNode);
                             if (index != -1) {
                                 chatArea.getChildren().remove(index);
@@ -696,7 +696,7 @@ public class MessageListController {
                     msg.isDeleted(), msg.isRecalled(), msg.isEdited(),
                     msg.getRepliedToContent(),
                     msg.getRepliedToMessageId() > 0 ? msg.getRepliedToMessageId() : null,
-                    Message.MessageStatus.SENT);
+                    msg.getStatus());
 
             HBox mainBox = new HBox();
             if (isOwn) {
@@ -761,30 +761,21 @@ public class MessageListController {
     }
 
     public void addLocalTextMessage(Message msg) {
-        boolean isOwn = msg.getSenderId() == currentUserId;
-
-        // Render tin nhắn ngay lập tức
-        chatRenderer.addTextMessage(msg.getContent(), isOwn, msg.getCreatedAt(), null, null, null,
-                Message.MessageStatus.SENDING);
-
-        // Lưu node ngay lập tức (không đợi qua Platform.runLater của controller)
-        // Chúng ta lấy node vừa được add vào cuối chatArea
-        if (msg.getTempId() != null) {
-            javafx.collections.ObservableList<Node> children = chatArea.getChildren();
-            if (!children.isEmpty()) {
-                Node lastNode = children.get(children.size() - 1);
-                if (lastNode instanceof HBox) {
-                    pendingMessageNodes.put(msg.getTempId(), (HBox) lastNode);
-                    logger.debug("Registered pending node for 1-1 chat: tempId={}", msg.getTempId());
+        Platform.runLater(() -> {
+            Node node = createMessageNode(msg);
+            if (node != null) {
+                chatRenderer.hideReadStatusFromOldMessages();
+                chatArea.getChildren().add(node);
+                if (msg.getTempId() != null && node instanceof HBox) {
+                    pendingMessageNodes.put(msg.getTempId(), (HBox) node);
+                    logger.debug("Registered pending node for chat: tempId={}", msg.getTempId());
                 }
+                chatRenderer.forceScrollToBottom();
             }
-        }
+        });
 
         currentConversationMessages.add(msg);
         infoPanelService.updateSharedMediaAndFiles(currentConversationMessages, currentGroup != null);
-
-        // Force scroll xuống dưới khi gửi tin nhắn
-        Platform.runLater(() -> chatRenderer.forceScrollToBottom());
     }
 
     public void addFileMessage(String fileName, int size, boolean isSentByMe) {
@@ -1181,7 +1172,32 @@ public class MessageListController {
 
     @FXML
     private void handleReportConversation() {
-        showAlert("Đã ghi nhận báo cáo của bạn.");
+        if (currentFriend == null) return;
+        
+        List<String> choices = new ArrayList<>();
+        choices.add("Spam, quảng cáo");
+        choices.add("Quấy rối, bắt nạt");
+        choices.add("Lừa đảo");
+        choices.add("Nội dung không phù hợp");
+        choices.add("Khác");
+
+        javafx.scene.control.ChoiceDialog<String> dialog = new javafx.scene.control.ChoiceDialog<>("Spam, quảng cáo", choices);
+        dialog.setTitle("Báo xấu người dùng");
+        dialog.setHeaderText("Báo cáo: " + currentFriend.getUsername());
+        dialog.setContentText("Lý do:");
+
+        java.util.Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            String reason = result.get();
+            // Send REPORT_USER
+            ChatClient.sendRequest("REPORT_USER|" + currentFriend.getId() + "|" + reason + "|Báo cáo từ ứng dụng");
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Thành công");
+            alert.setHeaderText(null);
+            alert.setContentText("Cảm ơn bạn đã báo cáo. Quản trị viên sẽ xem xét trong thời gian sớm nhất.");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -1191,7 +1207,11 @@ public class MessageListController {
 
     @FXML
     private void handleGroupReport() {
-        showAlert("Đã ghi nhận báo cáo nhóm.");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText("Tính năng báo cáo nhóm đang được phát triển.");
+        alert.showAndWait();
     }
 
     @FXML
@@ -1768,5 +1788,15 @@ public class MessageListController {
             return false;
 
         return true;
+    }
+
+    @FXML
+    private void handleVideoCall() {
+        // TODO: Implement video call feature
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Tính năng đang phát triển");
+        alert.setHeaderText(null);
+        alert.setContentText("Tính năng gọi video sẽ sớm ra mắt!");
+        alert.show();
     }
 }

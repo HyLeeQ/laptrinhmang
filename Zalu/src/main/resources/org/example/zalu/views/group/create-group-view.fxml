@@ -52,9 +52,9 @@
             <!-- Footer Actions -->
             <HBox spacing="10" styleClass="footer-actions" alignment="CENTER_RIGHT">
                 <Button text="Huỷ" onAction="#closeDialog" styleClass="back-btn" 
-                        prefWidth="80" prefHeight="36"/>
+                        minWidth="80" prefHeight="36"/>
                 <Button text="Tạo nhóm" onAction="#confirmCreateGroup" styleClass="primary-btn" 
-                        prefWidth="100" prefHeight="36"/>
+                        minWidth="100" prefHeight="36"/>
             </HBox>
         </VBox>
     </children>

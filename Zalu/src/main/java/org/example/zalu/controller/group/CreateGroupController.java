@@ -275,29 +275,14 @@ public class CreateGroupController {
     }
 
     private void loadAvatar(User user, Circle circle) {
-        try {
-            javafx.scene.image.Image avatarImage = null;
+        if (user == null || circle == null) return;
+        
+        javafx.scene.image.Image avatarImage = org.example.zalu.service.AvatarService.resolveAvatar(user);
 
-            // Try to load from cache first
-            byte[] cachedAvatar = org.example.zalu.client.ClientCache.getInstance().getAvatar(user.getId());
-            if (cachedAvatar != null && cachedAvatar.length > 0) {
-                avatarImage = new javafx.scene.image.Image(
-                        new ByteArrayInputStream(cachedAvatar), 40, 40, true, true);
-            } else if (user.getAvatarData() != null && user.getAvatarData().length > 0) {
-                // Load from user data
-                avatarImage = new javafx.scene.image.Image(
-                        new ByteArrayInputStream(user.getAvatarData()), 40, 40, true, true);
-            }
-
-            if (avatarImage != null) {
-                circle.setFill(new ImagePattern(avatarImage));
-            } else {
-                // Default avatar color
-                circle.setFill(javafx.scene.paint.Color.web("#e0e7ff"));
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading avatar for user " + user.getId() + ": " + e.getMessage());
-            circle.setFill(javafx.scene.paint.Color.web("#e0e7ff"));
+        if (avatarImage != null) {
+            circle.setFill(new javafx.scene.paint.ImagePattern(avatarImage));
+        } else {
+            circle.setFill(javafx.scene.paint.Color.web("#0088ff"));
         }
     }
 }

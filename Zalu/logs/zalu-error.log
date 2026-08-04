@@ -1,157 +1,32 @@
-2026-01-07 10:40:38.838 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-2026-01-07 10:40:38.844 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
-2026-01-07 10:40:38.844 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+2026-08-04 13:12:17.428 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2026-08-04 13:12:17.433 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2026-08-04 13:12:17.434 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
 
-2026-01-07 10:52:16.195 [Discovery-Listener] ERROR o.e.z.server.ServerDiscoveryListener - ✗ Không thể bind port discovery 8888. Có thể một instance server khác đang chạy.
-2026-01-07 10:52:16.196 [Discovery-Listener] ERROR o.e.z.server.ServerDiscoveryListener - Chi tiết lỗi: Address already in use: bind
-2026-01-07 14:17:09.268 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1166)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 14:17:09.366 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.415 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.500 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.521 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.603 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1166)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 14:17:09.628 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.668 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.750 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:09.774 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:17:10.663 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
-	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 14:22:58.200 [JavaFX Application Thread] ERROR o.e.z.util.ui.MessageBubbleFactory - Error opening video player
-java.lang.IllegalStateException: Location is not set.
-	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2556)
+2026-08-04 13:25:20.340 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
 	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
-	at org.example.zalu/org.example.zalu.util.ui.MessageBubbleFactory.lambda$26(MessageBubbleFactory.java:958)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController.switchToMain(LoginController.java:145)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController$1.lambda$onSuccess$0(LoginController.java:120)
 	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
 	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
 	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
@@ -159,687 +34,965 @@ java.lang.IllegalStateException: Location is not set.
 	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
 	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-2026-01-07 16:09:42.701 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
-2026-01-07 16:09:42.705 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
-2026-01-07 16:09:42.705 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+2026-08-04 13:25:20.646 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
 
-2026-01-07 16:10:58.119 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$processEvent$22(ChatEventManager.java:464)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:25:32.906 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$processEvent$44(ChatEventManager.java:807)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:26:33.041 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController.switchToMain(LoginController.java:145)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController$1.lambda$onSuccess$0(LoginController.java:120)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:26:33.157 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$processEvent$22(ChatEventManager.java:464)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:26:56.094 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$processEvent$44(ChatEventManager.java:807)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:28.302 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController.switchToMain(LoginController.java:145)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController$1.lambda$onSuccess$0(LoginController.java:120)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:28.421 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$processEvent$22(ChatEventManager.java:464)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:33.344 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.onChatItemSelected(MainController.java:397)
+	at org.example.zalu/org.example.zalu.controller.MainController.lambda$initialize$0(MainController.java:97)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper$SingleChange.fireValueChangedEvent(ExpressionHelper.java:192)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:91)
+	at javafx.base@21/javafx.beans.property.ReadOnlyObjectPropertyBase.fireValueChangedEvent(ReadOnlyObjectPropertyBase.java:80)
+	at javafx.base@21/javafx.beans.property.ReadOnlyObjectWrapper.fireValueChangedEvent(ReadOnlyObjectWrapper.java:102)
+	at javafx.base@21/javafx.beans.property.ObjectPropertyBase.markInvalid(ObjectPropertyBase.java:113)
+	at javafx.base@21/javafx.beans.property.ObjectPropertyBase.set(ObjectPropertyBase.java:147)
+	at javafx.controls@21/javafx.scene.control.SelectionModel.setSelectedItem(SelectionModel.java:105)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.lambda$new$0(MultipleSelectionModelBase.java:67)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper$SingleInvalidation.fireValueChangedEvent(ExpressionHelper.java:147)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:91)
+	at javafx.base@21/javafx.beans.property.ReadOnlyIntegerPropertyBase.fireValueChangedEvent(ReadOnlyIntegerPropertyBase.java:78)
+	at javafx.base@21/javafx.beans.property.ReadOnlyIntegerWrapper.fireValueChangedEvent(ReadOnlyIntegerWrapper.java:102)
+	at javafx.base@21/javafx.beans.property.IntegerPropertyBase.markInvalid(IntegerPropertyBase.java:114)
+	at javafx.base@21/javafx.beans.property.IntegerPropertyBase.set(IntegerPropertyBase.java:148)
+	at javafx.controls@21/javafx.scene.control.SelectionModel.setSelectedIndex(SelectionModel.java:69)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.select(MultipleSelectionModelBase.java:424)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.clearAndSelect(MultipleSelectionModelBase.java:371)
+	at javafx.controls@21/javafx.scene.control.ListView$ListViewBitSetSelectionModel.clearAndSelect(ListView.java:1494)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.simpleSelect(CellBehaviorBase.java:287)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.doSelect(CellBehaviorBase.java:246)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.mousePressed(CellBehaviorBase.java:176)
+	at javafx.controls@21/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3984)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:33.408 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$setupEventHandlers$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:36.344 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$setupEventHandlers$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:37.122 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$setupEventHandlers$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:44.382 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$setupEventHandlers$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 13:27:50.735 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$setupEventHandlers$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 15:51:13.797 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Lỗi kiểm tra khóa tài khoản khi login
+org.example.zalu.exception.database.DatabaseException: Lỗi khi kiểm tra trạng thái khóa tài khoản
+	at org.example.zalu/org.example.zalu.dao.UserDAO.isUserLocked(UserDAO.java:436)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleLogin(ClientHandler.java:300)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:110)
+Caused by: java.sql.SQLSyntaxErrorException: Unknown column 'is_locked' in 'field list'
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
 	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
 	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
 	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
 	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	at org.example.zalu/org.example.zalu.dao.UserDAO.isUserLocked(UserDAO.java:428)
 	... 2 common frames omitted
-2026-01-07 16:10:58.201 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+2026-08-04 15:51:14.003 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController.switchToMain(LoginController.java:167)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController$1.lambda$onSuccess$0(LoginController.java:120)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 15:51:14.328 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:124)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$processEvent$23(ChatEventManager.java:474)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 15:52:10.771 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.onChatItemSelected(MainController.java:397)
+	at org.example.zalu/org.example.zalu.controller.MainController.lambda$0(MainController.java:97)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper$SingleChange.fireValueChangedEvent(ExpressionHelper.java:192)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:91)
+	at javafx.base@21/javafx.beans.property.ReadOnlyObjectPropertyBase.fireValueChangedEvent(ReadOnlyObjectPropertyBase.java:80)
+	at javafx.base@21/javafx.beans.property.ReadOnlyObjectWrapper.fireValueChangedEvent(ReadOnlyObjectWrapper.java:102)
+	at javafx.base@21/javafx.beans.property.ObjectPropertyBase.markInvalid(ObjectPropertyBase.java:113)
+	at javafx.base@21/javafx.beans.property.ObjectPropertyBase.set(ObjectPropertyBase.java:147)
+	at javafx.controls@21/javafx.scene.control.SelectionModel.setSelectedItem(SelectionModel.java:105)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.lambda$new$0(MultipleSelectionModelBase.java:67)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper$SingleInvalidation.fireValueChangedEvent(ExpressionHelper.java:147)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:91)
+	at javafx.base@21/javafx.beans.property.ReadOnlyIntegerPropertyBase.fireValueChangedEvent(ReadOnlyIntegerPropertyBase.java:78)
+	at javafx.base@21/javafx.beans.property.ReadOnlyIntegerWrapper.fireValueChangedEvent(ReadOnlyIntegerWrapper.java:102)
+	at javafx.base@21/javafx.beans.property.IntegerPropertyBase.markInvalid(IntegerPropertyBase.java:114)
+	at javafx.base@21/javafx.beans.property.IntegerPropertyBase.set(IntegerPropertyBase.java:148)
+	at javafx.controls@21/javafx.scene.control.SelectionModel.setSelectedIndex(SelectionModel.java:69)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.select(MultipleSelectionModelBase.java:424)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.clearAndSelect(MultipleSelectionModelBase.java:371)
+	at javafx.controls@21/javafx.scene.control.ListView$ListViewBitSetSelectionModel.clearAndSelect(ListView.java:1494)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.simpleSelect(CellBehaviorBase.java:287)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.doSelect(CellBehaviorBase.java:246)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.mousePressed(CellBehaviorBase.java:176)
+	at javafx.controls@21/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3984)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 15:52:10.971 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 15:52:14.242 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:921)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:420)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 15:53:15.138 [Thread-18] ERROR o.example.zalu.server.ClientHandler - Lỗi kiểm tra khóa tài khoản khi resume session
+org.example.zalu.exception.database.DatabaseException: Lỗi khi kiểm tra trạng thái khóa tài khoản
+	at org.example.zalu/org.example.zalu.dao.UserDAO.isUserLocked(UserDAO.java:436)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleResumeSession(ClientHandler.java:429)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:106)
+Caused by: java.sql.SQLSyntaxErrorException: Unknown column 'is_locked' in 'field list'
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
 	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
 	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
 	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
 	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	at org.example.zalu/org.example.zalu.dao.UserDAO.isUserLocked(UserDAO.java:428)
 	... 2 common frames omitted
-2026-01-07 16:10:58.231 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:10:58.287 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:10:58.316 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:10:58.366 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 16:10:58.382 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:10:58.394 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:10:58.442 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:10:58.457 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:11:05.764 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:11:05.780 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:11:06.918 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:11:17.517 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:15:07.445 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:15:07.573 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:15:07.660 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:15:07.692 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.084 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 16:19:10.180 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.214 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.258 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.273 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.315 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 16:19:10.330 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.344 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.391 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:10.430 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:18.037 [Thread-14] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:18.054 [Thread-14] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:18.929 [Thread-14] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:19:24.021 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:23:19.562 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:23:19.694 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:23:19.784 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:23:19.838 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:27:19.648 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:27:19.690 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:27:19.762 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:27:19.785 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:26.819 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 16:32:26.913 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:26.946 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:27.010 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:27.026 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:27.112 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
-org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
-	... 2 common frames omitted
-2026-01-07 16:32:27.140 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:27.156 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:27.235 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:27.251 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:56.946 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:32:56.965 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
-org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
-Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
-	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
-	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
-	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
-	... 2 common frames omitted
-2026-01-07 16:45:02.262 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - === ✗ Kết nối thất bại ===
-2026-01-07 16:45:02.267 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Lỗi I/O: SocketException
-2026-01-07 16:45:02.268 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Server: 192.168.0.101:5000
-2026-01-07 16:45:02.268 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Chi tiết: Connection reset
+2026-08-04 16:09:38.684 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - === ✗ Kết nối thất bại ===
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Lỗi: Connection refused
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Server: localhost:5000
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Nguyên nhân có thể:
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient -   1. Server chưa khởi động
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient -   2. Server đang chạy trên port khác
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient -   3. Firewall đang chặn kết nối
+2026-08-04 16:09:38.685 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient -   4. Địa chỉ IP không đúng
+2026-08-04 16:09:52.900 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:922)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:125)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController.switchToMain(LoginController.java:167)
+	at org.example.zalu/org.example.zalu.controller.auth.LoginController$1.lambda$0(LoginController.java:120)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 16:09:53.167 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:922)
+	at org.example.zalu/org.example.zalu.controller.MainController.initialize(MainController.java:125)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at javafx.base@21/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$23(ChatEventManager.java:474)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 16:09:54.456 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:922)
+	at org.example.zalu/org.example.zalu.controller.MainController.onChatItemSelected(MainController.java:398)
+	at org.example.zalu/org.example.zalu.controller.MainController.lambda$initialize$0(MainController.java:98)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper$SingleChange.fireValueChangedEvent(ExpressionHelper.java:192)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:91)
+	at javafx.base@21/javafx.beans.property.ReadOnlyObjectPropertyBase.fireValueChangedEvent(ReadOnlyObjectPropertyBase.java:80)
+	at javafx.base@21/javafx.beans.property.ReadOnlyObjectWrapper.fireValueChangedEvent(ReadOnlyObjectWrapper.java:102)
+	at javafx.base@21/javafx.beans.property.ObjectPropertyBase.markInvalid(ObjectPropertyBase.java:113)
+	at javafx.base@21/javafx.beans.property.ObjectPropertyBase.set(ObjectPropertyBase.java:147)
+	at javafx.controls@21/javafx.scene.control.SelectionModel.setSelectedItem(SelectionModel.java:105)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.lambda$new$0(MultipleSelectionModelBase.java:67)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper$SingleInvalidation.fireValueChangedEvent(ExpressionHelper.java:147)
+	at javafx.base@21/com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:91)
+	at javafx.base@21/javafx.beans.property.ReadOnlyIntegerPropertyBase.fireValueChangedEvent(ReadOnlyIntegerPropertyBase.java:78)
+	at javafx.base@21/javafx.beans.property.ReadOnlyIntegerWrapper.fireValueChangedEvent(ReadOnlyIntegerWrapper.java:102)
+	at javafx.base@21/javafx.beans.property.IntegerPropertyBase.markInvalid(IntegerPropertyBase.java:114)
+	at javafx.base@21/javafx.beans.property.IntegerPropertyBase.set(IntegerPropertyBase.java:148)
+	at javafx.controls@21/javafx.scene.control.SelectionModel.setSelectedIndex(SelectionModel.java:69)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.select(MultipleSelectionModelBase.java:424)
+	at javafx.controls@21/javafx.scene.control.MultipleSelectionModelBase.clearAndSelect(MultipleSelectionModelBase.java:371)
+	at javafx.controls@21/javafx.scene.control.ListView$ListViewBitSetSelectionModel.clearAndSelect(ListView.java:1494)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.simpleSelect(CellBehaviorBase.java:287)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.doSelect(CellBehaviorBase.java:246)
+	at javafx.controls@21/com.sun.javafx.scene.control.behavior.CellBehaviorBase.mousePressed(CellBehaviorBase.java:176)
+	at javafx.controls@21/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3984)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 16:09:54.616 [JavaFX Application Thread] ERROR o.e.zalu.controller.MainController - Error loading sub-controllers
+javafx.fxml.LoadException: Error resolving onAction='#handleVideoCall', either the event handler is not in the Namespace or there is an error in the script.
+/D:/Java/LTM/Zalu/target/classes/org/example/zalu/views/chat/message-list-view.fxml:24
+
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2718)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:623)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:783)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2969)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2654)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.controller.MainController.loadSubControllers(MainController.java:922)
+	at org.example.zalu/org.example.zalu.controller.MainController.reloadChatForItem(MainController.java:421)
+	at org.example.zalu/org.example.zalu.controller.ChatListCellFactory$ChatListCell.lambda$0(ChatListCellFactory.java:148)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21/javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3688)
+	at javafx.graphics@21/javafx.scene.Scene$MouseHandler.process(Scene.java:3993)
+	at javafx.graphics@21/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 16:14:09.445 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$45(ChatEventManager.java:825)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 17:24:25.521 [JavaFX Application Thread] ERROR org.example.zalu.server.ChatServer - Lỗi ghi log DB: Lỗi ghi user activity log
+2026-08-04 17:25:23.379 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$45(ChatEventManager.java:825)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 17:26:04.600 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$45(ChatEventManager.java:825)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 17:28:50.860 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$45(ChatEventManager.java:825)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-04 17:30:15.792 [JavaFX Application Thread] ERROR org.example.zalu.ZaluApplication - ⚠ LỖI KHÔNG MONG MUỐN (UNCAUGHT EXCEPTION): Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+java.lang.NullPointerException: Cannot invoke "java.util.function.Consumer.accept(Object)" because "org.example.zalu.client.ChatEventManager.broadcastCallback" is null
+	at org.example.zalu/org.example.zalu.client.ChatEventManager.lambda$45(ChatEventManager.java:825)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)

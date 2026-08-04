@@ -432,16 +432,7 @@ public class ChatController {
                         "SEND_GROUP_FILE|" + currentGroupId + "|" + currentUserId + "|" + fileName + "|" + data.length);
                 ChatClient.sendObject(data);
 
-                // Hiển thị ngay trong chat (ảnh, voice hoặc file)
-                if (messageListController != null) {
-                    if (isImage) {
-                        messageListController.addImageMessage(data, fileName, true);
-                    } else if (ChatRenderer.isAudioFile(fileName)) {
-                        messageListController.addVoiceMessage(data, fileName, true);
-                    } else {
-                        messageListController.addFileMessage(fileName, data.length, true);
-                    }
-                }
+
                 logger.info("Sent {} to group: {} ({})", (isImage ? "image" : "file"), fileName,
                         formatSize(data.length));
             } else if (currentFriendId > 0) {
@@ -450,16 +441,7 @@ public class ChatController {
                         "SEND_FILE|" + currentUserId + "|" + currentFriendId + "|" + fileName + "|" + data.length);
                 ChatClient.sendObject(data);
 
-                // Hiển thị ngay trong chat (ảnh hoặc file)
-                if (messageListController != null) {
-                    if (isImage) {
-                        messageListController.addImageMessage(data, fileName, true);
-                    } else if (ChatRenderer.isAudioFile(fileName)) {
-                        messageListController.addVoiceMessage(data, fileName, true);
-                    } else {
-                        messageListController.addFileMessage(fileName, data.length, true);
-                    }
-                }
+
                 logger.info("Sent {}: {} ({})", (isImage ? "image" : "file"), fileName, formatSize(data.length));
             }
 
@@ -760,10 +742,7 @@ public class ChatController {
                 ChatClient.sendObject(audioData);
             }
 
-            // Hiển thị ngay trong chat
-            if (messageListController != null) {
-                messageListController.addVoiceMessage(audioData, fileName, true);
-            }
+
 
             logger.info("Sent voice message: {} ({})", fileName, formatSize(audioData.length));
         } catch (Exception e) {

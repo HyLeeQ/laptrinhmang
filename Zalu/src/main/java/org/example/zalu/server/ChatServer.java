@@ -30,6 +30,9 @@ public class ChatServer {
     private static FriendDAO friendDAO;
     private static MessageDAO messageDAO;
     private static GroupDAO groupDAO;
+    private static UserActivityDAO userActivityDAO;
+    private static ReportDAO reportDAO;
+
     private static final ObservableList<String> userList = FXCollections.observableArrayList();
     private static Consumer<UserActivity> activityCallback;
     private static Runnable userListUpdateCallback;
@@ -71,6 +74,8 @@ public class ChatServer {
         friendDAO = new FriendDAO();
         messageDAO = new MessageDAO();
         groupDAO = new GroupDAO();
+        userActivityDAO = new UserActivityDAO();
+        reportDAO = new ReportDAO();
         logger.info("✓ Tất cả DAO đã khởi tạo thành công với HikariCP!");
 
         // Kiểm tra và cấu hình max_allowed_packet
@@ -282,10 +287,18 @@ public class ChatServer {
      * Thêm hoạt động vào nhật ký
      */
     public static void addActivity(UserActivity activity) {
+        if (userActivityDAO != null) {
+            try {
+                userActivityDAO.logActivity(activity);
+            } catch (Exception e) {
+                logger.error("Lỗi ghi log DB: {}", e.getMessage());
+            }
+        }
         if (activityCallback != null) {
             activityCallback.accept(activity);
         }
     }
+
 
     /**
      * Lấy callback để thêm hoạt động (dùng trong ClientHandler)
@@ -429,5 +442,103 @@ public class ChatServer {
 
     public static GroupDAO getGroupDAO() {
         return groupDAO;
+    }
+
+    public static MessageDAO getMessageDAO() {
+        return messageDAO;
+    }
+
+    public static ReportDAO getReportDAO() {
+        return reportDAO;
+    }
+
+    // ============================================================
+    // ADMIN ACCOUNT ACTIONS
+    // ============================================================
+
+    /**
+     * Khóa tài khoản người dùng.
+     * Nếu user đang online, kick ngay và thông báo.
+     */
+    public static boolean lockUserAccount(int userId) {
+        try {
+            if (!userDAO.setUserLocked(userId, true)) {
+                logger.warn("lockUserAccount: Không tìm thấy user {}", userId);
+                return false;
+            }
+            // Kick nếu đang online
+            if (clients.containsKey(userId)) {
+                broadcastToUser(userId, "ACCOUNT_LOCKED|Tài khoản của bạn đã bị Admin khóa.");
+                try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+                kickUser(userId);
+            }
+            addActivity(new UserActivity(userId, "System", "LOCK_ACCOUNT", LocalDateTime.now()));
+            logger.info("Admin đã khóa tài khoản user {}", userId);
+            return true;
+        } catch (Exception e) {
+            logger.error("Lỗi khi khóa tài khoản user {}: {}", userId, e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Mở khóa tài khoản người dùng.
+     */
+    public static boolean unlockUserAccount(int userId) {
+        try {
+            boolean ok = userDAO.setUserLocked(userId, false);
+            if (ok) {
+                addActivity(new UserActivity(userId, "System", "UNLOCK_ACCOUNT", LocalDateTime.now()));
+                logger.info("Admin đã mở khóa tài khoản user {}", userId);
+            }
+            return ok;
+        } catch (Exception e) {
+            logger.error("Lỗi khi mở khóa tài khoản user {}: {}", userId, e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Xóa tài khoản người dùng (kick trước nếu đang online, sau đó xóa khỏi DB).
+     */
+    public static boolean deleteUserAccount(int userId) {
+        try {
+            if (clients.containsKey(userId)) {
+                broadcastToUser(userId, "ACCOUNT_DELETED|Tài khoản của bạn đã bị Admin xóa.");
+                try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+                kickUser(userId);
+            }
+            boolean ok = userDAO.deleteUser(userId);
+            if (ok) {
+                addActivity(new UserActivity(userId, "System", "DELETE_ACCOUNT", LocalDateTime.now()));
+                logger.info("Admin đã xóa tài khoản user {}", userId);
+            }
+            return ok;
+        } catch (Exception e) {
+            logger.error("Lỗi khi xóa tài khoản user {}: {}", userId, e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Giải tán nhóm chat từ phía Admin (thông báo tất cả thành viên, xóa khỏi DB).
+     */
+    public static boolean deleteGroupAdmin(int groupId) {
+        try {
+            // Thông báo tất cả thành viên đang online
+            java.util.List<Integer> members = groupDAO.getGroupMembers(groupId);
+            for (int memberId : members) {
+                broadcastToUser(memberId, "GROUP_DISBANDED|" + groupId + "|Nhóm đã bị Admin giải tán.");
+            }
+            boolean ok = groupDAO.deleteGroup(groupId);
+            if (ok) {
+                addActivity(new UserActivity(0, "System", "DELETE_GROUP", groupId, null, LocalDateTime.now()));
+                logger.info("Admin đã giải tán nhóm {}", groupId);
+            }
+            return ok;
+        } catch (Exception e) {
+            logger.error("Lỗi khi giải tán nhóm {}: {}", groupId, e.getMessage());
+            return false;
+        }
     }
 }

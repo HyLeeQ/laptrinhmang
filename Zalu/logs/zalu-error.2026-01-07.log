@@ -1,0 +1,845 @@
+2026-01-07 10:40:38.838 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2026-01-07 10:40:38.844 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2026-01-07 10:40:38.844 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+
+2026-01-07 10:52:16.195 [Discovery-Listener] ERROR o.e.z.server.ServerDiscoveryListener - ✗ Không thể bind port discovery 8888. Có thể một instance server khác đang chạy.
+2026-01-07 10:52:16.196 [Discovery-Listener] ERROR o.e.z.server.ServerDiscoveryListener - Chi tiết lỗi: Address already in use: bind
+2026-01-07 14:17:09.268 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1166)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 14:17:09.366 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.415 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.500 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.521 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.603 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1166)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 14:17:09.628 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.668 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.750 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:09.774 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:17:10.663 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:943)
+	at org.example.zalu/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 14:22:58.200 [JavaFX Application Thread] ERROR o.e.z.util.ui.MessageBubbleFactory - Error opening video player
+java.lang.IllegalStateException: Location is not set.
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2556)
+	at javafx.fxml@21/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at org.example.zalu/org.example.zalu.util.ui.MessageBubbleFactory.lambda$26(MessageBubbleFactory.java:958)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$10(PlatformImpl.java:456)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.graphics@21/com.sun.javafx.application.PlatformImpl.lambda$runLater$11(PlatformImpl.java:455)
+	at javafx.graphics@21/com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-01-07 16:09:42.701 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Không thể kết nối tới MySQL: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+2026-01-07 16:09:42.705 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Vui lòng đảm bảo MySQL đang chạy và cấu hình trong database.properties đúng!
+2026-01-07 16:09:42.705 [main] ERROR org.example.zalu.server.ChatServer - ⚠ Server vẫn sẽ khởi động nhưng có thể không hoạt động đầy đủ.
+
+2026-01-07 16:10:58.119 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 16:10:58.201 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.231 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.287 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.316 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.366 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 16:10:58.382 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.394 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.442 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:10:58.457 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:11:05.764 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:11:05.780 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:11:06.918 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:11:17.517 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:15:07.445 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:15:07.573 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:15:07.660 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:15:07.692 [Thread-11] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.084 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 16:19:10.180 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.214 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.258 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.273 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.315 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 16:19:10.330 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.344 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.391 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:10.430 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:18.037 [Thread-14] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:18.054 [Thread-14] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:18.929 [Thread-14] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:19:24.021 [Thread-13] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:23:19.562 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:23:19.694 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:23:19.784 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:23:19.838 [Thread-17] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:27:19.648 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:27:19.690 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:27:19.762 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:27:19.785 [Thread-19] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:26.819 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 16:32:26.913 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:26.946 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:27.010 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:27.026 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:27.112 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error getting avatar for user
+org.example.zalu.exception.database.DatabaseException: Lỗi khi tải avatar
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:321)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:1169)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,377,618 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.UserDAO.getAvatarData(UserDAO.java:310)
+	... 2 common frames omitted
+2026-01-07 16:32:27.140 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:27.156 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:27.235 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:27.251 [Thread-7] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (1,166,050 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:56.946 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:32:56.965 [Thread-8] ERROR o.example.zalu.server.ClientHandler - Error handling GET_CONVERSATION
+org.example.zalu.exception.message.MessageException: Lỗi khi lấy tin nhắn: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:186)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.handleMessage(ClientHandler.java:946)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.server.ClientHandler.run(ClientHandler.java:130)
+Caused by: com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (6,965,299 > 1,048,576). You can change this value on the server by setting the 'max_allowed_packet' variable.
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:107)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:916)
+	at mysql.connector.j@8.0.33/com.mysql.cj.jdbc.ClientPreparedStatement.executeQuery(ClientPreparedStatement.java:972)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)
+	at com.zaxxer.hikari@5.1.0/com.zaxxer.hikari.pool.HikariProxyPreparedStatement.executeQuery(HikariProxyPreparedStatement.java)
+	at org.example.zalu@1.0-SNAPSHOT/org.example.zalu.dao.MessageDAO.getMessagesBetween(MessageDAO.java:141)
+	... 2 common frames omitted
+2026-01-07 16:45:02.262 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - === ✗ Kết nối thất bại ===
+2026-01-07 16:45:02.267 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Lỗi I/O: SocketException
+2026-01-07 16:45:02.268 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Server: 192.168.0.101:5000
+2026-01-07 16:45:02.268 [JavaFX Application Thread] ERROR org.example.zalu.client.ChatClient - Chi tiết: Connection reset

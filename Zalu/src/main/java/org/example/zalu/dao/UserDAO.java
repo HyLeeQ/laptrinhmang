@@ -344,4 +344,164 @@ public class UserDAO {
             throw new DatabaseException("Lỗi khi đếm số lượng user", e);
         }
     }
+
+    // ============================================================
+    // ADMIN METHODS
+    // ============================================================
+
+    /**
+     * Lấy toàn bộ danh sách người dùng (dành cho admin).
+     */
+    public List<User> getAllUsers() throws DatabaseException, DatabaseConnectionException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT id, username, full_name, email, phone, avatar_url, bio, birthdate, gender, status, is_locked, created_at "
+                + "FROM users ORDER BY created_at DESC";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                User u = mapRowToUser(rs);
+                users.add(u);
+            }
+        } catch (SQLException e) {
+            if (isConnectionError(e))
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            throw new DatabaseException("Lỗi khi lấy danh sách người dùng", e);
+        }
+        return users;
+    }
+
+    /**
+     * Tìm kiếm người dùng theo username / fullName / email (dành cho admin).
+     */
+    public List<User> searchAllUsers(String query) throws DatabaseException, DatabaseConnectionException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT id, username, full_name, email, phone, avatar_url, bio, birthdate, gender, status, is_locked, created_at "
+                + "FROM users WHERE username LIKE ? OR full_name LIKE ? OR email LIKE ? ORDER BY created_at DESC";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            String pattern = "%" + query + "%";
+            ps.setString(1, pattern);
+            ps.setString(2, pattern);
+            ps.setString(3, pattern);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    users.add(mapRowToUser(rs));
+                }
+            }
+        } catch (SQLException e) {
+            if (isConnectionError(e))
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            throw new DatabaseException("Lỗi khi tìm kiếm người dùng", e);
+        }
+        return users;
+    }
+
+    /**
+     * Khóa hoặc mở khóa tài khoản người dùng.
+     *
+     * @param userId ID người dùng
+     * @param locked true = khóa, false = mở khóa
+     */
+    public boolean setUserLocked(int userId, boolean locked) throws DatabaseException, DatabaseConnectionException {
+        String sql = "UPDATE users SET is_locked = ? WHERE id = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, locked);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            if (isConnectionError(e))
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            throw new DatabaseException("Lỗi khi cập nhật trạng thái khóa tài khoản", e);
+        }
+    }
+
+    /**
+     * Kiểm tra xem tài khoản người dùng có đang bị khóa không.
+     */
+    public boolean isUserLocked(int userId) throws DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT is_locked FROM users WHERE id = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean("is_locked");
+                }
+            }
+        } catch (SQLException e) {
+            if (isConnectionError(e))
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            throw new DatabaseException("Lỗi khi kiểm tra trạng thái khóa tài khoản", e);
+        }
+        return false;
+    }
+
+    /**
+     * Xóa tài khoản người dùng (cascade – xóa kèm messages, friends, v.v.).
+     */
+    public boolean deleteUser(int userId) throws DatabaseException, DatabaseConnectionException {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            if (isConnectionError(e))
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            throw new DatabaseException("Lỗi khi xóa tài khoản người dùng", e);
+        }
+    }
+
+    /**
+     * Đếm số người dùng mới đăng ký trong N ngày gần nhất.
+     */
+    public int getNewUserCountLastNDays(int days) throws DatabaseException, DatabaseConnectionException {
+        String sql = "SELECT COUNT(*) FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)";
+        try (Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, days);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next())
+                    return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            if (isConnectionError(e))
+                throw new DatabaseConnectionException("Không thể kết nối đến database", e);
+            throw new DatabaseException("Lỗi khi đếm user mới", e);
+        }
+        return 0;
+    }
+
+    // ── helpers ──────────────────────────────────────────────────
+
+    private User mapRowToUser(ResultSet rs) throws SQLException {
+        User u = new User(
+                rs.getInt("id"),
+                rs.getString("username"),
+                rs.getString("full_name"),
+                rs.getString("email"),
+                rs.getString("phone"),
+                rs.getString("avatar_url"),
+                rs.getString("bio"),
+                (rs.getDate("birthdate") != null) ? rs.getDate("birthdate").toLocalDate() : null,
+                rs.getString("status"),
+                rs.getString("gender"));
+        // is_locked – graceful fallback if column not yet migrated
+        try { u.setLocked(rs.getBoolean("is_locked")); } catch (SQLException ignored) {}
+        // created_at – optional
+        try {
+            if (rs.getTimestamp("created_at") != null)
+                u.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        } catch (SQLException ignored) {}
+        return u;
+    }
+
+    private boolean isConnectionError(SQLException e) {
+        String msg = e.getMessage();
+        return msg != null && (msg.toLowerCase().contains("connection") ||
+                msg.toLowerCase().contains("timeout") ||
+                msg.toLowerCase().contains("cannot establish"));
+    }
 }
