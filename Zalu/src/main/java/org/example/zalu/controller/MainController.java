@@ -664,6 +664,35 @@ public class MainController {
             return;
         }
 
+        if (message.startsWith("MESSAGE_PIN_UPDATE|")) {
+            if (messageListController != null) {
+                Platform.runLater(() -> messageListController.loadPinnedMessages());
+            }
+            return;
+        }
+
+        if (message.equals("REPORT_USER_SUCCESS")) {
+            Platform.runLater(() -> {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Thành công");
+                alert.setHeaderText(null);
+                alert.setContentText("Báo cáo vi phạm đã được gửi thành công.");
+                alert.show();
+            });
+            return;
+        }
+
+        if (message.equals("REPORT_USER_FAIL")) {
+            Platform.runLater(() -> {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Có lỗi xảy ra khi gửi báo cáo. Vui lòng thử lại sau.");
+                alert.show();
+            });
+            return;
+        }
+
         if (message.startsWith("MESSAGES_READ|")) {
             String[] parts = message.split("\\|");
             if (parts.length >= 2) {

@@ -42,6 +42,7 @@ public class ChatEventManager {
     private static Consumer<String> errorCallback = null;
     private static Consumer<List<Integer>> pendingRequestsCallback = null;
     private static Consumer<String> friendRequestSentCallback = null;
+    private static Consumer<Integer> groupMembersUpdateCallback = null;
     private static Consumer<List<org.example.zalu.model.GroupInfo>> groupsCallback = null;
     private static Consumer<List<Integer>> onlineUsersCallback = null;
     private static final java.util.Map<Integer, Consumer<FileDownloadInfo>> fileDownloadCallbacks = new java.util.concurrent.ConcurrentHashMap<>();
@@ -734,10 +735,22 @@ public class ChatEventManager {
                     Platform.runLater(() -> broadcastCallback.accept(message.substring(10)));
                 }
             } else if (message.startsWith("USER_ONLINE|") || message.startsWith("USER_OFFLINE|") ||
-                    message.startsWith("USER_PROFILE_UPDATED|") ||
-                    message.startsWith("TYPING_INDICATOR|") || message.startsWith("TYPING_STOP|") ||
+                    message.startsWith("NEW_MESSAGE|") || message.startsWith("NEW_FILE|") ||
                     message.startsWith("MESSAGE_DELETED|") || message.startsWith("MESSAGE_RECALLED|") ||
-                    message.startsWith("MESSAGE_EDITED|")) {
+                    message.startsWith("MESSAGE_EDITED|") || message.startsWith("MESSAGE_PIN_UPDATE|") ||
+                    message.startsWith("REPORT_USER_") ||
+                    message.startsWith("USER_PROFILE_UPDATED|") ||
+                    message.startsWith("TYPING_INDICATOR|") || message.startsWith("TYPING_STOP|")) {
+                if (broadcastCallback != null) {
+                    Platform.runLater(() -> broadcastCallback.accept(message));
+                }
+            } else if (message.startsWith("GROUP_MEMBERS_UPDATE|")) {
+                if (groupMembersUpdateCallback != null) {
+                    try {
+                        int groupId = Integer.parseInt(message.substring(21));
+                        Platform.runLater(() -> groupMembersUpdateCallback.accept(groupId));
+                    } catch (NumberFormatException ignored) {}
+                }
                 if (broadcastCallback != null) {
                     Platform.runLater(() -> broadcastCallback.accept(message));
                 }
@@ -909,6 +922,10 @@ public class ChatEventManager {
         friendRequestSentCallback = callback;
     }
 
+    public void registerGroupMembersUpdateCallback(Consumer<Integer> callback) {
+        groupMembersUpdateCallback = callback;
+    }
+
     public void registerPendingRequestsCallback(Consumer<List<Integer>> callback) {
         pendingRequestsCallback = callback;
     }
@@ -1005,6 +1022,7 @@ public class ChatEventManager {
         errorCallback = null;
         pendingRequestsCallback = null;
         friendRequestSentCallback = null;
+        groupMembersUpdateCallback = null;
         groupsCallback = null;
         onlineUsersCallback = null;
         fileDownloadCallbacks.clear();

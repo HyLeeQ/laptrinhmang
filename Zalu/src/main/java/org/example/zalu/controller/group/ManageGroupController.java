@@ -101,6 +101,12 @@ public class ManageGroupController {
 
         members = FXCollections.observableArrayList();
         membersListView.setItems(members);
+        
+        org.example.zalu.client.ChatEventManager.getInstance().registerGroupMembersUpdateCallback(updatedGroupId -> {
+            if (this.groupId == updatedGroupId) {
+                javafx.application.Platform.runLater(this::loadMembers);
+            }
+        });
 
         membersListView.setCellFactory(param -> new ListCell<MemberWithRole>() {
             private HBox itemBox;

@@ -1191,12 +1191,6 @@ public class MessageListController {
             String reason = result.get();
             // Send REPORT_USER
             ChatClient.sendRequest("REPORT_USER|" + currentFriend.getId() + "|" + reason + "|Báo cáo từ ứng dụng");
-            
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Thành công");
-            alert.setHeaderText(null);
-            alert.setContentText("Cảm ơn bạn đã báo cáo. Quản trị viên sẽ xem xét trong thời gian sớm nhất.");
-            alert.showAndWait();
         }
     }
 
@@ -1581,7 +1575,7 @@ public class MessageListController {
     // ============================= PIN MESSAGES FUNCTIONALITY
     // =============================
 
-    private void loadPinnedMessages() {
+    public void loadPinnedMessages() {
         if (currentFriend == null && currentGroup == null) {
             if (pinnedMessagesSection != null) {
                 pinnedMessagesSection.setVisible(false);
