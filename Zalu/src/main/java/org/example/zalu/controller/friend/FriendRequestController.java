@@ -206,7 +206,6 @@ public class FriendRequestController implements Initializable {
 
                             // Refresh UI - Load lại danh sách bạn bè mới nhất
                             refreshRequests();
-                            backToMainAndRefresh();
 
                             // Đợi một chút để server xử lý xong, sau đó load lại friend list
                             new Thread(() -> {
@@ -240,7 +239,6 @@ public class FriendRequestController implements Initializable {
 
                             // Refresh UI
                             refreshRequests();
-                            backToMainAndRefresh();
                         });
                     });
 
@@ -320,7 +318,8 @@ public class FriendRequestController implements Initializable {
                     // Reset button action
                     cancelBtn.setOnAction(e -> {
                         ChatClient.sendRequest("CANCEL_FRIEND|" + currentUserId + "|" + item.getId());
-                        backToMainAndRefresh();
+                        // Refresh immediately optimistically
+                        refreshRequests();
                     });
 
                     setGraphic(card);

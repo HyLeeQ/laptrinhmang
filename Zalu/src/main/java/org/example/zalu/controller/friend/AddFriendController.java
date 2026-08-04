@@ -262,8 +262,6 @@ public class AddFriendController {
                     }
                     // Refresh danh sách tìm kiếm để ẩn user đã gửi lời mời
                     searchFriend();
-                    // Switch back to initial interface
-                    backToMain();
                 });
             } else if (message.startsWith("FRIEND_REQUEST_SENT|FAIL")) {
                 // #region agent log
